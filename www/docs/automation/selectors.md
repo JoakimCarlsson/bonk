@@ -39,6 +39,8 @@ el, err := page.WaitSelector("#dynamic-content")
 |--------|---------|-------------|
 | `WaitTimeout(time.Duration)` | 30s | Maximum time to wait |
 | `WaitInterval(time.Duration)` | 50ms | Initial polling interval |
+| `WaitVisibleOption()` | — | Wait until element is visible |
+| `WaitHiddenOption()` | — | Wait until element is hidden or removed |
 
 ```go
 el, err := page.WaitSelector(".loaded",
@@ -48,6 +50,24 @@ el, err := page.WaitSelector(".loaded",
 ```
 
 Polling uses exponential backoff starting from the interval, capped at 1 second.
+
+### Wait for Visibility
+
+Wait until the element exists AND is visible:
+
+```go
+el, err := page.WaitSelector(".modal", bonk.WaitVisibleOption())
+```
+
+### Wait for Hidden
+
+Wait until the element is hidden or removed from the DOM:
+
+```go
+_, err := page.WaitSelector(".spinner", bonk.WaitHiddenOption())
+```
+
+This is useful for waiting for loading indicators to disappear.
 
 ## Auto-Wait for Visibility
 

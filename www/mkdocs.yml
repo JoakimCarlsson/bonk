@@ -50,6 +50,7 @@ nav:
       - Element: core/element.md
   - Automation:
       - Selectors: automation/selectors.md
+      - Locators: automation/locators.md
       - Input: automation/input.md
       - Frames: automation/frames.md
       - Device Emulation: automation/device-emulation.md
@@ -66,4 +67,5 @@ nav:
   - Advanced:
       - Context Control: advanced/context-control.md
       - Session Persistence: advanced/session-persistence.md
+      - Page Pool: advanced/pool.md
       - Debugging: advanced/debugging.md

@@ -49,6 +49,18 @@ visible, err := el.IsVisible()
 box, err := el.BoundingBox()     // *Box{X, Y, Width, Height}
 ```
 
+## Visibility Waiting
+
+Wait for an element to become visible or hidden:
+
+```go
+err = el.WaitForVisible()
+err = el.WaitForVisible(bonk.WaitTimeout(5 * time.Second))
+
+err = el.WaitForHidden()
+err = el.WaitForHidden(bonk.WaitTimeout(10 * time.Second))
+```
+
 ## Element Screenshot
 
 ```go

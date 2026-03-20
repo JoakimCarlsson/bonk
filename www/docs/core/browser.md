@@ -50,6 +50,12 @@ if err != nil {
 defer b.Close()
 ```
 
+`Connect` accepts the same `LaunchOption` values for configuration:
+
+```go
+b, err := bonk.Connect(wsURL, bonk.WithLogger(slog.Default()))
+```
+
 ## Create Contexts
 
 ```go
@@ -72,3 +78,18 @@ See [Context](context.md) for context options.
 ```go
 b.Close()
 ```
+
+## Connection Recovery
+
+If the WebSocket connection drops unexpectedly, you can reconnect:
+
+```go
+b.OnDisconnect(func() {
+    log.Println("connection lost, reconnecting...")
+    if err := b.Reconnect(); err != nil {
+        log.Fatal("reconnect failed:", err)
+    }
+})
+```
+
+`Reconnect()` re-dials the stored WebSocket URL, creates a new RPC connection, and restarts the message listener. Existing browser contexts and pages will need to be re-created.

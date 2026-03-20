@@ -26,9 +26,13 @@ err := ctx.LoadState("./session.dat")
 
 ## What's Saved
 
-Currently, state persistence saves and restores:
+State persistence saves and restores:
 
 - All cookies (name, value, domain, path, expiry, httpOnly, secure, sameSite)
+- localStorage per origin (from all open pages at save time)
+
+!!! note "IndexedDB"
+    IndexedDB is not saved. It uses binary data and complex object stores that can't be easily serialized. If you need IndexedDB persistence, handle it manually via `page.Evaluate`.
 
 ## Cookie Management
 
