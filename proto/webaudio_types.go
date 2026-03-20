@@ -272,7 +272,7 @@ type WebAudioBaseAudioContext struct {
 	ContextID    WebAudioGraphObjectID       `json:"contextId"`
 	ContextType  WebAudioContextType         `json:"contextType"`
 	ContextState WebAudioContextState        `json:"contextState"`
-	RealtimeData WebAudioContextRealtimeData `json:"realtimeData,omitempty"`
+	RealtimeData WebAudioContextRealtimeData `json:"realtimeData,omitempty,omitzero"`
 	// CallbackBufferSize Platform-dependent callback buffer size.
 	CallbackBufferSize float64 `json:"callbackBufferSize"`
 	// MaxOutputChannelCount Number of output channels supported by audio hardware in use.

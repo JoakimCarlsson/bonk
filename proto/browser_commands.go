@@ -11,13 +11,13 @@ type BrowserSetPermissionParams struct {
 	// Setting Setting of the permission.
 	Setting BrowserPermissionSetting `json:"setting"`
 	// Origin Embedding origin the permission applies to, all origins if not specified.
-	Origin string `json:"origin,omitempty"`
+	Origin string `json:"origin,omitempty,omitzero"`
 	// EmbeddedOrigin Embedded origin the permission applies to. It is ignored unless the embedding origin is
 	// present and valid. If the embedding origin is provided but the embedded origin isn't, the
 	// embedding origin is used as the embedded origin.
-	EmbeddedOrigin string `json:"embeddedOrigin,omitempty"`
+	EmbeddedOrigin string `json:"embeddedOrigin,omitempty,omitzero"`
 	// BrowserContextID Context to override. When omitted, default browser context is used.
-	BrowserContextID BrowserContextID `json:"browserContextId,omitempty"`
+	BrowserContextID BrowserContextID `json:"browserContextId,omitempty,omitzero"`
 }
 
 // BrowserSetPermission creates a new BrowserSetPermissionParams.
@@ -56,9 +56,9 @@ func (p *BrowserSetPermissionParams) Do(ctx context.Context) error {
 type BrowserGrantPermissionsParams struct {
 	Permissions []BrowserPermissionType `json:"permissions"`
 	// Origin Origin the permission applies to, all origins if not specified.
-	Origin string `json:"origin,omitempty"`
+	Origin string `json:"origin,omitempty,omitzero"`
 	// BrowserContextID BrowserContext to override permissions. When omitted, default browser context is used.
-	BrowserContextID BrowserContextID `json:"browserContextId,omitempty"`
+	BrowserContextID BrowserContextID `json:"browserContextId,omitempty,omitzero"`
 }
 
 // BrowserGrantPermissions creates a new BrowserGrantPermissionsParams.
@@ -88,7 +88,7 @@ func (p *BrowserGrantPermissionsParams) Do(ctx context.Context) error {
 // BrowserResetPermissionsParams Reset all permission management for all origins.
 type BrowserResetPermissionsParams struct {
 	// BrowserContextID BrowserContext to reset permissions. When omitted, default browser context is used.
-	BrowserContextID BrowserContextID `json:"browserContextId,omitempty"`
+	BrowserContextID BrowserContextID `json:"browserContextId,omitempty,omitzero"`
 }
 
 // BrowserResetPermissions creates a new BrowserResetPermissionsParams.
@@ -114,12 +114,12 @@ type BrowserSetDownloadBehaviorParams struct {
 	// their download guids.
 	Behavior BrowserSetDownloadBehaviorBehavior `json:"behavior"`
 	// BrowserContextID BrowserContext to set download behavior. When omitted, default browser context is used.
-	BrowserContextID BrowserContextID `json:"browserContextId,omitempty"`
+	BrowserContextID BrowserContextID `json:"browserContextId,omitempty,omitzero"`
 	// DownloadPath The default path to save downloaded files to. This is required if behavior is set to 'allow'
 	// or 'allowAndName'.
-	DownloadPath string `json:"downloadPath,omitempty"`
+	DownloadPath string `json:"downloadPath,omitempty,omitzero"`
 	// EventsEnabled Whether to emit download events (defaults to false).
-	EventsEnabled bool `json:"eventsEnabled,omitempty"`
+	EventsEnabled bool `json:"eventsEnabled,omitempty,omitzero"`
 }
 
 // BrowserSetDownloadBehavior creates a new BrowserSetDownloadBehaviorParams.
@@ -157,7 +157,7 @@ type BrowserCancelDownloadParams struct {
 	// Guid Global unique identifier of the download.
 	Guid string `json:"guid"`
 	// BrowserContextID BrowserContext to perform the action in. When omitted, default browser context is used.
-	BrowserContextID BrowserContextID `json:"browserContextId,omitempty"`
+	BrowserContextID BrowserContextID `json:"browserContextId,omitempty,omitzero"`
 }
 
 // BrowserCancelDownload creates a new BrowserCancelDownloadParams.
@@ -277,9 +277,9 @@ type BrowserGetHistogramsParams struct {
 	// Query Requested substring in name. Only histograms which have query as a
 	// substring in their name are extracted. An empty or absent query returns
 	// all histograms.
-	Query string `json:"query,omitempty"`
+	Query string `json:"query,omitempty,omitzero"`
 	// Delta If true, retrieve delta since last delta call.
-	Delta bool `json:"delta,omitempty"`
+	Delta bool `json:"delta,omitempty,omitzero"`
 }
 
 // BrowserGetHistogramsReturns holds the return values for getHistograms.
@@ -319,7 +319,7 @@ type BrowserGetHistogramParams struct {
 	// Name Requested histogram name.
 	Name string `json:"name"`
 	// Delta If true, retrieve delta since last delta call.
-	Delta bool `json:"delta,omitempty"`
+	Delta bool `json:"delta,omitempty,omitzero"`
 }
 
 // BrowserGetHistogramReturns holds the return values for getHistogram.
@@ -382,7 +382,7 @@ func (p *BrowserGetWindowBoundsParams) Do(ctx context.Context) (*BrowserGetWindo
 // BrowserGetWindowForTargetParams Get the browser window that contains the devtools target.
 type BrowserGetWindowForTargetParams struct {
 	// TargetID Devtools agent host id. If called as a part of the session, associated targetId is used.
-	TargetID TargetTargetID `json:"targetId,omitempty"`
+	TargetID TargetTargetID `json:"targetId,omitempty,omitzero"`
 }
 
 // BrowserGetWindowForTargetReturns holds the return values for getWindowForTarget.
@@ -442,10 +442,10 @@ type BrowserSetContentsSizeParams struct {
 	WindowID BrowserWindowID `json:"windowId"`
 	// Width The window contents width in DIP. Assumes current width if omitted.
 	// Must be specified if 'height' is omitted.
-	Width int64 `json:"width,omitempty"`
+	Width int64 `json:"width,omitempty,omitzero"`
 	// Height The window contents height in DIP. Assumes current height if omitted.
 	// Must be specified if 'width' is omitted.
-	Height int64 `json:"height,omitempty"`
+	Height int64 `json:"height,omitempty,omitzero"`
 }
 
 // BrowserSetContentsSize creates a new BrowserSetContentsSizeParams.
@@ -474,9 +474,9 @@ func (p *BrowserSetContentsSizeParams) Do(ctx context.Context) error {
 
 // BrowserSetDockTileParams Set dock tile details, platform-specific.
 type BrowserSetDockTileParams struct {
-	BadgeLabel string `json:"badgeLabel,omitempty"`
+	BadgeLabel string `json:"badgeLabel,omitempty,omitzero"`
 	// Image Png encoded image.
-	Image []byte `json:"image,omitempty"`
+	Image []byte `json:"image,omitempty,omitzero"`
 }
 
 // BrowserSetDockTile creates a new BrowserSetDockTileParams.
@@ -546,7 +546,7 @@ type BrowserAddPrivacySandboxCoordinatorKeyConfigParams struct {
 	KeyConfig         string                   `json:"keyConfig"`
 	// BrowserContextID BrowserContext to perform the action in. When omitted, default browser
 	// context is used.
-	BrowserContextID BrowserContextID `json:"browserContextId,omitempty"`
+	BrowserContextID BrowserContextID `json:"browserContextId,omitempty,omitzero"`
 }
 
 // BrowserAddPrivacySandboxCoordinatorKeyConfig creates a new BrowserAddPrivacySandboxCoordinatorKeyConfigParams.

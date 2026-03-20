@@ -10,7 +10,7 @@ import "context"
 // Also starts observing for issue messages. When an issue is added or removed,
 // an |issueUpdated| event is fired.
 type CastEnableParams struct {
-	PresentationURL string `json:"presentationUrl,omitempty"`
+	PresentationURL string `json:"presentationUrl,omitempty,omitzero"`
 }
 
 // CastEnable creates a new CastEnableParams.

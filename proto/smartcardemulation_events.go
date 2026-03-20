@@ -41,7 +41,7 @@ type SmartCardEmulationEventGetStatusChangeRequested struct {
 	ContextID    int64                             `json:"contextId"`
 	ReaderStates []SmartCardEmulationReaderStateIn `json:"readerStates"`
 	// Timeout in milliseconds, if absent, it means "infinite"
-	Timeout int64 `json:"timeout,omitempty"`
+	Timeout int64 `json:"timeout,omitempty,omitzero"`
 }
 
 // SmartCardEmulationEventCancelRequested Fired when |SCardCancel| is called.
@@ -87,7 +87,7 @@ type SmartCardEmulationEventTransmitRequested struct {
 	RequestID string                     `json:"requestId"`
 	Handle    int64                      `json:"handle"`
 	Data      []byte                     `json:"data"`
-	Protocol  SmartCardEmulationProtocol `json:"protocol,omitempty"`
+	Protocol  SmartCardEmulationProtocol `json:"protocol,omitempty,omitzero"`
 }
 
 // SmartCardEmulationEventControlRequested Fired when |SCardControl| is called.

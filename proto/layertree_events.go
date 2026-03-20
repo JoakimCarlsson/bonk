@@ -11,7 +11,7 @@ type LayerTreeEventLayerPainted struct {
 
 type LayerTreeEventLayerTreeDidChange struct {
 	// Layers Layer tree, absent if not in the compositing mode.
-	Layers []LayerTreeLayer `json:"layers,omitempty"`
+	Layers []LayerTreeLayer `json:"layers,omitempty,omitzero"`
 }
 
 // LayerTree event names.

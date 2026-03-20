@@ -12,9 +12,9 @@ func (t DOMStorageSerializedStorageKey) String() string {
 // DOMStorageStorageID DOM Storage identifier.
 type DOMStorageStorageID struct {
 	// SecurityOrigin Security origin for the storage.
-	SecurityOrigin string `json:"securityOrigin,omitempty"`
+	SecurityOrigin string `json:"securityOrigin,omitempty,omitzero"`
 	// StorageKey Represents a key by which DOM Storage keys its CachedStorageAreas
-	StorageKey DOMStorageSerializedStorageKey `json:"storageKey,omitempty"`
+	StorageKey DOMStorageSerializedStorageKey `json:"storageKey,omitempty,omitzero"`
 	// IsLocalStorage Whether the storage is local storage (not session storage).
 	IsLocalStorage bool `json:"isLocalStorage"`
 }

@@ -13,91 +13,91 @@ type OverlaySourceOrderConfig struct {
 // OverlayGridHighlightConfig Configuration data for the highlighting of Grid elements.
 type OverlayGridHighlightConfig struct {
 	// ShowGridExtensionLines Whether the extension lines from grid cells to the rulers should be shown (default: false).
-	ShowGridExtensionLines bool `json:"showGridExtensionLines,omitempty"`
+	ShowGridExtensionLines bool `json:"showGridExtensionLines,omitempty,omitzero"`
 	// ShowPositiveLineNumbers Show Positive line number labels (default: false).
-	ShowPositiveLineNumbers bool `json:"showPositiveLineNumbers,omitempty"`
+	ShowPositiveLineNumbers bool `json:"showPositiveLineNumbers,omitempty,omitzero"`
 	// ShowNegativeLineNumbers Show Negative line number labels (default: false).
-	ShowNegativeLineNumbers bool `json:"showNegativeLineNumbers,omitempty"`
+	ShowNegativeLineNumbers bool `json:"showNegativeLineNumbers,omitempty,omitzero"`
 	// ShowAreaNames Show area name labels (default: false).
-	ShowAreaNames bool `json:"showAreaNames,omitempty"`
+	ShowAreaNames bool `json:"showAreaNames,omitempty,omitzero"`
 	// ShowLineNames Show line name labels (default: false).
-	ShowLineNames bool `json:"showLineNames,omitempty"`
+	ShowLineNames bool `json:"showLineNames,omitempty,omitzero"`
 	// ShowTrackSizes Show track size labels (default: false).
-	ShowTrackSizes bool `json:"showTrackSizes,omitempty"`
+	ShowTrackSizes bool `json:"showTrackSizes,omitempty,omitzero"`
 	// GridBorderColor The grid container border highlight color (default: transparent).
-	GridBorderColor DOMRGBA `json:"gridBorderColor,omitempty"`
+	GridBorderColor DOMRGBA `json:"gridBorderColor,omitempty,omitzero"`
 	// CellBorderColor The cell border color (default: transparent). Deprecated, please use rowLineColor and columnLineColor instead.
-	CellBorderColor DOMRGBA `json:"cellBorderColor,omitempty"`
+	CellBorderColor DOMRGBA `json:"cellBorderColor,omitempty,omitzero"`
 	// RowLineColor The row line color (default: transparent).
-	RowLineColor DOMRGBA `json:"rowLineColor,omitempty"`
+	RowLineColor DOMRGBA `json:"rowLineColor,omitempty,omitzero"`
 	// ColumnLineColor The column line color (default: transparent).
-	ColumnLineColor DOMRGBA `json:"columnLineColor,omitempty"`
+	ColumnLineColor DOMRGBA `json:"columnLineColor,omitempty,omitzero"`
 	// GridBorderDash Whether the grid border is dashed (default: false).
-	GridBorderDash bool `json:"gridBorderDash,omitempty"`
+	GridBorderDash bool `json:"gridBorderDash,omitempty,omitzero"`
 	// CellBorderDash Whether the cell border is dashed (default: false). Deprecated, please us rowLineDash and columnLineDash instead.
-	CellBorderDash bool `json:"cellBorderDash,omitempty"`
+	CellBorderDash bool `json:"cellBorderDash,omitempty,omitzero"`
 	// RowLineDash Whether row lines are dashed (default: false).
-	RowLineDash bool `json:"rowLineDash,omitempty"`
+	RowLineDash bool `json:"rowLineDash,omitempty,omitzero"`
 	// ColumnLineDash Whether column lines are dashed (default: false).
-	ColumnLineDash bool `json:"columnLineDash,omitempty"`
+	ColumnLineDash bool `json:"columnLineDash,omitempty,omitzero"`
 	// RowGapColor The row gap highlight fill color (default: transparent).
-	RowGapColor DOMRGBA `json:"rowGapColor,omitempty"`
+	RowGapColor DOMRGBA `json:"rowGapColor,omitempty,omitzero"`
 	// RowHatchColor The row gap hatching fill color (default: transparent).
-	RowHatchColor DOMRGBA `json:"rowHatchColor,omitempty"`
+	RowHatchColor DOMRGBA `json:"rowHatchColor,omitempty,omitzero"`
 	// ColumnGapColor The column gap highlight fill color (default: transparent).
-	ColumnGapColor DOMRGBA `json:"columnGapColor,omitempty"`
+	ColumnGapColor DOMRGBA `json:"columnGapColor,omitempty,omitzero"`
 	// ColumnHatchColor The column gap hatching fill color (default: transparent).
-	ColumnHatchColor DOMRGBA `json:"columnHatchColor,omitempty"`
+	ColumnHatchColor DOMRGBA `json:"columnHatchColor,omitempty,omitzero"`
 	// AreaBorderColor The named grid areas border color (Default: transparent).
-	AreaBorderColor DOMRGBA `json:"areaBorderColor,omitempty"`
+	AreaBorderColor DOMRGBA `json:"areaBorderColor,omitempty,omitzero"`
 	// GridBackgroundColor The grid container background color (Default: transparent).
-	GridBackgroundColor DOMRGBA `json:"gridBackgroundColor,omitempty"`
+	GridBackgroundColor DOMRGBA `json:"gridBackgroundColor,omitempty,omitzero"`
 }
 
 // OverlayFlexContainerHighlightConfig Configuration data for the highlighting of Flex container elements.
 type OverlayFlexContainerHighlightConfig struct {
 	// ContainerBorder The style of the container border
-	ContainerBorder OverlayLineStyle `json:"containerBorder,omitempty"`
+	ContainerBorder OverlayLineStyle `json:"containerBorder,omitempty,omitzero"`
 	// LineSeparator The style of the separator between lines
-	LineSeparator OverlayLineStyle `json:"lineSeparator,omitempty"`
+	LineSeparator OverlayLineStyle `json:"lineSeparator,omitempty,omitzero"`
 	// ItemSeparator The style of the separator between items
-	ItemSeparator OverlayLineStyle `json:"itemSeparator,omitempty"`
+	ItemSeparator OverlayLineStyle `json:"itemSeparator,omitempty,omitzero"`
 	// MainDistributedSpace Style of content-distribution space on the main axis (justify-content).
-	MainDistributedSpace OverlayBoxStyle `json:"mainDistributedSpace,omitempty"`
+	MainDistributedSpace OverlayBoxStyle `json:"mainDistributedSpace,omitempty,omitzero"`
 	// CrossDistributedSpace Style of content-distribution space on the cross axis (align-content).
-	CrossDistributedSpace OverlayBoxStyle `json:"crossDistributedSpace,omitempty"`
+	CrossDistributedSpace OverlayBoxStyle `json:"crossDistributedSpace,omitempty,omitzero"`
 	// RowGapSpace Style of empty space caused by row gaps (gap/row-gap).
-	RowGapSpace OverlayBoxStyle `json:"rowGapSpace,omitempty"`
+	RowGapSpace OverlayBoxStyle `json:"rowGapSpace,omitempty,omitzero"`
 	// ColumnGapSpace Style of empty space caused by columns gaps (gap/column-gap).
-	ColumnGapSpace OverlayBoxStyle `json:"columnGapSpace,omitempty"`
+	ColumnGapSpace OverlayBoxStyle `json:"columnGapSpace,omitempty,omitzero"`
 	// CrossAlignment Style of the self-alignment line (align-items).
-	CrossAlignment OverlayLineStyle `json:"crossAlignment,omitempty"`
+	CrossAlignment OverlayLineStyle `json:"crossAlignment,omitempty,omitzero"`
 }
 
 // OverlayFlexItemHighlightConfig Configuration data for the highlighting of Flex item elements.
 type OverlayFlexItemHighlightConfig struct {
 	// BaseSizeBox Style of the box representing the item's base size
-	BaseSizeBox OverlayBoxStyle `json:"baseSizeBox,omitempty"`
+	BaseSizeBox OverlayBoxStyle `json:"baseSizeBox,omitempty,omitzero"`
 	// BaseSizeBorder Style of the border around the box representing the item's base size
-	BaseSizeBorder OverlayLineStyle `json:"baseSizeBorder,omitempty"`
+	BaseSizeBorder OverlayLineStyle `json:"baseSizeBorder,omitempty,omitzero"`
 	// FlexibilityArrow Style of the arrow representing if the item grew or shrank
-	FlexibilityArrow OverlayLineStyle `json:"flexibilityArrow,omitempty"`
+	FlexibilityArrow OverlayLineStyle `json:"flexibilityArrow,omitempty,omitzero"`
 }
 
 // OverlayLineStyle Style information for drawing a line.
 type OverlayLineStyle struct {
 	// Color The color of the line (default: transparent)
-	Color DOMRGBA `json:"color,omitempty"`
+	Color DOMRGBA `json:"color,omitempty,omitzero"`
 	// Pattern The line pattern (default: solid)
-	Pattern OverlayLineStylePattern `json:"pattern,omitempty"`
+	Pattern OverlayLineStylePattern `json:"pattern,omitempty,omitzero"`
 }
 
 // OverlayBoxStyle Style information for drawing a box.
 type OverlayBoxStyle struct {
 	// FillColor The background color for the box (default: transparent)
-	FillColor DOMRGBA `json:"fillColor,omitempty"`
+	FillColor DOMRGBA `json:"fillColor,omitempty,omitzero"`
 	// HatchColor The hatching color for the box (default: transparent)
-	HatchColor DOMRGBA `json:"hatchColor,omitempty"`
+	HatchColor DOMRGBA `json:"hatchColor,omitempty,omitzero"`
 }
 
 type OverlayContrastAlgorithm string
@@ -149,43 +149,43 @@ func (t OverlayContrastAlgorithm) String() string {
 // OverlayHighlightConfig Configuration data for the highlighting of page elements.
 type OverlayHighlightConfig struct {
 	// ShowInfo Whether the node info tooltip should be shown (default: false).
-	ShowInfo bool `json:"showInfo,omitempty"`
+	ShowInfo bool `json:"showInfo,omitempty,omitzero"`
 	// ShowStyles Whether the node styles in the tooltip (default: false).
-	ShowStyles bool `json:"showStyles,omitempty"`
+	ShowStyles bool `json:"showStyles,omitempty,omitzero"`
 	// ShowRulers Whether the rulers should be shown (default: false).
-	ShowRulers bool `json:"showRulers,omitempty"`
+	ShowRulers bool `json:"showRulers,omitempty,omitzero"`
 	// ShowAccessibilityInfo Whether the a11y info should be shown (default: true).
-	ShowAccessibilityInfo bool `json:"showAccessibilityInfo,omitempty"`
+	ShowAccessibilityInfo bool `json:"showAccessibilityInfo,omitempty,omitzero"`
 	// ShowExtensionLines Whether the extension lines from node to the rulers should be shown (default: false).
-	ShowExtensionLines bool `json:"showExtensionLines,omitempty"`
+	ShowExtensionLines bool `json:"showExtensionLines,omitempty,omitzero"`
 	// ContentColor The content box highlight fill color (default: transparent).
-	ContentColor DOMRGBA `json:"contentColor,omitempty"`
+	ContentColor DOMRGBA `json:"contentColor,omitempty,omitzero"`
 	// PaddingColor The padding highlight fill color (default: transparent).
-	PaddingColor DOMRGBA `json:"paddingColor,omitempty"`
+	PaddingColor DOMRGBA `json:"paddingColor,omitempty,omitzero"`
 	// BorderColor The border highlight fill color (default: transparent).
-	BorderColor DOMRGBA `json:"borderColor,omitempty"`
+	BorderColor DOMRGBA `json:"borderColor,omitempty,omitzero"`
 	// MarginColor The margin highlight fill color (default: transparent).
-	MarginColor DOMRGBA `json:"marginColor,omitempty"`
+	MarginColor DOMRGBA `json:"marginColor,omitempty,omitzero"`
 	// EventTargetColor The event target element highlight fill color (default: transparent).
-	EventTargetColor DOMRGBA `json:"eventTargetColor,omitempty"`
+	EventTargetColor DOMRGBA `json:"eventTargetColor,omitempty,omitzero"`
 	// ShapeColor The shape outside fill color (default: transparent).
-	ShapeColor DOMRGBA `json:"shapeColor,omitempty"`
+	ShapeColor DOMRGBA `json:"shapeColor,omitempty,omitzero"`
 	// ShapeMarginColor The shape margin fill color (default: transparent).
-	ShapeMarginColor DOMRGBA `json:"shapeMarginColor,omitempty"`
+	ShapeMarginColor DOMRGBA `json:"shapeMarginColor,omitempty,omitzero"`
 	// CSSGridColor The grid layout color (default: transparent).
-	CSSGridColor DOMRGBA `json:"cssGridColor,omitempty"`
+	CSSGridColor DOMRGBA `json:"cssGridColor,omitempty,omitzero"`
 	// ColorFormat The color format used to format color styles (default: hex).
-	ColorFormat OverlayColorFormat `json:"colorFormat,omitempty"`
+	ColorFormat OverlayColorFormat `json:"colorFormat,omitempty,omitzero"`
 	// GridHighlightConfig The grid layout highlight configuration (default: all transparent).
-	GridHighlightConfig OverlayGridHighlightConfig `json:"gridHighlightConfig,omitempty"`
+	GridHighlightConfig OverlayGridHighlightConfig `json:"gridHighlightConfig,omitempty,omitzero"`
 	// FlexContainerHighlightConfig The flex container highlight configuration (default: all transparent).
-	FlexContainerHighlightConfig OverlayFlexContainerHighlightConfig `json:"flexContainerHighlightConfig,omitempty"`
+	FlexContainerHighlightConfig OverlayFlexContainerHighlightConfig `json:"flexContainerHighlightConfig,omitempty,omitzero"`
 	// FlexItemHighlightConfig The flex item highlight configuration (default: all transparent).
-	FlexItemHighlightConfig OverlayFlexItemHighlightConfig `json:"flexItemHighlightConfig,omitempty"`
+	FlexItemHighlightConfig OverlayFlexItemHighlightConfig `json:"flexItemHighlightConfig,omitempty,omitzero"`
 	// ContrastAlgorithm The contrast algorithm to use for the contrast ratio (default: aa).
-	ContrastAlgorithm OverlayContrastAlgorithm `json:"contrastAlgorithm,omitempty"`
+	ContrastAlgorithm OverlayContrastAlgorithm `json:"contrastAlgorithm,omitempty,omitzero"`
 	// ContainerQueryContainerHighlightConfig The container query container highlight configuration (default: all transparent).
-	ContainerQueryContainerHighlightConfig OverlayContainerQueryContainerHighlightConfig `json:"containerQueryContainerHighlightConfig,omitempty"`
+	ContainerQueryContainerHighlightConfig OverlayContainerQueryContainerHighlightConfig `json:"containerQueryContainerHighlightConfig,omitempty,omitzero"`
 }
 
 type OverlayColorFormat string
@@ -255,13 +255,13 @@ type OverlayFlexNodeHighlightConfig struct {
 
 type OverlayScrollSnapContainerHighlightConfig struct {
 	// SnapportBorder The style of the snapport border (default: transparent)
-	SnapportBorder OverlayLineStyle `json:"snapportBorder,omitempty"`
+	SnapportBorder OverlayLineStyle `json:"snapportBorder,omitempty,omitzero"`
 	// SnapAreaBorder The style of the snap area border (default: transparent)
-	SnapAreaBorder OverlayLineStyle `json:"snapAreaBorder,omitempty"`
+	SnapAreaBorder OverlayLineStyle `json:"snapAreaBorder,omitempty,omitzero"`
 	// ScrollMarginColor The margin highlight fill color (default: transparent).
-	ScrollMarginColor DOMRGBA `json:"scrollMarginColor,omitempty"`
+	ScrollMarginColor DOMRGBA `json:"scrollMarginColor,omitempty,omitzero"`
 	// ScrollPaddingColor The padding highlight fill color (default: transparent).
-	ScrollPaddingColor DOMRGBA `json:"scrollPaddingColor,omitempty"`
+	ScrollPaddingColor DOMRGBA `json:"scrollPaddingColor,omitempty,omitzero"`
 }
 
 type OverlayScrollSnapHighlightConfig struct {
@@ -276,9 +276,9 @@ type OverlayHingeConfig struct {
 	// Rect A rectangle represent hinge
 	Rect DOMRect `json:"rect"`
 	// ContentColor The content box highlight fill color (default: a dark color).
-	ContentColor DOMRGBA `json:"contentColor,omitempty"`
+	ContentColor DOMRGBA `json:"contentColor,omitempty,omitzero"`
 	// OutlineColor The content box highlight outline color (default: transparent).
-	OutlineColor DOMRGBA `json:"outlineColor,omitempty"`
+	OutlineColor DOMRGBA `json:"outlineColor,omitempty,omitzero"`
 }
 
 // OverlayWindowControlsOverlayConfig Configuration for Window Controls Overlay
@@ -300,9 +300,9 @@ type OverlayContainerQueryHighlightConfig struct {
 
 type OverlayContainerQueryContainerHighlightConfig struct {
 	// ContainerBorder The style of the container border.
-	ContainerBorder OverlayLineStyle `json:"containerBorder,omitempty"`
+	ContainerBorder OverlayLineStyle `json:"containerBorder,omitempty,omitzero"`
 	// DescendantBorder The style of the descendants' borders.
-	DescendantBorder OverlayLineStyle `json:"descendantBorder,omitempty"`
+	DescendantBorder OverlayLineStyle `json:"descendantBorder,omitempty,omitzero"`
 }
 
 type OverlayIsolatedElementHighlightConfig struct {
@@ -314,11 +314,11 @@ type OverlayIsolatedElementHighlightConfig struct {
 
 type OverlayIsolationModeHighlightConfig struct {
 	// ResizerColor The fill color of the resizers (default: transparent).
-	ResizerColor DOMRGBA `json:"resizerColor,omitempty"`
+	ResizerColor DOMRGBA `json:"resizerColor,omitempty,omitzero"`
 	// ResizerHandleColor The fill color for resizer handles (default: transparent).
-	ResizerHandleColor DOMRGBA `json:"resizerHandleColor,omitempty"`
+	ResizerHandleColor DOMRGBA `json:"resizerHandleColor,omitempty,omitzero"`
 	// MaskColor The fill color for the mask covering non-isolated elements (default: transparent).
-	MaskColor DOMRGBA `json:"maskColor,omitempty"`
+	MaskColor DOMRGBA `json:"maskColor,omitempty,omitzero"`
 }
 
 type OverlayInspectMode string
@@ -373,9 +373,9 @@ func (t OverlayInspectMode) String() string {
 
 type OverlayInspectedElementAnchorConfig struct {
 	// NodeID Identifier of the node to highlight.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 	// BackendNodeID Identifier of the backend node to highlight.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 }
 
 // OverlayLineStylePattern The line pattern (default: solid)

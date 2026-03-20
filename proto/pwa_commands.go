@@ -64,7 +64,7 @@ type PWAInstallParams struct {
 	ManifestID string `json:"manifestId"`
 	// InstallURLOrBundleURL The location of the app or bundle overriding the one derived from the
 	// manifestId.
-	InstallURLOrBundleURL string `json:"installUrlOrBundleUrl,omitempty"`
+	InstallURLOrBundleURL string `json:"installUrlOrBundleUrl,omitempty,omitzero"`
 }
 
 // PWAInstall creates a new PWAInstallParams.
@@ -107,7 +107,7 @@ func (p *PWAUninstallParams) Do(ctx context.Context) error {
 // can be used to attach to via Target.attachToTarget or similar APIs.
 type PWALaunchParams struct {
 	ManifestID string `json:"manifestId"`
-	URL        string `json:"url,omitempty"`
+	URL        string `json:"url,omitempty,omitzero"`
 }
 
 // PWALaunchReturns holds the return values for launch.
@@ -220,8 +220,8 @@ type PWAChangeAppUserSettingsParams struct {
 	//
 	// TODO(crbug.com/339453269): Setting this value on ChromeOS is not
 	// supported yet.
-	LinkCapturing bool           `json:"linkCapturing,omitempty"`
-	DisplayMode   PWADisplayMode `json:"displayMode,omitempty"`
+	LinkCapturing bool           `json:"linkCapturing,omitempty,omitzero"`
+	DisplayMode   PWADisplayMode `json:"displayMode,omitempty,omitzero"`
 }
 
 // PWAChangeAppUserSettings creates a new PWAChangeAppUserSettingsParams.

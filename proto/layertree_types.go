@@ -33,9 +33,9 @@ type LayerTreeStickyPositionConstraint struct {
 	// ContainingBlockRect Layout rectangle of the containing block of the sticky element
 	ContainingBlockRect DOMRect `json:"containingBlockRect"`
 	// NearestLayerShiftingStickyBox The nearest sticky layer that shifts the sticky box
-	NearestLayerShiftingStickyBox LayerTreeLayerID `json:"nearestLayerShiftingStickyBox,omitempty"`
+	NearestLayerShiftingStickyBox LayerTreeLayerID `json:"nearestLayerShiftingStickyBox,omitempty,omitzero"`
 	// NearestLayerShiftingContainingBlock The nearest sticky layer that shifts the containing block
-	NearestLayerShiftingContainingBlock LayerTreeLayerID `json:"nearestLayerShiftingContainingBlock,omitempty"`
+	NearestLayerShiftingContainingBlock LayerTreeLayerID `json:"nearestLayerShiftingContainingBlock,omitempty,omitzero"`
 }
 
 // LayerTreePictureTile Serialized fragment of layer picture along with its offset within the layer.
@@ -53,9 +53,9 @@ type LayerTreeLayer struct {
 	// LayerID The unique id for this layer.
 	LayerID LayerTreeLayerID `json:"layerId"`
 	// ParentLayerID The id of parent (not present for root).
-	ParentLayerID LayerTreeLayerID `json:"parentLayerId,omitempty"`
+	ParentLayerID LayerTreeLayerID `json:"parentLayerId,omitempty,omitzero"`
 	// BackendNodeID The backend id for the node associated with this layer.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// OffsetX Offset from parent layer, X coordinate.
 	OffsetX float64 `json:"offsetX"`
 	// OffsetY Offset from parent layer, Y coordinate.
@@ -65,24 +65,24 @@ type LayerTreeLayer struct {
 	// Height Layer height.
 	Height float64 `json:"height"`
 	// Transform Transformation matrix for layer, default is identity matrix
-	Transform []float64 `json:"transform,omitempty"`
+	Transform []float64 `json:"transform,omitempty,omitzero"`
 	// AnchorX Transform anchor point X, absent if no transform specified
-	AnchorX float64 `json:"anchorX,omitempty"`
+	AnchorX float64 `json:"anchorX,omitempty,omitzero"`
 	// AnchorY Transform anchor point Y, absent if no transform specified
-	AnchorY float64 `json:"anchorY,omitempty"`
+	AnchorY float64 `json:"anchorY,omitempty,omitzero"`
 	// AnchorZ Transform anchor point Z, absent if no transform specified
-	AnchorZ float64 `json:"anchorZ,omitempty"`
+	AnchorZ float64 `json:"anchorZ,omitempty,omitzero"`
 	// PaintCount Indicates how many time this layer has painted.
 	PaintCount int64 `json:"paintCount"`
 	// DrawsContent Indicates whether this layer hosts any content, rather than being used for
 	// transform/scrolling purposes only.
 	DrawsContent bool `json:"drawsContent"`
 	// Invisible Set if layer is not visible.
-	Invisible bool `json:"invisible,omitempty"`
+	Invisible bool `json:"invisible,omitempty,omitzero"`
 	// ScrollRects Rectangles scrolling on main thread only.
-	ScrollRects []LayerTreeScrollRect `json:"scrollRects,omitempty"`
+	ScrollRects []LayerTreeScrollRect `json:"scrollRects,omitempty,omitzero"`
 	// StickyPositionConstraint Sticky position constraint information
-	StickyPositionConstraint LayerTreeStickyPositionConstraint `json:"stickyPositionConstraint,omitempty"`
+	StickyPositionConstraint LayerTreeStickyPositionConstraint `json:"stickyPositionConstraint,omitempty,omitzero"`
 }
 
 // LayerTreePaintProfile Array of timings, one per paint step.

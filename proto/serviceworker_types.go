@@ -132,13 +132,13 @@ type ServiceWorkerServiceWorkerVersion struct {
 	RunningStatus  ServiceWorkerServiceWorkerVersionRunningStatus `json:"runningStatus"`
 	Status         ServiceWorkerServiceWorkerVersionStatus        `json:"status"`
 	// ScriptLastModified The Last-Modified header value of the main script.
-	ScriptLastModified float64 `json:"scriptLastModified,omitempty"`
+	ScriptLastModified float64 `json:"scriptLastModified,omitempty,omitzero"`
 	// ScriptResponseTime The time at which the response headers of the main script were received from the server.
 	// For cached script it is the last time the cache entry was validated.
-	ScriptResponseTime float64          `json:"scriptResponseTime,omitempty"`
-	ControlledClients  []TargetTargetID `json:"controlledClients,omitempty"`
-	TargetID           TargetTargetID   `json:"targetId,omitempty"`
-	RouterRules        string           `json:"routerRules,omitempty"`
+	ScriptResponseTime float64          `json:"scriptResponseTime,omitempty,omitzero"`
+	ControlledClients  []TargetTargetID `json:"controlledClients,omitempty,omitzero"`
+	TargetID           TargetTargetID   `json:"targetId,omitempty,omitzero"`
+	RouterRules        string           `json:"routerRules,omitempty,omitzero"`
 }
 
 // ServiceWorkerServiceWorkerErrorMessage ServiceWorker error message.

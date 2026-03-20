@@ -12,7 +12,7 @@ type WebAuthnEnableParams struct {
 	// experience. Disabling the UI is recommended for automated testing.
 	// Supported at the embedder's discretion if UI is available.
 	// Defaults to false.
-	EnableUI bool `json:"enableUI,omitempty"`
+	EnableUI bool `json:"enableUI,omitempty,omitzero"`
 }
 
 // WebAuthnEnable creates a new WebAuthnEnableParams.
@@ -75,13 +75,13 @@ type WebAuthnSetResponseOverrideBitsParams struct {
 	AuthenticatorID WebAuthnAuthenticatorID `json:"authenticatorId"`
 	// IsBogusSignature If isBogusSignature is set, overrides the signature in the authenticator response to be zero.
 	// Defaults to false.
-	IsBogusSignature bool `json:"isBogusSignature,omitempty"`
+	IsBogusSignature bool `json:"isBogusSignature,omitempty,omitzero"`
 	// IsBadUV If isBadUV is set, overrides the UV bit in the flags in the authenticator response to
 	// be zero. Defaults to false.
-	IsBadUV bool `json:"isBadUV,omitempty"`
+	IsBadUV bool `json:"isBadUV,omitempty,omitzero"`
 	// IsBadUP If isBadUP is set, overrides the UP bit in the flags in the authenticator response to
 	// be zero. Defaults to false.
-	IsBadUP bool `json:"isBadUP,omitempty"`
+	IsBadUP bool `json:"isBadUP,omitempty,omitzero"`
 }
 
 // WebAuthnSetResponseOverrideBits creates a new WebAuthnSetResponseOverrideBitsParams.
@@ -286,8 +286,8 @@ func (p *WebAuthnSetAutomaticPresenceSimulationParams) Do(ctx context.Context) e
 type WebAuthnSetCredentialPropertiesParams struct {
 	AuthenticatorID   WebAuthnAuthenticatorID `json:"authenticatorId"`
 	CredentialID      []byte                  `json:"credentialId"`
-	BackupEligibility bool                    `json:"backupEligibility,omitempty"`
-	BackupState       bool                    `json:"backupState,omitempty"`
+	BackupEligibility bool                    `json:"backupEligibility,omitempty,omitzero"`
+	BackupState       bool                    `json:"backupState,omitempty,omitzero"`
 }
 
 // WebAuthnSetCredentialProperties creates a new WebAuthnSetCredentialPropertiesParams.

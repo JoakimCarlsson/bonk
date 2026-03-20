@@ -47,11 +47,11 @@ func (p *CacheStorageDeleteEntryParams) Do(ctx context.Context) error {
 type CacheStorageRequestCacheNamesParams struct {
 	// SecurityOrigin At least and at most one of securityOrigin, storageKey, storageBucket must be specified.
 	// Security origin.
-	SecurityOrigin string `json:"securityOrigin,omitempty"`
+	SecurityOrigin string `json:"securityOrigin,omitempty,omitzero"`
 	// StorageKey Storage key.
-	StorageKey string `json:"storageKey,omitempty"`
+	StorageKey string `json:"storageKey,omitempty,omitzero"`
 	// StorageBucket Storage bucket. If not specified, it uses the default bucket.
-	StorageBucket StorageStorageBucket `json:"storageBucket,omitempty"`
+	StorageBucket StorageStorageBucket `json:"storageBucket,omitempty,omitzero"`
 }
 
 // CacheStorageRequestCacheNamesReturns holds the return values for requestCacheNames.
@@ -131,11 +131,11 @@ type CacheStorageRequestEntriesParams struct {
 	// CacheID ID of cache to get entries from.
 	CacheID CacheStorageCacheID `json:"cacheId"`
 	// SkipCount Number of records to skip.
-	SkipCount int64 `json:"skipCount,omitempty"`
+	SkipCount int64 `json:"skipCount,omitempty,omitzero"`
 	// PageSize Number of records to fetch.
-	PageSize int64 `json:"pageSize,omitempty"`
+	PageSize int64 `json:"pageSize,omitempty,omitzero"`
 	// PathFilter If present, only return the entries containing this substring in the path
-	PathFilter string `json:"pathFilter,omitempty"`
+	PathFilter string `json:"pathFilter,omitempty,omitzero"`
 }
 
 // CacheStorageRequestEntriesReturns holds the return values for requestEntries.

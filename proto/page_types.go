@@ -98,7 +98,7 @@ func (t PageAdFrameExplanation) String() string {
 // PageAdFrameStatus Indicates whether a frame has been identified as an ad and why.
 type PageAdFrameStatus struct {
 	AdFrameType  PageAdFrameType          `json:"adFrameType"`
-	Explanations []PageAdFrameExplanation `json:"explanations,omitempty"`
+	Explanations []PageAdFrameExplanation `json:"explanations,omitempty,omitzero"`
 }
 
 // PageSecureContextType Indicates whether the frame is a secure context and why it is the case.
@@ -785,7 +785,7 @@ type PagePermissionsPolicyBlockLocator struct {
 type PagePermissionsPolicyFeatureState struct {
 	Feature PagePermissionsPolicyFeature      `json:"feature"`
 	Allowed bool                              `json:"allowed"`
-	Locator PagePermissionsPolicyBlockLocator `json:"locator,omitempty"`
+	Locator PagePermissionsPolicyBlockLocator `json:"locator,omitempty,omitzero"`
 }
 
 // PageOriginTrialTokenStatus Origin Trial(https://www.chromium.org/blink/origin-trials) support.
@@ -978,7 +978,7 @@ type PageOriginTrialTokenWithStatus struct {
 	RawTokenText string `json:"rawTokenText"`
 	// ParsedToken `parsedToken` is present only when the token is extractable and
 	// parsable.
-	ParsedToken PageOriginTrialToken       `json:"parsedToken,omitempty"`
+	ParsedToken PageOriginTrialToken       `json:"parsedToken,omitempty,omitzero"`
 	Status      PageOriginTrialTokenStatus `json:"status"`
 }
 
@@ -1001,15 +1001,15 @@ type PageFrame struct {
 	// ID Frame unique identifier.
 	ID FrameID `json:"id"`
 	// ParentID Parent frame identifier.
-	ParentID FrameID `json:"parentId,omitempty"`
+	ParentID FrameID `json:"parentId,omitempty,omitzero"`
 	// LoaderID Identifier of the loader associated with this frame.
 	LoaderID LoaderID `json:"loaderId"`
 	// Name Frame's name as specified in the tag.
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty,omitzero"`
 	// URL Frame document's URL without fragment.
 	URL string `json:"url"`
 	// URLFragment Frame document's URL fragment including the '#'.
-	URLFragment string `json:"urlFragment,omitempty"`
+	URLFragment string `json:"urlFragment,omitempty,omitzero"`
 	// DomainAndRegistry Frame document's registered domain, taking the public suffixes list into account.
 	// Extracted from the Frame's url.
 	// Example URLs: http://www.google.com/file.html -> "google.com"
@@ -1018,13 +1018,13 @@ type PageFrame struct {
 	// SecurityOrigin Frame document's security origin.
 	SecurityOrigin string `json:"securityOrigin"`
 	// SecurityOriginDetails Additional details about the frame document's security origin.
-	SecurityOriginDetails PageSecurityOriginDetails `json:"securityOriginDetails,omitempty"`
+	SecurityOriginDetails PageSecurityOriginDetails `json:"securityOriginDetails,omitempty,omitzero"`
 	// MimeType Frame document's mimeType as determined by the browser.
 	MimeType string `json:"mimeType"`
 	// UnreachableURL If the frame failed to load, this contains the URL that could not be loaded. Note that unlike url above, this URL may contain a fragment.
-	UnreachableURL string `json:"unreachableUrl,omitempty"`
+	UnreachableURL string `json:"unreachableUrl,omitempty,omitzero"`
 	// AdFrameStatus Indicates whether this frame was tagged as an ad and why.
-	AdFrameStatus PageAdFrameStatus `json:"adFrameStatus,omitempty"`
+	AdFrameStatus PageAdFrameStatus `json:"adFrameStatus,omitempty,omitzero"`
 	// SecureContextType Indicates whether the main document is a secure context and explains why that is the case.
 	SecureContextType PageSecureContextType `json:"secureContextType"`
 	// CrossOriginIsolatedContextType Indicates whether this is a cross origin isolated context.
@@ -1042,13 +1042,13 @@ type PageFrameResource struct {
 	// MimeType Resource mimeType as determined by the browser.
 	MimeType string `json:"mimeType"`
 	// LastModified last-modified timestamp as reported by server.
-	LastModified TimeSinceEpoch `json:"lastModified,omitempty"`
+	LastModified TimeSinceEpoch `json:"lastModified,omitempty,omitzero"`
 	// ContentSize Resource content size.
-	ContentSize float64 `json:"contentSize,omitempty"`
+	ContentSize float64 `json:"contentSize,omitempty,omitzero"`
 	// Failed True if the resource failed to load.
-	Failed bool `json:"failed,omitempty"`
+	Failed bool `json:"failed,omitempty,omitzero"`
 	// Canceled True if the resource was canceled during loading.
-	Canceled bool `json:"canceled,omitempty"`
+	Canceled bool `json:"canceled,omitempty,omitzero"`
 }
 
 // PageFrameResourceTree Information about the Frame hierarchy along with their cached resources.
@@ -1056,7 +1056,7 @@ type PageFrameResourceTree struct {
 	// Frame Frame information for this tree item.
 	Frame PageFrame `json:"frame"`
 	// ChildFrames Child frames.
-	ChildFrames []PageFrameResourceTree `json:"childFrames,omitempty"`
+	ChildFrames []PageFrameResourceTree `json:"childFrames,omitempty,omitzero"`
 	// Resources Information about frame resources.
 	Resources []PageFrameResource `json:"resources"`
 }
@@ -1066,7 +1066,7 @@ type PageFrameTree struct {
 	// Frame Frame information for this tree item.
 	Frame PageFrame `json:"frame"`
 	// ChildFrames Child frames.
-	ChildFrames []PageFrameTree `json:"childFrames,omitempty"`
+	ChildFrames []PageFrameTree `json:"childFrames,omitempty,omitzero"`
 }
 
 // PageScriptIdentifier Unique script identifier.
@@ -1193,7 +1193,7 @@ type PageScreencastFrameMetadata struct {
 	// ScrollOffsetY Position of vertical scroll in CSS pixels.
 	ScrollOffsetY float64 `json:"scrollOffsetY"`
 	// Timestamp Frame swap timestamp.
-	Timestamp TimeSinceEpoch `json:"timestamp,omitempty"`
+	Timestamp TimeSinceEpoch `json:"timestamp,omitempty,omitzero"`
 }
 
 // PageDialogType Javascript dialog type.
@@ -1294,7 +1294,7 @@ type PageVisualViewport struct {
 	// Scale Scale relative to the ideal viewport (size at width=device-width).
 	Scale float64 `json:"scale"`
 	// Zoom Page zoom factor (CSS to device independent pixels ratio).
-	Zoom float64 `json:"zoom,omitempty"`
+	Zoom float64 `json:"zoom,omitempty,omitzero"`
 }
 
 // PageViewport Viewport for capturing screenshot.
@@ -1314,19 +1314,19 @@ type PageViewport struct {
 // PageFontFamilies Generic font families collection.
 type PageFontFamilies struct {
 	// Standard The standard font-family.
-	Standard string `json:"standard,omitempty"`
+	Standard string `json:"standard,omitempty,omitzero"`
 	// Fixed The fixed font-family.
-	Fixed string `json:"fixed,omitempty"`
+	Fixed string `json:"fixed,omitempty,omitzero"`
 	// Serif The serif font-family.
-	Serif string `json:"serif,omitempty"`
+	Serif string `json:"serif,omitempty,omitzero"`
 	// SansSerif The sansSerif font-family.
-	SansSerif string `json:"sansSerif,omitempty"`
+	SansSerif string `json:"sansSerif,omitempty,omitzero"`
 	// Cursive The cursive font-family.
-	Cursive string `json:"cursive,omitempty"`
+	Cursive string `json:"cursive,omitempty,omitzero"`
 	// Fantasy The fantasy font-family.
-	Fantasy string `json:"fantasy,omitempty"`
+	Fantasy string `json:"fantasy,omitempty,omitzero"`
 	// Math The math font-family.
-	Math string `json:"math,omitempty"`
+	Math string `json:"math,omitempty,omitzero"`
 }
 
 // PageScriptFontFamilies Font families collection for a script.
@@ -1340,9 +1340,9 @@ type PageScriptFontFamilies struct {
 // PageFontSizes Default font sizes.
 type PageFontSizes struct {
 	// Standard Default standard font size.
-	Standard int64 `json:"standard,omitempty"`
+	Standard int64 `json:"standard,omitempty,omitzero"`
 	// Fixed Default fixed font size.
-	Fixed int64 `json:"fixed,omitempty"`
+	Fixed int64 `json:"fixed,omitempty,omitzero"`
 }
 
 type PageClientNavigationReason string
@@ -1557,20 +1557,20 @@ type PageCompilationCacheParams struct {
 	URL string `json:"url"`
 	// Eager A hint to the backend whether eager compilation is recommended.
 	// (the actual compilation mode used is upon backend discretion).
-	Eager bool `json:"eager,omitempty"`
+	Eager bool `json:"eager,omitempty,omitzero"`
 }
 
 type PageFileFilter struct {
-	Name    string   `json:"name,omitempty"`
-	Accepts []string `json:"accepts,omitempty"`
+	Name    string   `json:"name,omitempty,omitzero"`
+	Accepts []string `json:"accepts,omitempty,omitzero"`
 }
 
 type PageFileHandler struct {
 	Action string              `json:"action"`
 	Name   string              `json:"name"`
-	Icons  []PageImageResource `json:"icons,omitempty"`
+	Icons  []PageImageResource `json:"icons,omitempty,omitzero"`
 	// Accepts Mimic a map, name is the key, accepts is the value.
-	Accepts []PageFileFilter `json:"accepts,omitempty"`
+	Accepts []PageFileFilter `json:"accepts,omitempty,omitzero"`
 	// LaunchType Won't repeat the enums, using string for easy comparison. Same as the
 	// other enums below.
 	LaunchType string `json:"launchType"`
@@ -1581,8 +1581,8 @@ type PageImageResource struct {
 	// URL The src field in the definition, but changing to url in favor of
 	// consistency.
 	URL   string `json:"url"`
-	Sizes string `json:"sizes,omitempty"`
-	Type  string `json:"type,omitempty"`
+	Sizes string `json:"sizes,omitempty,omitzero"`
+	Type  string `json:"type,omitempty,omitzero"`
 }
 
 type PageLaunchHandler struct {
@@ -1595,7 +1595,7 @@ type PageProtocolHandler struct {
 }
 
 type PageRelatedApplication struct {
-	ID  string `json:"id,omitempty"`
+	ID  string `json:"id,omitempty,omitzero"`
 	URL string `json:"url"`
 }
 
@@ -1609,7 +1609,7 @@ type PageScopeExtension struct {
 type PageScreenshot struct {
 	Image      PageImageResource `json:"image"`
 	FormFactor string            `json:"formFactor"`
-	Label      string            `json:"label,omitempty"`
+	Label      string            `json:"label,omitempty,omitzero"`
 }
 
 type PageShareTarget struct {
@@ -1617,10 +1617,10 @@ type PageShareTarget struct {
 	Method  string `json:"method"`
 	Enctype string `json:"enctype"`
 	// Title Embed the ShareTargetParams
-	Title string           `json:"title,omitempty"`
-	Text  string           `json:"text,omitempty"`
-	URL   string           `json:"url,omitempty"`
-	Files []PageFileFilter `json:"files,omitempty"`
+	Title string           `json:"title,omitempty,omitzero"`
+	Text  string           `json:"text,omitempty,omitzero"`
+	URL   string           `json:"url,omitempty,omitzero"`
+	Files []PageFileFilter `json:"files,omitempty,omitzero"`
 }
 
 type PageShortcut struct {
@@ -1629,39 +1629,39 @@ type PageShortcut struct {
 }
 
 type PageWebAppManifest struct {
-	BackgroundColor string `json:"backgroundColor,omitempty"`
+	BackgroundColor string `json:"backgroundColor,omitempty,omitzero"`
 	// Description The extra description provided by the manifest.
-	Description string `json:"description,omitempty"`
-	Dir         string `json:"dir,omitempty"`
-	Display     string `json:"display,omitempty"`
+	Description string `json:"description,omitempty,omitzero"`
+	Dir         string `json:"dir,omitempty,omitzero"`
+	Display     string `json:"display,omitempty,omitzero"`
 	// DisplayOverrides The overrided display mode controlled by the user.
-	DisplayOverrides []string `json:"displayOverrides,omitempty"`
+	DisplayOverrides []string `json:"displayOverrides,omitempty,omitzero"`
 	// FileHandlers The handlers to open files.
-	FileHandlers []PageFileHandler   `json:"fileHandlers,omitempty"`
-	Icons        []PageImageResource `json:"icons,omitempty"`
-	ID           string              `json:"id,omitempty"`
-	Lang         string              `json:"lang,omitempty"`
+	FileHandlers []PageFileHandler   `json:"fileHandlers,omitempty,omitzero"`
+	Icons        []PageImageResource `json:"icons,omitempty,omitzero"`
+	ID           string              `json:"id,omitempty,omitzero"`
+	Lang         string              `json:"lang,omitempty,omitzero"`
 	// LaunchHandler TODO(crbug.com/1231886): This field is non-standard and part of a Chrome
 	// experiment. See:
 	// https://github.com/WICG/web-app-launch/blob/main/launch_handler.md
-	LaunchHandler             PageLaunchHandler `json:"launchHandler,omitempty"`
-	Name                      string            `json:"name,omitempty"`
-	Orientation               string            `json:"orientation,omitempty"`
-	PreferRelatedApplications bool              `json:"preferRelatedApplications,omitempty"`
+	LaunchHandler             PageLaunchHandler `json:"launchHandler,omitempty,omitzero"`
+	Name                      string            `json:"name,omitempty,omitzero"`
+	Orientation               string            `json:"orientation,omitempty,omitzero"`
+	PreferRelatedApplications bool              `json:"preferRelatedApplications,omitempty,omitzero"`
 	// ProtocolHandlers The handlers to open protocols.
-	ProtocolHandlers    []PageProtocolHandler    `json:"protocolHandlers,omitempty"`
-	RelatedApplications []PageRelatedApplication `json:"relatedApplications,omitempty"`
-	Scope               string                   `json:"scope,omitempty"`
+	ProtocolHandlers    []PageProtocolHandler    `json:"protocolHandlers,omitempty,omitzero"`
+	RelatedApplications []PageRelatedApplication `json:"relatedApplications,omitempty,omitzero"`
+	Scope               string                   `json:"scope,omitempty,omitzero"`
 	// ScopeExtensions Non-standard, see
 	// https://github.com/WICG/manifest-incubations/blob/gh-pages/scope_extensions-explainer.md
-	ScopeExtensions []PageScopeExtension `json:"scopeExtensions,omitempty"`
+	ScopeExtensions []PageScopeExtension `json:"scopeExtensions,omitempty,omitzero"`
 	// Screenshots The screenshots used by chromium.
-	Screenshots []PageScreenshot `json:"screenshots,omitempty"`
-	ShareTarget PageShareTarget  `json:"shareTarget,omitempty"`
-	ShortName   string           `json:"shortName,omitempty"`
-	Shortcuts   []PageShortcut   `json:"shortcuts,omitempty"`
-	StartURL    string           `json:"startUrl,omitempty"`
-	ThemeColor  string           `json:"themeColor,omitempty"`
+	Screenshots []PageScreenshot `json:"screenshots,omitempty,omitzero"`
+	ShareTarget PageShareTarget  `json:"shareTarget,omitempty,omitzero"`
+	ShortName   string           `json:"shortName,omitempty,omitzero"`
+	Shortcuts   []PageShortcut   `json:"shortcuts,omitempty,omitzero"`
+	StartURL    string           `json:"startUrl,omitempty,omitzero"`
+	ThemeColor  string           `json:"themeColor,omitempty,omitzero"`
 }
 
 // PageNavigationType The type of a frameNavigated event.
@@ -2379,9 +2379,9 @@ func (t PageBackForwardCacheNotRestoredReasonType) String() string {
 
 type PageBackForwardCacheBlockingDetails struct {
 	// URL Url of the file where blockage happened. Optional because of tests.
-	URL string `json:"url,omitempty"`
+	URL string `json:"url,omitempty,omitzero"`
 	// Function Function name where blockage happened. Optional because of anonymous functions and tests.
-	Function string `json:"function,omitempty"`
+	Function string `json:"function,omitempty,omitzero"`
 	// LineNumber Line number in the script (0-based).
 	LineNumber int64 `json:"lineNumber"`
 	// ColumnNumber Column number in the script (0-based).
@@ -2397,8 +2397,8 @@ type PageBackForwardCacheNotRestoredExplanation struct {
 	// dependent on the reason:
 	// - EmbedderExtensionSentMessageToCachedFrame: the extension ID.
 	//
-	Context string                                `json:"context,omitempty"`
-	Details []PageBackForwardCacheBlockingDetails `json:"details,omitempty"`
+	Context string                                `json:"context,omitempty,omitzero"`
+	Details []PageBackForwardCacheBlockingDetails `json:"details,omitempty,omitzero"`
 }
 
 type PageBackForwardCacheNotRestoredExplanationTree struct {

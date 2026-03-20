@@ -465,13 +465,13 @@ type StorageSharedStorageMetadata struct {
 // run or selectURL.
 type StorageSharedStoragePrivateAggregationConfig struct {
 	// AggregationCoordinatorOrigin The chosen aggregation service deployment.
-	AggregationCoordinatorOrigin string `json:"aggregationCoordinatorOrigin,omitempty"`
+	AggregationCoordinatorOrigin string `json:"aggregationCoordinatorOrigin,omitempty,omitzero"`
 	// ContextID The context ID provided.
-	ContextID string `json:"contextId,omitempty"`
+	ContextID string `json:"contextId,omitempty,omitzero"`
 	// FilteringIDMaxBytes Configures the maximum size allowed for filtering IDs.
 	FilteringIDMaxBytes int64 `json:"filteringIdMaxBytes"`
 	// MaxContributions The limit on the number of contributions in the final report.
-	MaxContributions int64 `json:"maxContributions,omitempty"`
+	MaxContributions int64 `json:"maxContributions,omitempty,omitzero"`
 }
 
 // StorageSharedStorageReportingMetadata Pair of reporting metadata details for a candidate URL for `selectURL()`.
@@ -494,67 +494,67 @@ type StorageSharedStorageAccessParams struct {
 	// ScriptSourceURL Spec of the module script URL.
 	// Present only for SharedStorageAccessMethods: addModule and
 	// createWorklet.
-	ScriptSourceURL string `json:"scriptSourceUrl,omitempty"`
+	ScriptSourceURL string `json:"scriptSourceUrl,omitempty,omitzero"`
 	// DataOrigin String denoting "context-origin", "script-origin", or a custom
 	// origin to be used as the worklet's data origin.
 	// Present only for SharedStorageAccessMethod: createWorklet.
-	DataOrigin string `json:"dataOrigin,omitempty"`
+	DataOrigin string `json:"dataOrigin,omitempty,omitzero"`
 	// OperationName Name of the registered operation to be run.
 	// Present only for SharedStorageAccessMethods: run and selectURL.
-	OperationName string `json:"operationName,omitempty"`
+	OperationName string `json:"operationName,omitempty,omitzero"`
 	// OperationID ID of the operation call.
 	// Present only for SharedStorageAccessMethods: run and selectURL.
-	OperationID string `json:"operationId,omitempty"`
+	OperationID string `json:"operationId,omitempty,omitzero"`
 	// KeepAlive Whether or not to keep the worket alive for future run or selectURL
 	// calls.
 	// Present only for SharedStorageAccessMethods: run and selectURL.
-	KeepAlive bool `json:"keepAlive,omitempty"`
+	KeepAlive bool `json:"keepAlive,omitempty,omitzero"`
 	// PrivateAggregationConfig Configures the private aggregation options.
 	// Present only for SharedStorageAccessMethods: run and selectURL.
-	PrivateAggregationConfig StorageSharedStoragePrivateAggregationConfig `json:"privateAggregationConfig,omitempty"`
+	PrivateAggregationConfig StorageSharedStoragePrivateAggregationConfig `json:"privateAggregationConfig,omitempty,omitzero"`
 	// SerializedData The operation's serialized data in bytes (converted to a string).
 	// Present only for SharedStorageAccessMethods: run and selectURL.
 	// TODO(crbug.com/401011862): Consider updating this parameter to binary.
-	SerializedData string `json:"serializedData,omitempty"`
+	SerializedData string `json:"serializedData,omitempty,omitzero"`
 	// UrlsWithMetadata Array of candidate URLs' specs, along with any associated metadata.
 	// Present only for SharedStorageAccessMethod: selectURL.
-	UrlsWithMetadata []StorageSharedStorageURLWithMetadata `json:"urlsWithMetadata,omitempty"`
+	UrlsWithMetadata []StorageSharedStorageURLWithMetadata `json:"urlsWithMetadata,omitempty,omitzero"`
 	// UrnUUID Spec of the URN:UUID generated for a selectURL call.
 	// Present only for SharedStorageAccessMethod: selectURL.
-	UrnUUID string `json:"urnUuid,omitempty"`
+	UrnUUID string `json:"urnUuid,omitempty,omitzero"`
 	// Key Key for a specific entry in an origin's shared storage.
 	// Present only for SharedStorageAccessMethods: set, append, delete, and
 	// get.
-	Key string `json:"key,omitempty"`
+	Key string `json:"key,omitempty,omitzero"`
 	// Value Value for a specific entry in an origin's shared storage.
 	// Present only for SharedStorageAccessMethods: set and append.
-	Value string `json:"value,omitempty"`
+	Value string `json:"value,omitempty,omitzero"`
 	// IgnoreIfPresent Whether or not to set an entry for a key if that key is already present.
 	// Present only for SharedStorageAccessMethod: set.
-	IgnoreIfPresent bool `json:"ignoreIfPresent,omitempty"`
+	IgnoreIfPresent bool `json:"ignoreIfPresent,omitempty,omitzero"`
 	// WorkletOrdinal A number denoting the (0-based) order of the worklet's
 	// creation relative to all other shared storage worklets created by
 	// documents using the current storage partition.
 	// Present only for SharedStorageAccessMethods: addModule, createWorklet.
-	WorkletOrdinal int64 `json:"workletOrdinal,omitempty"`
+	WorkletOrdinal int64 `json:"workletOrdinal,omitempty,omitzero"`
 	// WorkletTargetID Hex representation of the DevTools token used as the TargetID for the
 	// associated shared storage worklet.
 	// Present only for SharedStorageAccessMethods: addModule, createWorklet,
 	// run, selectURL, and any other SharedStorageAccessMethod when the
 	// SharedStorageAccessScope is sharedStorageWorklet.
-	WorkletTargetID TargetTargetID `json:"workletTargetId,omitempty"`
+	WorkletTargetID TargetTargetID `json:"workletTargetId,omitempty,omitzero"`
 	// WithLock Name of the lock to be acquired, if present.
 	// Optionally present only for SharedStorageAccessMethods: batchUpdate,
 	// set, append, delete, and clear.
-	WithLock string `json:"withLock,omitempty"`
+	WithLock string `json:"withLock,omitempty,omitzero"`
 	// BatchUpdateID If the method has been called as part of a batchUpdate, then this
 	// number identifies the batch to which it belongs.
 	// Optionally present only for SharedStorageAccessMethods:
 	// batchUpdate (required), set, append, delete, and clear.
-	BatchUpdateID string `json:"batchUpdateId,omitempty"`
+	BatchUpdateID string `json:"batchUpdateId,omitempty,omitzero"`
 	// BatchSize Number of modifier methods sent in batch.
 	// Present only for SharedStorageAccessMethod: batchUpdate.
-	BatchSize int64 `json:"batchSize,omitempty"`
+	BatchSize int64 `json:"batchSize,omitempty,omitzero"`
 }
 
 type StorageStorageBucketsDurability string
@@ -602,7 +602,7 @@ func (t StorageStorageBucketsDurability) String() string {
 type StorageStorageBucket struct {
 	StorageKey StorageSerializedStorageKey `json:"storageKey"`
 	// Name If not specified, it is the default bucket of the storageKey.
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty,omitzero"`
 }
 
 type StorageStorageBucketInfo struct {
@@ -682,7 +682,7 @@ type StorageAttributionReportingFilterDataEntry struct {
 type StorageAttributionReportingFilterConfig struct {
 	FilterValues []StorageAttributionReportingFilterDataEntry `json:"filterValues"`
 	// LookbackWindow duration in seconds
-	LookbackWindow int64 `json:"lookbackWindow,omitempty"`
+	LookbackWindow int64 `json:"lookbackWindow,omitempty,omitzero"`
 }
 
 type StorageAttributionReportingFilterPair struct {
@@ -755,10 +755,10 @@ type StorageAttributionReportingAggregatableDebugReportingData struct {
 type StorageAttributionReportingAggregatableDebugReportingConfig struct {
 	// Budget number instead of integer because not all uint32 can be represented by
 	// int, only present for source registrations
-	Budget                       float64                                                     `json:"budget,omitempty"`
+	Budget                       float64                                                     `json:"budget,omitempty,omitzero"`
 	KeyPiece                     StorageUnsignedInt128AsBase16                               `json:"keyPiece"`
 	DebugData                    []StorageAttributionReportingAggregatableDebugReportingData `json:"debugData"`
-	AggregationCoordinatorOrigin string                                                      `json:"aggregationCoordinatorOrigin,omitempty"`
+	AggregationCoordinatorOrigin string                                                      `json:"aggregationCoordinatorOrigin,omitempty,omitzero"`
 }
 
 type StorageAttributionScopesData struct {
@@ -792,11 +792,11 @@ type StorageAttributionReportingSourceRegistration struct {
 	Priority                         StorageSignedInt64AsBase10                                  `json:"priority"`
 	FilterData                       []StorageAttributionReportingFilterDataEntry                `json:"filterData"`
 	AggregationKeys                  []StorageAttributionReportingAggregationKeysEntry           `json:"aggregationKeys"`
-	DebugKey                         StorageUnsignedInt64AsBase10                                `json:"debugKey,omitempty"`
+	DebugKey                         StorageUnsignedInt64AsBase10                                `json:"debugKey,omitempty,omitzero"`
 	TriggerDataMatching              StorageAttributionReportingTriggerDataMatching              `json:"triggerDataMatching"`
 	DestinationLimitPriority         StorageSignedInt64AsBase10                                  `json:"destinationLimitPriority"`
 	AggregatableDebugReportingConfig StorageAttributionReportingAggregatableDebugReportingConfig `json:"aggregatableDebugReportingConfig"`
-	ScopesData                       StorageAttributionScopesData                                `json:"scopesData,omitempty"`
+	ScopesData                       StorageAttributionScopesData                                `json:"scopesData,omitempty,omitzero"`
 	MaxEventLevelReports             int64                                                       `json:"maxEventLevelReports"`
 	NamedBudgets                     []StorageAttributionReportingNamedBudgetDef                 `json:"namedBudgets"`
 	DebugReporting                   bool                                                        `json:"debugReporting"`
@@ -959,7 +959,7 @@ type StorageAttributionReportingAggregatableValueEntry struct {
 type StorageAttributionReportingEventTriggerData struct {
 	Data     StorageUnsignedInt64AsBase10          `json:"data"`
 	Priority StorageSignedInt64AsBase10            `json:"priority"`
-	DedupKey StorageUnsignedInt64AsBase10          `json:"dedupKey,omitempty"`
+	DedupKey StorageUnsignedInt64AsBase10          `json:"dedupKey,omitempty,omitzero"`
 	Filters  StorageAttributionReportingFilterPair `json:"filters"`
 }
 
@@ -970,27 +970,27 @@ type StorageAttributionReportingAggregatableTriggerData struct {
 }
 
 type StorageAttributionReportingAggregatableDedupKey struct {
-	DedupKey StorageUnsignedInt64AsBase10          `json:"dedupKey,omitempty"`
+	DedupKey StorageUnsignedInt64AsBase10          `json:"dedupKey,omitempty,omitzero"`
 	Filters  StorageAttributionReportingFilterPair `json:"filters"`
 }
 
 type StorageAttributionReportingNamedBudgetCandidate struct {
-	Name    string                                `json:"name,omitempty"`
+	Name    string                                `json:"name,omitempty,omitzero"`
 	Filters StorageAttributionReportingFilterPair `json:"filters"`
 }
 
 type StorageAttributionReportingTriggerRegistration struct {
 	Filters                          StorageAttributionReportingFilterPair                       `json:"filters"`
-	DebugKey                         StorageUnsignedInt64AsBase10                                `json:"debugKey,omitempty"`
+	DebugKey                         StorageUnsignedInt64AsBase10                                `json:"debugKey,omitempty,omitzero"`
 	AggregatableDedupKeys            []StorageAttributionReportingAggregatableDedupKey           `json:"aggregatableDedupKeys"`
 	EventTriggerData                 []StorageAttributionReportingEventTriggerData               `json:"eventTriggerData"`
 	AggregatableTriggerData          []StorageAttributionReportingAggregatableTriggerData        `json:"aggregatableTriggerData"`
 	AggregatableValues               []StorageAttributionReportingAggregatableValueEntry         `json:"aggregatableValues"`
 	AggregatableFilteringIDMaxBytes  int64                                                       `json:"aggregatableFilteringIdMaxBytes"`
 	DebugReporting                   bool                                                        `json:"debugReporting"`
-	AggregationCoordinatorOrigin     string                                                      `json:"aggregationCoordinatorOrigin,omitempty"`
+	AggregationCoordinatorOrigin     string                                                      `json:"aggregationCoordinatorOrigin,omitempty,omitzero"`
 	SourceRegistrationTimeConfig     StorageAttributionReportingSourceRegistrationTimeConfig     `json:"sourceRegistrationTimeConfig"`
-	TriggerContextID                 string                                                      `json:"triggerContextId,omitempty"`
+	TriggerContextID                 string                                                      `json:"triggerContextId,omitempty,omitzero"`
 	AggregatableDebugReportingConfig StorageAttributionReportingAggregatableDebugReportingConfig `json:"aggregatableDebugReportingConfig"`
 	Scopes                           []string                                                    `json:"scopes"`
 	NamedBudgets                     []StorageAttributionReportingNamedBudgetCandidate           `json:"namedBudgets"`

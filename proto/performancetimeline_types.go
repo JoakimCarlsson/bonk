@@ -9,16 +9,16 @@ type PerformanceTimelineLargestContentfulPaint struct {
 	// Size The number of pixels being painted.
 	Size float64 `json:"size"`
 	// ElementID The id attribute of the element, if available.
-	ElementID string `json:"elementId,omitempty"`
+	ElementID string `json:"elementId,omitempty,omitzero"`
 	// URL The URL of the image (may be trimmed).
-	URL    string        `json:"url,omitempty"`
-	NodeID BackendNodeID `json:"nodeId,omitempty"`
+	URL    string        `json:"url,omitempty,omitzero"`
+	NodeID BackendNodeID `json:"nodeId,omitempty,omitzero"`
 }
 
 type PerformanceTimelineLayoutShiftAttribution struct {
 	PreviousRect DOMRect       `json:"previousRect"`
 	CurrentRect  DOMRect       `json:"currentRect"`
-	NodeID       BackendNodeID `json:"nodeId,omitempty"`
+	NodeID       BackendNodeID `json:"nodeId,omitempty,omitzero"`
 }
 
 // PerformanceTimelineLayoutShift See https://wicg.github.io/layout-instability/#sec-layout-shift and layout_shift.idl
@@ -41,7 +41,7 @@ type PerformanceTimelineTimelineEvent struct {
 	// Time Time in seconds since Epoch, monotonically increasing within document lifetime.
 	Time TimeSinceEpoch `json:"time"`
 	// Duration Event duration, if applicable.
-	Duration           float64                                   `json:"duration,omitempty"`
-	LcpDetails         PerformanceTimelineLargestContentfulPaint `json:"lcpDetails,omitempty"`
-	LayoutShiftDetails PerformanceTimelineLayoutShift            `json:"layoutShiftDetails,omitempty"`
+	Duration           float64                                   `json:"duration,omitempty,omitzero"`
+	LcpDetails         PerformanceTimelineLargestContentfulPaint `json:"lcpDetails,omitempty,omitzero"`
+	LayoutShiftDetails PerformanceTimelineLayoutShift            `json:"layoutShiftDetails,omitempty,omitzero"`
 }

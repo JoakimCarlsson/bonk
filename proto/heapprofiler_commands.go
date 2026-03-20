@@ -89,7 +89,7 @@ func (p *HeapProfilerGetHeapObjectIDParams) Do(ctx context.Context) (*HeapProfil
 type HeapProfilerGetObjectByHeapObjectIDParams struct {
 	ObjectID HeapProfilerHeapSnapshotObjectID `json:"objectId"`
 	// ObjectGroup Symbolic group name that can be used to release multiple objects.
-	ObjectGroup string `json:"objectGroup,omitempty"`
+	ObjectGroup string `json:"objectGroup,omitempty,omitzero"`
 }
 
 // HeapProfilerGetObjectByHeapObjectIDReturns holds the return values for getObjectByHeapObjectId.
@@ -145,9 +145,9 @@ func (p *HeapProfilerGetSamplingProfileParams) Do(ctx context.Context) (*HeapPro
 type HeapProfilerStartSamplingParams struct {
 	// SamplingInterval Average sample interval in bytes. Poisson distribution is used for the intervals. The
 	// default value is 32768 bytes.
-	SamplingInterval float64 `json:"samplingInterval,omitempty"`
+	SamplingInterval float64 `json:"samplingInterval,omitempty,omitzero"`
 	// StackDepth Maximum stack depth. The default value is 128.
-	StackDepth float64 `json:"stackDepth,omitempty"`
+	StackDepth float64 `json:"stackDepth,omitempty,omitzero"`
 	// IncludeObjectsCollectedByMajorGC By default, the sampling heap profiler reports only objects which are
 	// still alive when the profile is returned via getSamplingProfile or
 	// stopSampling, which is useful for determining what functions contribute
@@ -155,7 +155,7 @@ type HeapProfilerStartSamplingParams struct {
 	// heap profiler to also include information about objects discarded by
 	// major GC, which will show which functions cause large temporary memory
 	// usage or long GC pauses.
-	IncludeObjectsCollectedByMajorGC bool `json:"includeObjectsCollectedByMajorGC,omitempty"`
+	IncludeObjectsCollectedByMajorGC bool `json:"includeObjectsCollectedByMajorGC,omitempty,omitzero"`
 	// IncludeObjectsCollectedByMinorGC By default, the sampling heap profiler reports only objects which are
 	// still alive when the profile is returned via getSamplingProfile or
 	// stopSampling, which is useful for determining what functions contribute
@@ -163,7 +163,7 @@ type HeapProfilerStartSamplingParams struct {
 	// heap profiler to also include information about objects discarded by
 	// minor GC, which is useful when tuning a latency-sensitive application
 	// for minimal GC activity.
-	IncludeObjectsCollectedByMinorGC bool `json:"includeObjectsCollectedByMinorGC,omitempty"`
+	IncludeObjectsCollectedByMinorGC bool `json:"includeObjectsCollectedByMinorGC,omitempty,omitzero"`
 }
 
 // HeapProfilerStartSampling creates a new HeapProfilerStartSamplingParams.
@@ -201,7 +201,7 @@ func (p *HeapProfilerStartSamplingParams) Do(ctx context.Context) error {
 }
 
 type HeapProfilerStartTrackingHeapObjectsParams struct {
-	TrackAllocations bool `json:"trackAllocations,omitempty"`
+	TrackAllocations bool `json:"trackAllocations,omitempty,omitzero"`
 }
 
 // HeapProfilerStartTrackingHeapObjects creates a new HeapProfilerStartTrackingHeapObjectsParams.
@@ -245,13 +245,13 @@ func (p *HeapProfilerStopSamplingParams) Do(ctx context.Context) (*HeapProfilerS
 type HeapProfilerStopTrackingHeapObjectsParams struct {
 	// ReportProgress If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken
 	// when the tracking is stopped.
-	ReportProgress bool `json:"reportProgress,omitempty"`
+	ReportProgress bool `json:"reportProgress,omitempty,omitzero"`
 	// TreatGlobalObjectsAsRoots Deprecated in favor of `exposeInternals`.
-	TreatGlobalObjectsAsRoots bool `json:"treatGlobalObjectsAsRoots,omitempty"`
+	TreatGlobalObjectsAsRoots bool `json:"treatGlobalObjectsAsRoots,omitempty,omitzero"`
 	// CaptureNumericValue If true, numerical values are included in the snapshot
-	CaptureNumericValue bool `json:"captureNumericValue,omitempty"`
+	CaptureNumericValue bool `json:"captureNumericValue,omitempty,omitzero"`
 	// ExposeInternals If true, exposes internals of the snapshot.
-	ExposeInternals bool `json:"exposeInternals,omitempty"`
+	ExposeInternals bool `json:"exposeInternals,omitempty,omitzero"`
 }
 
 // HeapProfilerStopTrackingHeapObjects creates a new HeapProfilerStopTrackingHeapObjectsParams.
@@ -290,14 +290,14 @@ func (p *HeapProfilerStopTrackingHeapObjectsParams) Do(ctx context.Context) erro
 
 type HeapProfilerTakeHeapSnapshotParams struct {
 	// ReportProgress If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken.
-	ReportProgress bool `json:"reportProgress,omitempty"`
+	ReportProgress bool `json:"reportProgress,omitempty,omitzero"`
 	// TreatGlobalObjectsAsRoots If true, a raw snapshot without artificial roots will be generated.
 	// Deprecated in favor of `exposeInternals`.
-	TreatGlobalObjectsAsRoots bool `json:"treatGlobalObjectsAsRoots,omitempty"`
+	TreatGlobalObjectsAsRoots bool `json:"treatGlobalObjectsAsRoots,omitempty,omitzero"`
 	// CaptureNumericValue If true, numerical values are included in the snapshot
-	CaptureNumericValue bool `json:"captureNumericValue,omitempty"`
+	CaptureNumericValue bool `json:"captureNumericValue,omitempty,omitzero"`
 	// ExposeInternals If true, exposes internals of the snapshot.
-	ExposeInternals bool `json:"exposeInternals,omitempty"`
+	ExposeInternals bool `json:"exposeInternals,omitempty,omitzero"`
 }
 
 // HeapProfilerTakeHeapSnapshot creates a new HeapProfilerTakeHeapSnapshotParams.

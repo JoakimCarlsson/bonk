@@ -7,9 +7,9 @@ import "encoding/json"
 // WebMCPAnnotation Tool annotations
 type WebMCPAnnotation struct {
 	// ReadOnly A hint indicating that the tool does not modify any state.
-	ReadOnly bool `json:"readOnly,omitempty"`
+	ReadOnly bool `json:"readOnly,omitempty,omitzero"`
 	// Autosubmit If the declarative tool was declared with the autosubmit attribute.
-	Autosubmit bool `json:"autosubmit,omitempty"`
+	Autosubmit bool `json:"autosubmit,omitempty,omitzero"`
 }
 
 // WebMCPTool Definition of a tool that can be invoked.
@@ -19,13 +19,13 @@ type WebMCPTool struct {
 	// Description Tool description.
 	Description string `json:"description"`
 	// InputSchema Schema for the tool's input parameters.
-	InputSchema json.RawMessage `json:"inputSchema,omitempty"`
+	InputSchema json.RawMessage `json:"inputSchema,omitempty,omitzero"`
 	// Annotations Optional annotations for the tool.
-	Annotations WebMCPAnnotation `json:"annotations,omitempty"`
+	Annotations WebMCPAnnotation `json:"annotations,omitempty,omitzero"`
 	// FrameID Frame identifier associated with the tool registration.
 	FrameID FrameID `json:"frameId"`
 	// BackendNodeID Optional node ID for declarative tools.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// StackTrace The stack trace at the time of the registration.
-	StackTrace RuntimeStackTrace `json:"stackTrace,omitempty"`
+	StackTrace RuntimeStackTrace `json:"stackTrace,omitempty,omitzero"`
 }

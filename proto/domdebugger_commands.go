@@ -10,10 +10,10 @@ type DOMDebuggerGetEventListenersParams struct {
 	ObjectID RemoteObjectID `json:"objectId"`
 	// Depth The maximum depth at which Node children should be retrieved, defaults to 1. Use -1 for the
 	// entire subtree or provide an integer larger than 0.
-	Depth int64 `json:"depth,omitempty"`
+	Depth int64 `json:"depth,omitempty,omitzero"`
 	// Pierce Whether or not iframes and shadow roots should be traversed when returning the subtree
 	// (default is false). Reports listeners for all contexts if pierce is enabled.
-	Pierce bool `json:"pierce,omitempty"`
+	Pierce bool `json:"pierce,omitempty,omitzero"`
 }
 
 // DOMDebuggerGetEventListenersReturns holds the return values for getEventListeners.
@@ -76,7 +76,7 @@ type DOMDebuggerRemoveEventListenerBreakpointParams struct {
 	// EventName Event name.
 	EventName string `json:"eventName"`
 	// TargetName EventTarget interface name.
-	TargetName string `json:"targetName,omitempty"`
+	TargetName string `json:"targetName,omitempty,omitzero"`
 }
 
 // DOMDebuggerRemoveEventListenerBreakpoint creates a new DOMDebuggerRemoveEventListenerBreakpointParams.
@@ -178,7 +178,7 @@ type DOMDebuggerSetEventListenerBreakpointParams struct {
 	EventName string `json:"eventName"`
 	// TargetName EventTarget interface name to stop on. If equal to `"*"` or not provided, will stop on any
 	// EventTarget.
-	TargetName string `json:"targetName,omitempty"`
+	TargetName string `json:"targetName,omitempty,omitzero"`
 }
 
 // DOMDebuggerSetEventListenerBreakpoint creates a new DOMDebuggerSetEventListenerBreakpointParams.

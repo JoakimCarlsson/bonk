@@ -10,11 +10,11 @@ type AutofillTriggerParams struct {
 	// FieldID Identifies a field that serves as an anchor for autofill.
 	FieldID BackendNodeID `json:"fieldId"`
 	// FrameID Identifies the frame that field belongs to.
-	FrameID FrameID `json:"frameId,omitempty"`
+	FrameID FrameID `json:"frameId,omitempty,omitzero"`
 	// Card Credit card information to fill out the form. Credit card data is not saved.  Mutually exclusive with `address`.
-	Card AutofillCreditCard `json:"card,omitempty"`
+	Card AutofillCreditCard `json:"card,omitempty,omitzero"`
 	// Address Address to fill out the form. Address data is not saved. Mutually exclusive with `card`.
-	Address AutofillAddress `json:"address,omitempty"`
+	Address AutofillAddress `json:"address,omitempty,omitzero"`
 }
 
 // AutofillTrigger creates a new AutofillTriggerParams.

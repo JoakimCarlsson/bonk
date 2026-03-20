@@ -245,15 +245,15 @@ type BluetoothEmulationManufacturerData struct {
 
 // BluetoothEmulationScanRecord Stores the byte data of the advertisement packet sent by a Bluetooth device.
 type BluetoothEmulationScanRecord struct {
-	Name  string   `json:"name,omitempty"`
-	Uuids []string `json:"uuids,omitempty"`
+	Name  string   `json:"name,omitempty,omitzero"`
+	Uuids []string `json:"uuids,omitempty,omitzero"`
 	// Appearance Stores the external appearance description of the device.
-	Appearance int64 `json:"appearance,omitempty"`
+	Appearance int64 `json:"appearance,omitempty,omitzero"`
 	// TxPower Stores the transmission power of a broadcasting device.
-	TxPower int64 `json:"txPower,omitempty"`
+	TxPower int64 `json:"txPower,omitempty,omitzero"`
 	// ManufacturerData Key is the company identifier and the value is an array of bytes of
 	// manufacturer specific data.
-	ManufacturerData []BluetoothEmulationManufacturerData `json:"manufacturerData,omitempty"`
+	ManufacturerData []BluetoothEmulationManufacturerData `json:"manufacturerData,omitempty,omitzero"`
 }
 
 // BluetoothEmulationScanEntry Stores the advertisement packet information that is sent by a Bluetooth device.
@@ -266,12 +266,12 @@ type BluetoothEmulationScanEntry struct {
 // BluetoothEmulationCharacteristicProperties Describes the properties of a characteristic. This follows Bluetooth Core
 // Specification BT 4.2 Vol 3 Part G 3.3.1. Characteristic Properties.
 type BluetoothEmulationCharacteristicProperties struct {
-	Broadcast                 bool `json:"broadcast,omitempty"`
-	Read                      bool `json:"read,omitempty"`
-	WriteWithoutResponse      bool `json:"writeWithoutResponse,omitempty"`
-	Write                     bool `json:"write,omitempty"`
-	Notify                    bool `json:"notify,omitempty"`
-	Indicate                  bool `json:"indicate,omitempty"`
-	AuthenticatedSignedWrites bool `json:"authenticatedSignedWrites,omitempty"`
-	ExtendedProperties        bool `json:"extendedProperties,omitempty"`
+	Broadcast                 bool `json:"broadcast,omitempty,omitzero"`
+	Read                      bool `json:"read,omitempty,omitzero"`
+	WriteWithoutResponse      bool `json:"writeWithoutResponse,omitempty,omitzero"`
+	Write                     bool `json:"write,omitempty,omitzero"`
+	Notify                    bool `json:"notify,omitempty,omitzero"`
+	Indicate                  bool `json:"indicate,omitempty,omitzero"`
+	AuthenticatedSignedWrites bool `json:"authenticatedSignedWrites,omitempty,omitzero"`
+	ExtendedProperties        bool `json:"extendedProperties,omitempty,omitzero"`
 }

@@ -38,13 +38,13 @@ type OverlayGetHighlightObjectForTestParams struct {
 	// NodeID Id of the node to get highlight object for.
 	NodeID NodeID `json:"nodeId"`
 	// IncludeDistance Whether to include distance info.
-	IncludeDistance bool `json:"includeDistance,omitempty"`
+	IncludeDistance bool `json:"includeDistance,omitempty,omitzero"`
 	// IncludeStyle Whether to include style info.
-	IncludeStyle bool `json:"includeStyle,omitempty"`
+	IncludeStyle bool `json:"includeStyle,omitempty,omitzero"`
 	// ColorFormat The color format to get config with (default: hex).
-	ColorFormat OverlayColorFormat `json:"colorFormat,omitempty"`
+	ColorFormat OverlayColorFormat `json:"colorFormat,omitempty,omitzero"`
 	// ShowAccessibilityInfo Whether to show accessibility info (default: true).
-	ShowAccessibilityInfo bool `json:"showAccessibilityInfo,omitempty"`
+	ShowAccessibilityInfo bool `json:"showAccessibilityInfo,omitempty,omitzero"`
 }
 
 // OverlayGetHighlightObjectForTestReturns holds the return values for getHighlightObjectForTest.
@@ -170,9 +170,9 @@ type OverlayHighlightFrameParams struct {
 	// FrameID Identifier of the frame to highlight.
 	FrameID FrameID `json:"frameId"`
 	// ContentColor The content box highlight fill color (default: transparent).
-	ContentColor DOMRGBA `json:"contentColor,omitempty"`
+	ContentColor DOMRGBA `json:"contentColor,omitempty,omitzero"`
 	// ContentOutlineColor The content box highlight outline color (default: transparent).
-	ContentOutlineColor DOMRGBA `json:"contentOutlineColor,omitempty"`
+	ContentOutlineColor DOMRGBA `json:"contentOutlineColor,omitempty,omitzero"`
 }
 
 // OverlayHighlightFrame creates a new OverlayHighlightFrameParams.
@@ -205,13 +205,13 @@ type OverlayHighlightNodeParams struct {
 	// HighlightConfig A descriptor for the highlight appearance.
 	HighlightConfig OverlayHighlightConfig `json:"highlightConfig"`
 	// NodeID Identifier of the node to highlight.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 	// BackendNodeID Identifier of the backend node to highlight.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// ObjectID JavaScript object id of the node to be highlighted.
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 	// Selector Selectors to highlight relevant nodes.
-	Selector string `json:"selector,omitempty"`
+	Selector string `json:"selector,omitempty,omitzero"`
 }
 
 // OverlayHighlightNode creates a new OverlayHighlightNodeParams.
@@ -255,9 +255,9 @@ type OverlayHighlightQuadParams struct {
 	// Quad Quad to highlight
 	Quad DOMQuad `json:"quad"`
 	// Color The highlight fill color (default: transparent).
-	Color DOMRGBA `json:"color,omitempty"`
+	Color DOMRGBA `json:"color,omitempty,omitzero"`
 	// OutlineColor The highlight outline color (default: transparent).
-	OutlineColor DOMRGBA `json:"outlineColor,omitempty"`
+	OutlineColor DOMRGBA `json:"outlineColor,omitempty,omitzero"`
 }
 
 // OverlayHighlightQuad creates a new OverlayHighlightQuadParams.
@@ -298,9 +298,9 @@ type OverlayHighlightRectParams struct {
 	// Height Rectangle height
 	Height int64 `json:"height"`
 	// Color The highlight fill color (default: transparent).
-	Color DOMRGBA `json:"color,omitempty"`
+	Color DOMRGBA `json:"color,omitempty,omitzero"`
 	// OutlineColor The highlight outline color (default: transparent).
-	OutlineColor DOMRGBA `json:"outlineColor,omitempty"`
+	OutlineColor DOMRGBA `json:"outlineColor,omitempty,omitzero"`
 }
 
 // OverlayHighlightRect creates a new OverlayHighlightRectParams.
@@ -336,11 +336,11 @@ type OverlayHighlightSourceOrderParams struct {
 	// SourceOrderConfig A descriptor for the appearance of the overlay drawing.
 	SourceOrderConfig OverlaySourceOrderConfig `json:"sourceOrderConfig"`
 	// NodeID Identifier of the node to highlight.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 	// BackendNodeID Identifier of the backend node to highlight.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// ObjectID JavaScript object id of the node to be highlighted.
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 }
 
 // OverlayHighlightSourceOrder creates a new OverlayHighlightSourceOrderParams.
@@ -380,7 +380,7 @@ type OverlaySetInspectModeParams struct {
 	Mode OverlayInspectMode `json:"mode"`
 	// HighlightConfig A descriptor for the highlight appearance of hovered-over nodes. May be omitted if `enabled
 	// == false`.
-	HighlightConfig OverlayHighlightConfig `json:"highlightConfig,omitempty"`
+	HighlightConfig OverlayHighlightConfig `json:"highlightConfig,omitempty,omitzero"`
 }
 
 // OverlaySetInspectMode creates a new OverlaySetInspectModeParams.
@@ -421,7 +421,7 @@ func (p *OverlaySetShowAdHighlightsParams) Do(ctx context.Context) error {
 
 type OverlaySetPausedInDebuggerMessageParams struct {
 	// Message The message to display, also triggers resume and step over controls.
-	Message string `json:"message,omitempty"`
+	Message string `json:"message,omitempty,omitzero"`
 }
 
 // OverlaySetPausedInDebuggerMessage creates a new OverlaySetPausedInDebuggerMessageParams.
@@ -672,7 +672,7 @@ func (p *OverlaySetShowViewportSizeOnResizeParams) Do(ctx context.Context) error
 // OverlaySetShowHingeParams Add a dual screen device hinge
 type OverlaySetShowHingeParams struct {
 	// HingeConfig hinge data, null means hideHinge
-	HingeConfig OverlayHingeConfig `json:"hingeConfig,omitempty"`
+	HingeConfig OverlayHingeConfig `json:"hingeConfig,omitempty,omitzero"`
 }
 
 // OverlaySetShowHinge creates a new OverlaySetShowHingeParams.
@@ -712,7 +712,7 @@ func (p *OverlaySetShowIsolatedElementsParams) Do(ctx context.Context) error {
 // OverlaySetShowWindowControlsOverlayParams Show Window Controls Overlay for PWA
 type OverlaySetShowWindowControlsOverlayParams struct {
 	// WindowControlsOverlayConfig Window Controls Overlay data, null means hide Window Controls Overlay
-	WindowControlsOverlayConfig OverlayWindowControlsOverlayConfig `json:"windowControlsOverlayConfig,omitempty"`
+	WindowControlsOverlayConfig OverlayWindowControlsOverlayConfig `json:"windowControlsOverlayConfig,omitempty,omitzero"`
 }
 
 // OverlaySetShowWindowControlsOverlay creates a new OverlaySetShowWindowControlsOverlayParams.

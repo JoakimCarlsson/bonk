@@ -130,7 +130,7 @@ type BluetoothEmulationSimulateCharacteristicOperationResponseParams struct {
 	CharacteristicID string                                        `json:"characteristicId"`
 	Type             BluetoothEmulationCharacteristicOperationType `json:"type"`
 	Code             int64                                         `json:"code"`
-	Data             []byte                                        `json:"data,omitempty"`
+	Data             []byte                                        `json:"data,omitempty,omitzero"`
 }
 
 // BluetoothEmulationSimulateCharacteristicOperationResponse creates a new BluetoothEmulationSimulateCharacteristicOperationResponseParams.
@@ -162,7 +162,7 @@ type BluetoothEmulationSimulateDescriptorOperationResponseParams struct {
 	DescriptorID string                                    `json:"descriptorId"`
 	Type         BluetoothEmulationDescriptorOperationType `json:"type"`
 	Code         int64                                     `json:"code"`
-	Data         []byte                                    `json:"data,omitempty"`
+	Data         []byte                                    `json:"data,omitempty,omitzero"`
 }
 
 // BluetoothEmulationSimulateDescriptorOperationResponse creates a new BluetoothEmulationSimulateDescriptorOperationResponseParams.

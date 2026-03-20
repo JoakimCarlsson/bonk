@@ -98,7 +98,7 @@ type CacheStorageCache struct {
 	// StorageKey Storage key of the cache.
 	StorageKey string `json:"storageKey"`
 	// StorageBucket Storage bucket of the cache.
-	StorageBucket StorageStorageBucket `json:"storageBucket,omitempty"`
+	StorageBucket StorageStorageBucket `json:"storageBucket,omitempty,omitzero"`
 	// CacheName The name of the cache.
 	CacheName string `json:"cacheName"`
 }

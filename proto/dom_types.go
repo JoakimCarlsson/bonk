@@ -459,7 +459,7 @@ type DOMNode struct {
 	// fire DOM events for nodes known to the client.
 	NodeID NodeID `json:"nodeId"`
 	// ParentID The id of the parent node if any.
-	ParentID NodeID `json:"parentId,omitempty"`
+	ParentID NodeID `json:"parentId,omitempty,omitzero"`
 	// BackendNodeID The BackendNodeId for this node.
 	BackendNodeID BackendNodeID `json:"backendNodeId"`
 	// NodeType `Node`'s nodeType.
@@ -471,58 +471,58 @@ type DOMNode struct {
 	// NodeValue `Node`'s nodeValue.
 	NodeValue string `json:"nodeValue"`
 	// ChildNodeCount Child count for `Container` nodes.
-	ChildNodeCount int64 `json:"childNodeCount,omitempty"`
+	ChildNodeCount int64 `json:"childNodeCount,omitempty,omitzero"`
 	// Children Child nodes of this node when requested with children.
-	Children []DOMNode `json:"children,omitempty"`
+	Children []DOMNode `json:"children,omitempty,omitzero"`
 	// Attributes Attributes of the `Element` node in the form of flat array `[name1, value1, name2, value2]`.
-	Attributes []string `json:"attributes,omitempty"`
+	Attributes []string `json:"attributes,omitempty,omitzero"`
 	// DocumentURL Document URL that `Document` or `FrameOwner` node points to.
-	DocumentURL string `json:"documentURL,omitempty"`
+	DocumentURL string `json:"documentURL,omitempty,omitzero"`
 	// BaseURL Base URL that `Document` or `FrameOwner` node uses for URL completion.
-	BaseURL string `json:"baseURL,omitempty"`
+	BaseURL string `json:"baseURL,omitempty,omitzero"`
 	// PublicID `DocumentType`'s publicId.
-	PublicID string `json:"publicId,omitempty"`
+	PublicID string `json:"publicId,omitempty,omitzero"`
 	// SystemID `DocumentType`'s systemId.
-	SystemID string `json:"systemId,omitempty"`
+	SystemID string `json:"systemId,omitempty,omitzero"`
 	// InternalSubset `DocumentType`'s internalSubset.
-	InternalSubset string `json:"internalSubset,omitempty"`
+	InternalSubset string `json:"internalSubset,omitempty,omitzero"`
 	// XMLVersion `Document`'s XML version in case of XML documents.
-	XMLVersion string `json:"xmlVersion,omitempty"`
+	XMLVersion string `json:"xmlVersion,omitempty,omitzero"`
 	// Name `Attr`'s name.
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty,omitzero"`
 	// Value `Attr`'s value.
-	Value string `json:"value,omitempty"`
+	Value string `json:"value,omitempty,omitzero"`
 	// PseudoType Pseudo element type for this node.
-	PseudoType DOMPseudoType `json:"pseudoType,omitempty"`
+	PseudoType DOMPseudoType `json:"pseudoType,omitempty,omitzero"`
 	// PseudoIdentifier Pseudo element identifier for this node. Only present if there is a
 	// valid pseudoType.
-	PseudoIdentifier string `json:"pseudoIdentifier,omitempty"`
+	PseudoIdentifier string `json:"pseudoIdentifier,omitempty,omitzero"`
 	// ShadowRootType Shadow root type.
-	ShadowRootType DOMShadowRootType `json:"shadowRootType,omitempty"`
+	ShadowRootType DOMShadowRootType `json:"shadowRootType,omitempty,omitzero"`
 	// FrameID Frame ID for frame owner elements.
-	FrameID FrameID `json:"frameId,omitempty"`
+	FrameID FrameID `json:"frameId,omitempty,omitzero"`
 	// ContentDocument Content document for frame owner elements.
-	ContentDocument *DOMNode `json:"contentDocument,omitempty"`
+	ContentDocument *DOMNode `json:"contentDocument,omitempty,omitzero"`
 	// ShadowRoots Shadow root list for given element host.
-	ShadowRoots []DOMNode `json:"shadowRoots,omitempty"`
+	ShadowRoots []DOMNode `json:"shadowRoots,omitempty,omitzero"`
 	// TemplateContent Content document fragment for template elements.
-	TemplateContent *DOMNode `json:"templateContent,omitempty"`
+	TemplateContent *DOMNode `json:"templateContent,omitempty,omitzero"`
 	// PseudoElements Pseudo elements associated with this node.
-	PseudoElements []DOMNode `json:"pseudoElements,omitempty"`
+	PseudoElements []DOMNode `json:"pseudoElements,omitempty,omitzero"`
 	// ImportedDocument Deprecated, as the HTML Imports API has been removed (crbug.com/937746).
 	// This property used to return the imported document for the HTMLImport links.
 	// The property is always undefined now.
-	ImportedDocument *DOMNode `json:"importedDocument,omitempty"`
+	ImportedDocument *DOMNode `json:"importedDocument,omitempty,omitzero"`
 	// DistributedNodes Distributed nodes for given insertion point.
-	DistributedNodes []DOMBackendNode `json:"distributedNodes,omitempty"`
+	DistributedNodes []DOMBackendNode `json:"distributedNodes,omitempty,omitzero"`
 	// IsSVG Whether the node is SVG.
-	IsSVG                    bool                 `json:"isSVG,omitempty"`
-	CompatibilityMode        DOMCompatibilityMode `json:"compatibilityMode,omitempty"`
-	AssignedSlot             DOMBackendNode       `json:"assignedSlot,omitempty"`
-	IsScrollable             bool                 `json:"isScrollable,omitempty"`
-	AffectedByStartingStyles bool                 `json:"affectedByStartingStyles,omitempty"`
-	AdoptedStyleSheets       []DOMStyleSheetID    `json:"adoptedStyleSheets,omitempty"`
-	AdProvenance             NetworkAdProvenance  `json:"adProvenance,omitempty"`
+	IsSVG                    bool                 `json:"isSVG,omitempty,omitzero"`
+	CompatibilityMode        DOMCompatibilityMode `json:"compatibilityMode,omitempty,omitzero"`
+	AssignedSlot             DOMBackendNode       `json:"assignedSlot,omitempty,omitzero"`
+	IsScrollable             bool                 `json:"isScrollable,omitempty,omitzero"`
+	AffectedByStartingStyles bool                 `json:"affectedByStartingStyles,omitempty,omitzero"`
+	AdoptedStyleSheets       []DOMStyleSheetID    `json:"adoptedStyleSheets,omitempty,omitzero"`
+	AdProvenance             NetworkAdProvenance  `json:"adProvenance,omitempty,omitzero"`
 }
 
 // DOMDetachedElementInfo A structure to hold the top-level node of a detached tree and an array of its retained descendants.
@@ -540,7 +540,7 @@ type DOMRGBA struct {
 	// B The blue component, in the [0-255] range.
 	B int64 `json:"b"`
 	// A The alpha component, in the [0-1] range (default: 1).
-	A float64 `json:"a,omitempty"`
+	A float64 `json:"a,omitempty,omitzero"`
 }
 
 // DOMQuad An array of quad vertices, x immediately followed by y for each point, points clock-wise.
@@ -561,7 +561,7 @@ type DOMBoxModel struct {
 	// Height Node height
 	Height int64 `json:"height"`
 	// ShapeOutside Shape outside coordinates
-	ShapeOutside DOMShapeOutsideInfo `json:"shapeOutside,omitempty"`
+	ShapeOutside DOMShapeOutsideInfo `json:"shapeOutside,omitempty,omitzero"`
 }
 
 // DOMShapeOutsideInfo CSS Shape Outside details.

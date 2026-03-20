@@ -23,10 +23,10 @@ type FetchEnableParams struct {
 	// Patterns If specified, only requests matching any of these patterns will produce
 	// fetchRequested event and will be paused until clients response. If not set,
 	// all requests will be affected.
-	Patterns []FetchRequestPattern `json:"patterns,omitempty"`
+	Patterns []FetchRequestPattern `json:"patterns,omitempty,omitzero"`
 	// HandleAuthRequests If true, authRequired events will be issued and requests will be paused
 	// expecting a call to continueWithAuth.
-	HandleAuthRequests bool `json:"handleAuthRequests,omitempty"`
+	HandleAuthRequests bool `json:"handleAuthRequests,omitempty,omitzero"`
 }
 
 // FetchEnable creates a new FetchEnableParams.
@@ -79,19 +79,19 @@ type FetchFulfillRequestParams struct {
 	// ResponseCode An HTTP response code.
 	ResponseCode int64 `json:"responseCode"`
 	// ResponseHeaders Response headers.
-	ResponseHeaders []FetchHeaderEntry `json:"responseHeaders,omitempty"`
+	ResponseHeaders []FetchHeaderEntry `json:"responseHeaders,omitempty,omitzero"`
 	// BinaryResponseHeaders Alternative way of specifying response headers as a \0-separated
 	// series of name: value pairs. Prefer the above method unless you
 	// need to represent some non-UTF8 values that can't be transmitted
 	// over the protocol as text.
-	BinaryResponseHeaders []byte `json:"binaryResponseHeaders,omitempty"`
+	BinaryResponseHeaders []byte `json:"binaryResponseHeaders,omitempty,omitzero"`
 	// Body A response body. If absent, original response body will be used if
 	// the request is intercepted at the response stage and empty body
 	// will be used if the request is intercepted at the request stage.
-	Body []byte `json:"body,omitempty"`
+	Body []byte `json:"body,omitempty,omitzero"`
 	// ResponsePhrase A textual representation of responseCode.
 	// If absent, a standard phrase matching responseCode is used.
-	ResponsePhrase string `json:"responsePhrase,omitempty"`
+	ResponsePhrase string `json:"responsePhrase,omitempty,omitzero"`
 }
 
 // FetchFulfillRequest creates a new FetchFulfillRequestParams.
@@ -136,17 +136,17 @@ type FetchContinueRequestParams struct {
 	// RequestID An id the client received in requestPaused event.
 	RequestID RequestID `json:"requestId"`
 	// URL If set, the request url will be modified in a way that's not observable by page.
-	URL string `json:"url,omitempty"`
+	URL string `json:"url,omitempty,omitzero"`
 	// Method If set, the request method is overridden.
-	Method string `json:"method,omitempty"`
+	Method string `json:"method,omitempty,omitzero"`
 	// PostData If set, overrides the post data in the request.
-	PostData []byte `json:"postData,omitempty"`
+	PostData []byte `json:"postData,omitempty,omitzero"`
 	// Headers If set, overrides the request headers. Note that the overrides do not
 	// extend to subsequent redirect hops, if a redirect happens. Another override
 	// may be applied to a different request produced by a redirect.
-	Headers []FetchHeaderEntry `json:"headers,omitempty"`
+	Headers []FetchHeaderEntry `json:"headers,omitempty,omitzero"`
 	// InterceptResponse If set, overrides response interception behavior for this request.
-	InterceptResponse bool `json:"interceptResponse,omitempty"`
+	InterceptResponse bool `json:"interceptResponse,omitempty,omitzero"`
 }
 
 // FetchContinueRequest creates a new FetchContinueRequestParams.
@@ -219,17 +219,17 @@ type FetchContinueResponseParams struct {
 	// RequestID An id the client received in requestPaused event.
 	RequestID RequestID `json:"requestId"`
 	// ResponseCode An HTTP response code. If absent, original response code will be used.
-	ResponseCode int64 `json:"responseCode,omitempty"`
+	ResponseCode int64 `json:"responseCode,omitempty,omitzero"`
 	// ResponsePhrase A textual representation of responseCode.
 	// If absent, a standard phrase matching responseCode is used.
-	ResponsePhrase string `json:"responsePhrase,omitempty"`
+	ResponsePhrase string `json:"responsePhrase,omitempty,omitzero"`
 	// ResponseHeaders Response headers. If absent, original response headers will be used.
-	ResponseHeaders []FetchHeaderEntry `json:"responseHeaders,omitempty"`
+	ResponseHeaders []FetchHeaderEntry `json:"responseHeaders,omitempty,omitzero"`
 	// BinaryResponseHeaders Alternative way of specifying response headers as a \0-separated
 	// series of name: value pairs. Prefer the above method unless you
 	// need to represent some non-UTF8 values that can't be transmitted
 	// over the protocol as text.
-	BinaryResponseHeaders []byte `json:"binaryResponseHeaders,omitempty"`
+	BinaryResponseHeaders []byte `json:"binaryResponseHeaders,omitempty,omitzero"`
 }
 
 // FetchContinueResponse creates a new FetchContinueResponseParams.

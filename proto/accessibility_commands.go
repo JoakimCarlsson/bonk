@@ -34,13 +34,13 @@ func (p *AccessibilityEnableParams) Do(ctx context.Context) error {
 // AccessibilityGetPartialAXTreeParams Fetches the accessibility node and partial accessibility tree for this DOM node, if it exists.
 type AccessibilityGetPartialAXTreeParams struct {
 	// NodeID Identifier of the node to get the partial accessibility tree for.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 	// BackendNodeID Identifier of the backend node to get the partial accessibility tree for.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// ObjectID JavaScript object id of the node wrapper to get the partial accessibility tree for.
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 	// FetchRelatives Whether to fetch this node's ancestors, siblings and children. Defaults to true.
-	FetchRelatives bool `json:"fetchRelatives,omitempty"`
+	FetchRelatives bool `json:"fetchRelatives,omitempty,omitzero"`
 }
 
 // AccessibilityGetPartialAXTreeReturns holds the return values for getPartialAXTree.
@@ -92,10 +92,10 @@ func (p *AccessibilityGetPartialAXTreeParams) Do(ctx context.Context) (*Accessib
 type AccessibilityGetFullAXTreeParams struct {
 	// Depth The maximum depth at which descendants of the root node should be retrieved.
 	// If omitted, the full tree is returned.
-	Depth int64 `json:"depth,omitempty"`
+	Depth int64 `json:"depth,omitempty,omitzero"`
 	// FrameID The frame for whose document the AX tree should be retrieved.
 	// If omitted, the root frame is used.
-	FrameID FrameID `json:"frameId,omitempty"`
+	FrameID FrameID `json:"frameId,omitempty,omitzero"`
 }
 
 // AccessibilityGetFullAXTreeReturns holds the return values for getFullAXTree.
@@ -134,7 +134,7 @@ func (p *AccessibilityGetFullAXTreeParams) Do(ctx context.Context) (*Accessibili
 type AccessibilityGetRootAXNodeParams struct {
 	// FrameID The frame in whose document the node resides.
 	// If omitted, the root frame is used.
-	FrameID FrameID `json:"frameId,omitempty"`
+	FrameID FrameID `json:"frameId,omitempty,omitzero"`
 }
 
 // AccessibilityGetRootAXNodeReturns holds the return values for getRootAXNode.
@@ -166,11 +166,11 @@ func (p *AccessibilityGetRootAXNodeParams) Do(ctx context.Context) (*Accessibili
 // Requires `enable()` to have been called previously.
 type AccessibilityGetAXNodeAndAncestorsParams struct {
 	// NodeID Identifier of the node to get.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 	// BackendNodeID Identifier of the backend node to get.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// ObjectID JavaScript object id of the node wrapper to get.
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 }
 
 // AccessibilityGetAXNodeAndAncestorsReturns holds the return values for getAXNodeAndAncestors.
@@ -216,7 +216,7 @@ type AccessibilityGetChildAXNodesParams struct {
 	ID AccessibilityAXNodeID `json:"id"`
 	// FrameID The frame in whose document the node resides.
 	// If omitted, the root frame is used.
-	FrameID FrameID `json:"frameId,omitempty"`
+	FrameID FrameID `json:"frameId,omitempty,omitzero"`
 }
 
 // AccessibilityGetChildAXNodesReturns holds the return values for getChildAXNodes.
@@ -253,15 +253,15 @@ func (p *AccessibilityGetChildAXNodesParams) Do(ctx context.Context) (*Accessibi
 // `accessibleName` or `role` is specified, it returns all the accessibility nodes in the subtree.
 type AccessibilityQueryAXTreeParams struct {
 	// NodeID Identifier of the node for the root to query.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 	// BackendNodeID Identifier of the backend node for the root to query.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// ObjectID JavaScript object id of the node wrapper for the root to query.
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 	// AccessibleName Find nodes with this computed name.
-	AccessibleName string `json:"accessibleName,omitempty"`
+	AccessibleName string `json:"accessibleName,omitempty,omitzero"`
 	// Role Find nodes with this computed role.
-	Role string `json:"role,omitempty"`
+	Role string `json:"role,omitempty,omitzero"`
 }
 
 // AccessibilityQueryAXTreeReturns holds the return values for queryAXTree.

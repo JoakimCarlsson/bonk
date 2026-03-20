@@ -188,7 +188,7 @@ func (p *SmartCardEmulationReportPlainResultParams) Do(ctx context.Context) erro
 type SmartCardEmulationReportConnectResultParams struct {
 	RequestID      string                     `json:"requestId"`
 	Handle         int64                      `json:"handle"`
-	ActiveProtocol SmartCardEmulationProtocol `json:"activeProtocol,omitempty"`
+	ActiveProtocol SmartCardEmulationProtocol `json:"activeProtocol,omitempty,omitzero"`
 }
 
 // SmartCardEmulationReportConnectResult creates a new SmartCardEmulationReportConnectResultParams.
@@ -254,7 +254,7 @@ type SmartCardEmulationReportStatusResultParams struct {
 	ReaderName string                            `json:"readerName"`
 	State      SmartCardEmulationConnectionState `json:"state"`
 	Atr        []byte                            `json:"atr"`
-	Protocol   SmartCardEmulationProtocol        `json:"protocol,omitempty"`
+	Protocol   SmartCardEmulationProtocol        `json:"protocol,omitempty,omitzero"`
 }
 
 // SmartCardEmulationReportStatusResult creates a new SmartCardEmulationReportStatusResultParams.

@@ -19,22 +19,22 @@ func (t RuntimeScriptID) String() string {
 type RuntimeSerializationOptions struct {
 	Serialization RuntimeSerializationOptionsSerialization `json:"serialization"`
 	// MaxDepth Deep serialization depth. Default is full depth. Respected only in `deep` serialization mode.
-	MaxDepth int64 `json:"maxDepth,omitempty"`
+	MaxDepth int64 `json:"maxDepth,omitempty,omitzero"`
 	// AdditionalParameters Embedder-specific parameters. For example if connected to V8 in Chrome these control DOM
 	// serialization via `maxNodeDepth: integer` and `includeShadowTree: "none" | "open" | "all"`.
 	// Values can be only of type string or integer.
-	AdditionalParameters json.RawMessage `json:"additionalParameters,omitempty"`
+	AdditionalParameters json.RawMessage `json:"additionalParameters,omitempty,omitzero"`
 }
 
 // RuntimeDeepSerializedValue Represents deep serialized value.
 type RuntimeDeepSerializedValue struct {
 	Type     RuntimeDeepSerializedValueType `json:"type"`
-	Value    json.RawMessage                `json:"value,omitempty"`
-	ObjectID string                         `json:"objectId,omitempty"`
+	Value    json.RawMessage                `json:"value,omitempty,omitzero"`
+	ObjectID string                         `json:"objectId,omitempty,omitzero"`
 	// WeakLocalObjectReference Set if value reference met more then once during serialization. In such
 	// case, value is provided only to one of the serialized values. Unique
 	// per value in the scope of one CDP call.
-	WeakLocalObjectReference int64 `json:"weakLocalObjectReference,omitempty"`
+	WeakLocalObjectReference int64 `json:"weakLocalObjectReference,omitempty,omitzero"`
 }
 
 // RuntimeUnserializableValue Primitive value which cannot be JSON-stringified. Includes values `-0`, `NaN`, `Infinity`,
@@ -53,23 +53,23 @@ type RuntimeRemoteObject struct {
 	// Subtype Object subtype hint. Specified for `object` type values only.
 	// NOTE: If you change anything here, make sure to also update
 	// `subtype` in `ObjectPreview` and `PropertyPreview` below.
-	Subtype RuntimeRemoteObjectSubtype `json:"subtype,omitempty"`
+	Subtype RuntimeRemoteObjectSubtype `json:"subtype,omitempty,omitzero"`
 	// ClassName Object class (constructor) name. Specified for `object` type values only.
-	ClassName string `json:"className,omitempty"`
+	ClassName string `json:"className,omitempty,omitzero"`
 	// Value Remote object value in case of primitive values or JSON values (if it was requested).
-	Value json.RawMessage `json:"value,omitempty"`
+	Value json.RawMessage `json:"value,omitempty,omitzero"`
 	// UnserializableValue Primitive value which can not be JSON-stringified does not have `value`, but gets this
 	// property.
-	UnserializableValue RuntimeUnserializableValue `json:"unserializableValue,omitempty"`
+	UnserializableValue RuntimeUnserializableValue `json:"unserializableValue,omitempty,omitzero"`
 	// Description String representation of the object.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty,omitzero"`
 	// DeepSerializedValue Deep serialized value.
-	DeepSerializedValue RuntimeDeepSerializedValue `json:"deepSerializedValue,omitempty"`
+	DeepSerializedValue RuntimeDeepSerializedValue `json:"deepSerializedValue,omitempty,omitzero"`
 	// ObjectID Unique object identifier (for non-primitive values).
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 	// Preview Preview containing abbreviated property values. Specified for `object` type values only.
-	Preview       RuntimeObjectPreview `json:"preview,omitempty"`
-	CustomPreview RuntimeCustomPreview `json:"customPreview,omitempty"`
+	Preview       RuntimeObjectPreview `json:"preview,omitempty,omitzero"`
+	CustomPreview RuntimeCustomPreview `json:"customPreview,omitempty,omitzero"`
 }
 
 type RuntimeCustomPreview struct {
@@ -79,7 +79,7 @@ type RuntimeCustomPreview struct {
 	// BodyGetterID If formatter returns true as a result of formatter.hasBody call then bodyGetterId will
 	// contain RemoteObjectId for the function that returns result of formatter.body(object, config) call.
 	// The result value is json ML array.
-	BodyGetterID RemoteObjectID `json:"bodyGetterId,omitempty"`
+	BodyGetterID RemoteObjectID `json:"bodyGetterId,omitempty,omitzero"`
 }
 
 // RuntimeObjectPreview Object containing abbreviated remote object value.
@@ -87,15 +87,15 @@ type RuntimeObjectPreview struct {
 	// Type Object type.
 	Type RuntimeObjectPreviewType `json:"type"`
 	// Subtype Object subtype hint. Specified for `object` type values only.
-	Subtype RuntimeObjectPreviewSubtype `json:"subtype,omitempty"`
+	Subtype RuntimeObjectPreviewSubtype `json:"subtype,omitempty,omitzero"`
 	// Description String representation of the object.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty,omitzero"`
 	// Overflow True iff some of the properties or entries of the original object did not fit.
 	Overflow bool `json:"overflow"`
 	// Properties List of the properties.
 	Properties []RuntimePropertyPreview `json:"properties"`
 	// Entries List of the entries. Specified for `map` and `set` subtype values only.
-	Entries []RuntimeEntryPreview `json:"entries,omitempty"`
+	Entries []RuntimeEntryPreview `json:"entries,omitempty,omitzero"`
 }
 
 type RuntimePropertyPreview struct {
@@ -104,16 +104,16 @@ type RuntimePropertyPreview struct {
 	// Type Object type. Accessor means that the property itself is an accessor property.
 	Type RuntimePropertyPreviewType `json:"type"`
 	// Value User-friendly property value string.
-	Value string `json:"value,omitempty"`
+	Value string `json:"value,omitempty,omitzero"`
 	// ValuePreview Nested value preview.
-	ValuePreview RuntimeObjectPreview `json:"valuePreview,omitempty"`
+	ValuePreview RuntimeObjectPreview `json:"valuePreview,omitempty,omitzero"`
 	// Subtype Object subtype hint. Specified for `object` type values only.
-	Subtype RuntimePropertyPreviewSubtype `json:"subtype,omitempty"`
+	Subtype RuntimePropertyPreviewSubtype `json:"subtype,omitempty,omitzero"`
 }
 
 type RuntimeEntryPreview struct {
 	// Key Preview of the key. Specified for map-like collection entries.
-	Key RuntimeObjectPreview `json:"key,omitempty"`
+	Key RuntimeObjectPreview `json:"key,omitempty,omitzero"`
 	// Value Preview of the value.
 	Value RuntimeObjectPreview `json:"value"`
 }
@@ -123,15 +123,15 @@ type RuntimePropertyDescriptor struct {
 	// Name Property name or symbol description.
 	Name string `json:"name"`
 	// Value The value associated with the property.
-	Value RuntimeRemoteObject `json:"value,omitempty"`
+	Value RuntimeRemoteObject `json:"value,omitempty,omitzero"`
 	// Writable True if the value associated with the property may be changed (data descriptors only).
-	Writable bool `json:"writable,omitempty"`
+	Writable bool `json:"writable,omitempty,omitzero"`
 	// Get A function which serves as a getter for the property, or `undefined` if there is no getter
 	// (accessor descriptors only).
-	Get RuntimeRemoteObject `json:"get,omitempty"`
+	Get RuntimeRemoteObject `json:"get,omitempty,omitzero"`
 	// Set A function which serves as a setter for the property, or `undefined` if there is no setter
 	// (accessor descriptors only).
-	Set RuntimeRemoteObject `json:"set,omitempty"`
+	Set RuntimeRemoteObject `json:"set,omitempty,omitzero"`
 	// Configurable True if the type of this property descriptor may be changed and if the property may be
 	// deleted from the corresponding object.
 	Configurable bool `json:"configurable"`
@@ -139,11 +139,11 @@ type RuntimePropertyDescriptor struct {
 	// object.
 	Enumerable bool `json:"enumerable"`
 	// WasThrown True if the result was thrown during the evaluation.
-	WasThrown bool `json:"wasThrown,omitempty"`
+	WasThrown bool `json:"wasThrown,omitempty,omitzero"`
 	// IsOwn True if the property is owned for the object.
-	IsOwn bool `json:"isOwn,omitempty"`
+	IsOwn bool `json:"isOwn,omitempty,omitzero"`
 	// Symbol Property symbol object, if the property is of the `symbol` type.
-	Symbol RuntimeRemoteObject `json:"symbol,omitempty"`
+	Symbol RuntimeRemoteObject `json:"symbol,omitempty,omitzero"`
 }
 
 // RuntimeInternalPropertyDescriptor Object internal property descriptor. This property isn't normally visible in JavaScript code.
@@ -151,7 +151,7 @@ type RuntimeInternalPropertyDescriptor struct {
 	// Name Conventional property name.
 	Name string `json:"name"`
 	// Value The value associated with the property.
-	Value RuntimeRemoteObject `json:"value,omitempty"`
+	Value RuntimeRemoteObject `json:"value,omitempty,omitzero"`
 }
 
 // RuntimePrivatePropertyDescriptor Object private field descriptor.
@@ -159,24 +159,24 @@ type RuntimePrivatePropertyDescriptor struct {
 	// Name Private property name.
 	Name string `json:"name"`
 	// Value The value associated with the private property.
-	Value RuntimeRemoteObject `json:"value,omitempty"`
+	Value RuntimeRemoteObject `json:"value,omitempty,omitzero"`
 	// Get A function which serves as a getter for the private property,
 	// or `undefined` if there is no getter (accessor descriptors only).
-	Get RuntimeRemoteObject `json:"get,omitempty"`
+	Get RuntimeRemoteObject `json:"get,omitempty,omitzero"`
 	// Set A function which serves as a setter for the private property,
 	// or `undefined` if there is no setter (accessor descriptors only).
-	Set RuntimeRemoteObject `json:"set,omitempty"`
+	Set RuntimeRemoteObject `json:"set,omitempty,omitzero"`
 }
 
 // RuntimeCallArgument Represents function call argument. Either remote object id `objectId`, primitive `value`,
 // unserializable primitive value or neither of (for undefined) them should be specified.
 type RuntimeCallArgument struct {
 	// Value Primitive value or serializable javascript object.
-	Value json.RawMessage `json:"value,omitempty"`
+	Value json.RawMessage `json:"value,omitempty,omitzero"`
 	// UnserializableValue Primitive value which can not be JSON-stringified.
-	UnserializableValue RuntimeUnserializableValue `json:"unserializableValue,omitempty"`
+	UnserializableValue RuntimeUnserializableValue `json:"unserializableValue,omitempty,omitzero"`
 	// ObjectID Remote object handle.
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 }
 
 // RuntimeExecutionContextID Id of an execution context.
@@ -214,7 +214,7 @@ type RuntimeExecutionContextDescription struct {
 	// performs a cross-process navigation.
 	UniqueID string `json:"uniqueId"`
 	// AuxData Embedder-specific auxiliary data likely matching {isDefault: boolean, type: 'default'|'isolated'|'worker', frameId: string}
-	AuxData json.RawMessage `json:"auxData,omitempty"`
+	AuxData json.RawMessage `json:"auxData,omitempty,omitzero"`
 }
 
 // RuntimeExceptionDetails Detailed information about exception (or error) that was thrown during script compilation or
@@ -229,19 +229,19 @@ type RuntimeExceptionDetails struct {
 	// ColumnNumber Column number of the exception location (0-based).
 	ColumnNumber int64 `json:"columnNumber"`
 	// ScriptID Script ID of the exception location.
-	ScriptID RuntimeScriptID `json:"scriptId,omitempty"`
+	ScriptID RuntimeScriptID `json:"scriptId,omitempty,omitzero"`
 	// URL URL of the exception location, to be used when the script was not reported.
-	URL string `json:"url,omitempty"`
+	URL string `json:"url,omitempty,omitzero"`
 	// StackTrace JavaScript stack trace if available.
-	StackTrace RuntimeStackTrace `json:"stackTrace,omitempty"`
+	StackTrace RuntimeStackTrace `json:"stackTrace,omitempty,omitzero"`
 	// Exception Exception object if available.
-	Exception RuntimeRemoteObject `json:"exception,omitempty"`
+	Exception RuntimeRemoteObject `json:"exception,omitempty,omitzero"`
 	// ExecutionContextID Identifier of the context where exception happened.
-	ExecutionContextID RuntimeExecutionContextID `json:"executionContextId,omitempty"`
+	ExecutionContextID RuntimeExecutionContextID `json:"executionContextId,omitempty,omitzero"`
 	// ExceptionMetaData Dictionary with entries of meta data that the client associated
 	// with this exception, such as information about associated network
 	// requests, etc.
-	ExceptionMetaData json.RawMessage `json:"exceptionMetaData,omitempty"`
+	ExceptionMetaData json.RawMessage `json:"exceptionMetaData,omitempty,omitzero"`
 }
 
 // RuntimeTimestamp Number of milliseconds since epoch.
@@ -278,13 +278,13 @@ type RuntimeCallFrame struct {
 type RuntimeStackTrace struct {
 	// Description String label of this stack trace. For async traces this may be a name of the function that
 	// initiated the async call.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty,omitzero"`
 	// CallFrames JavaScript function name.
 	CallFrames []RuntimeCallFrame `json:"callFrames"`
 	// Parent Asynchronous JavaScript stack trace that preceded this stack, if available.
-	Parent *RuntimeStackTrace `json:"parent,omitempty"`
+	Parent *RuntimeStackTrace `json:"parent,omitempty,omitzero"`
 	// ParentID Asynchronous JavaScript stack trace that preceded this stack, if available.
-	ParentID RuntimeStackTraceID `json:"parentId,omitempty"`
+	ParentID RuntimeStackTraceID `json:"parentId,omitempty,omitzero"`
 }
 
 // RuntimeUniqueDebuggerID Unique identifier of current debugger.
@@ -299,7 +299,7 @@ func (t RuntimeUniqueDebuggerID) String() string {
 // allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.paused` for usages.
 type RuntimeStackTraceID struct {
 	ID         string                  `json:"id"`
-	DebuggerID RuntimeUniqueDebuggerID `json:"debuggerId,omitempty"`
+	DebuggerID RuntimeUniqueDebuggerID `json:"debuggerId,omitempty,omitzero"`
 }
 
 type RuntimeSerializationOptionsSerialization string

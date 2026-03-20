@@ -109,9 +109,9 @@ type DOMDebuggerEventListener struct {
 	// ColumnNumber Column number in the script (0-based).
 	ColumnNumber int64 `json:"columnNumber"`
 	// Handler Event handler function value.
-	Handler RuntimeRemoteObject `json:"handler,omitempty"`
+	Handler RuntimeRemoteObject `json:"handler,omitempty,omitzero"`
 	// OriginalHandler Event original handler function value.
-	OriginalHandler RuntimeRemoteObject `json:"originalHandler,omitempty"`
+	OriginalHandler RuntimeRemoteObject `json:"originalHandler,omitempty,omitzero"`
 	// BackendNodeID Node the listener is added to (if any).
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 }

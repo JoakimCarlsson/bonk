@@ -56,8 +56,8 @@ type WebAudioEventNodesConnected struct {
 	ContextID             WebAudioGraphObjectID `json:"contextId"`
 	SourceID              WebAudioGraphObjectID `json:"sourceId"`
 	DestinationID         WebAudioGraphObjectID `json:"destinationId"`
-	SourceOutputIndex     float64               `json:"sourceOutputIndex,omitempty"`
-	DestinationInputIndex float64               `json:"destinationInputIndex,omitempty"`
+	SourceOutputIndex     float64               `json:"sourceOutputIndex,omitempty,omitzero"`
+	DestinationInputIndex float64               `json:"destinationInputIndex,omitempty,omitzero"`
 }
 
 // WebAudioEventNodesDisconnected Notifies that AudioNodes are disconnected. The destination can be null, and it means all the outgoing connections from the source are disconnected.
@@ -65,8 +65,8 @@ type WebAudioEventNodesDisconnected struct {
 	ContextID             WebAudioGraphObjectID `json:"contextId"`
 	SourceID              WebAudioGraphObjectID `json:"sourceId"`
 	DestinationID         WebAudioGraphObjectID `json:"destinationId"`
-	SourceOutputIndex     float64               `json:"sourceOutputIndex,omitempty"`
-	DestinationInputIndex float64               `json:"destinationInputIndex,omitempty"`
+	SourceOutputIndex     float64               `json:"sourceOutputIndex,omitempty,omitzero"`
+	DestinationInputIndex float64               `json:"destinationInputIndex,omitempty,omitzero"`
 }
 
 // WebAudioEventNodeParamConnected Notifies that an AudioNode is connected to an AudioParam.
@@ -74,7 +74,7 @@ type WebAudioEventNodeParamConnected struct {
 	ContextID         WebAudioGraphObjectID `json:"contextId"`
 	SourceID          WebAudioGraphObjectID `json:"sourceId"`
 	DestinationID     WebAudioGraphObjectID `json:"destinationId"`
-	SourceOutputIndex float64               `json:"sourceOutputIndex,omitempty"`
+	SourceOutputIndex float64               `json:"sourceOutputIndex,omitempty,omitzero"`
 }
 
 // WebAudioEventNodeParamDisconnected Notifies that an AudioNode is disconnected to an AudioParam.
@@ -82,7 +82,7 @@ type WebAudioEventNodeParamDisconnected struct {
 	ContextID         WebAudioGraphObjectID `json:"contextId"`
 	SourceID          WebAudioGraphObjectID `json:"sourceId"`
 	DestinationID     WebAudioGraphObjectID `json:"destinationId"`
-	SourceOutputIndex float64               `json:"sourceOutputIndex,omitempty"`
+	SourceOutputIndex float64               `json:"sourceOutputIndex,omitempty,omitzero"`
 }
 
 // WebAudio event names.

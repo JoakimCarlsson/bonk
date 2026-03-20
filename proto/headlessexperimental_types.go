@@ -5,11 +5,11 @@ package proto
 // HeadlessExperimentalScreenshotParams Encoding options for a screenshot.
 type HeadlessExperimentalScreenshotParams struct {
 	// Format Image compression format (defaults to png).
-	Format HeadlessExperimentalScreenshotParamsFormat `json:"format,omitempty"`
+	Format HeadlessExperimentalScreenshotParamsFormat `json:"format,omitempty,omitzero"`
 	// Quality Compression quality from range [0..100] (jpeg and webp only).
-	Quality int64 `json:"quality,omitempty"`
+	Quality int64 `json:"quality,omitempty,omitzero"`
 	// OptimizeForSpeed Optimize image encoding for speed, not for resulting size (defaults to false)
-	OptimizeForSpeed bool `json:"optimizeForSpeed,omitempty"`
+	OptimizeForSpeed bool `json:"optimizeForSpeed,omitempty,omitzero"`
 }
 
 // HeadlessExperimentalScreenshotParamsFormat Image compression format (defaults to png).

@@ -254,30 +254,30 @@ type AccessibilityAXValueSource struct {
 	// Type What type of source this is.
 	Type AccessibilityAXValueSourceType `json:"type"`
 	// Value The value of this property source.
-	Value AccessibilityAXValue `json:"value,omitempty"`
+	Value AccessibilityAXValue `json:"value,omitempty,omitzero"`
 	// Attribute The name of the relevant attribute, if any.
-	Attribute string `json:"attribute,omitempty"`
+	Attribute string `json:"attribute,omitempty,omitzero"`
 	// AttributeValue The value of the relevant attribute, if any.
-	AttributeValue AccessibilityAXValue `json:"attributeValue,omitempty"`
+	AttributeValue AccessibilityAXValue `json:"attributeValue,omitempty,omitzero"`
 	// Superseded Whether this source is superseded by a higher priority source.
-	Superseded bool `json:"superseded,omitempty"`
+	Superseded bool `json:"superseded,omitempty,omitzero"`
 	// NativeSource The native markup source for this value, e.g. a `<label>` element.
-	NativeSource AccessibilityAXValueNativeSourceType `json:"nativeSource,omitempty"`
+	NativeSource AccessibilityAXValueNativeSourceType `json:"nativeSource,omitempty,omitzero"`
 	// NativeSourceValue The value, such as a node or node list, of the native source.
-	NativeSourceValue AccessibilityAXValue `json:"nativeSourceValue,omitempty"`
+	NativeSourceValue AccessibilityAXValue `json:"nativeSourceValue,omitempty,omitzero"`
 	// Invalid Whether the value for this property is invalid.
-	Invalid bool `json:"invalid,omitempty"`
+	Invalid bool `json:"invalid,omitempty,omitzero"`
 	// InvalidReason Reason for the value being invalid, if it is.
-	InvalidReason string `json:"invalidReason,omitempty"`
+	InvalidReason string `json:"invalidReason,omitempty,omitzero"`
 }
 
 type AccessibilityAXRelatedNode struct {
 	// BackendDOMNodeID The BackendNodeId of the related DOM node.
 	BackendDOMNodeID BackendNodeID `json:"backendDOMNodeId"`
 	// Idref The IDRef value provided, if any.
-	Idref string `json:"idref,omitempty"`
+	Idref string `json:"idref,omitempty,omitzero"`
 	// Text The text alternative of this node in the current context.
-	Text string `json:"text,omitempty"`
+	Text string `json:"text,omitempty,omitzero"`
 }
 
 type AccessibilityAXProperty struct {
@@ -292,11 +292,11 @@ type AccessibilityAXValue struct {
 	// Type The type of this value.
 	Type AccessibilityAXValueType `json:"type"`
 	// Value The computed value of this property.
-	Value json.RawMessage `json:"value,omitempty"`
+	Value json.RawMessage `json:"value,omitempty,omitzero"`
 	// RelatedNodes One or more related nodes, if applicable.
-	RelatedNodes []AccessibilityAXRelatedNode `json:"relatedNodes,omitempty"`
+	RelatedNodes []AccessibilityAXRelatedNode `json:"relatedNodes,omitempty,omitzero"`
 	// Sources The sources which contributed to the computation of this property.
-	Sources []AccessibilityAXValueSource `json:"sources,omitempty"`
+	Sources []AccessibilityAXValueSource `json:"sources,omitempty,omitzero"`
 }
 
 // AccessibilityAXPropertyName Values of AXProperty name:
@@ -579,25 +579,25 @@ type AccessibilityAXNode struct {
 	// Ignored Whether this node is ignored for accessibility
 	Ignored bool `json:"ignored"`
 	// IgnoredReasons Collection of reasons why this node is hidden.
-	IgnoredReasons []AccessibilityAXProperty `json:"ignoredReasons,omitempty"`
+	IgnoredReasons []AccessibilityAXProperty `json:"ignoredReasons,omitempty,omitzero"`
 	// Role This `Node`'s role, whether explicit or implicit.
-	Role AccessibilityAXValue `json:"role,omitempty"`
+	Role AccessibilityAXValue `json:"role,omitempty,omitzero"`
 	// ChromeRole This `Node`'s Chrome raw role.
-	ChromeRole AccessibilityAXValue `json:"chromeRole,omitempty"`
+	ChromeRole AccessibilityAXValue `json:"chromeRole,omitempty,omitzero"`
 	// Name The accessible name for this `Node`.
-	Name AccessibilityAXValue `json:"name,omitempty"`
+	Name AccessibilityAXValue `json:"name,omitempty,omitzero"`
 	// Description The accessible description for this `Node`.
-	Description AccessibilityAXValue `json:"description,omitempty"`
+	Description AccessibilityAXValue `json:"description,omitempty,omitzero"`
 	// Value The value for this `Node`.
-	Value AccessibilityAXValue `json:"value,omitempty"`
+	Value AccessibilityAXValue `json:"value,omitempty,omitzero"`
 	// Properties All other properties
-	Properties []AccessibilityAXProperty `json:"properties,omitempty"`
+	Properties []AccessibilityAXProperty `json:"properties,omitempty,omitzero"`
 	// ParentID ID for this node's parent.
-	ParentID AccessibilityAXNodeID `json:"parentId,omitempty"`
+	ParentID AccessibilityAXNodeID `json:"parentId,omitempty,omitzero"`
 	// ChildIds IDs for each of this node's child nodes.
-	ChildIds []AccessibilityAXNodeID `json:"childIds,omitempty"`
+	ChildIds []AccessibilityAXNodeID `json:"childIds,omitempty,omitzero"`
 	// BackendDOMNodeID The backend ID for the associated DOM node, if any.
-	BackendDOMNodeID BackendNodeID `json:"backendDOMNodeId,omitempty"`
+	BackendDOMNodeID BackendNodeID `json:"backendDOMNodeId,omitempty,omitzero"`
 	// FrameID The frame ID for the frame associated with this nodes document.
-	FrameID FrameID `json:"frameId,omitempty"`
+	FrameID FrameID `json:"frameId,omitempty,omitzero"`
 }

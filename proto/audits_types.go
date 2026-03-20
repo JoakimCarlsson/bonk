@@ -13,7 +13,7 @@ type AuditsAffectedCookie struct {
 // AuditsAffectedRequest Information about a request that is affected by an inspector issue.
 type AuditsAffectedRequest struct {
 	// RequestID The unique request id.
-	RequestID RequestID `json:"requestId,omitempty"`
+	RequestID RequestID `json:"requestId,omitempty,omitzero"`
 	URL       string    `json:"url"`
 }
 
@@ -275,7 +275,7 @@ func (t AuditsInsightType) String() string {
 type AuditsCookieIssueInsight struct {
 	Type AuditsInsightType `json:"type"`
 	// TableEntryURL Link to table entry in third-party cookie migration readiness list.
-	TableEntryURL string `json:"tableEntryUrl,omitempty"`
+	TableEntryURL string `json:"tableEntryUrl,omitempty,omitzero"`
 }
 
 // AuditsCookieIssueDetails This information is currently necessary, as the front-end has a difficult
@@ -286,18 +286,18 @@ type AuditsCookieIssueDetails struct {
 	// Set-Cookie header string. This hints at a problem where the
 	// cookie line is syntactically or semantically malformed in a way
 	// that no valid cookie could be created.
-	Cookie                 AuditsAffectedCookie          `json:"cookie,omitempty"`
-	RawCookieLine          string                        `json:"rawCookieLine,omitempty"`
+	Cookie                 AuditsAffectedCookie          `json:"cookie,omitempty,omitzero"`
+	RawCookieLine          string                        `json:"rawCookieLine,omitempty,omitzero"`
 	CookieWarningReasons   []AuditsCookieWarningReason   `json:"cookieWarningReasons"`
 	CookieExclusionReasons []AuditsCookieExclusionReason `json:"cookieExclusionReasons"`
 	// Operation Optionally identifies the site-for-cookies and the cookie url, which
 	// may be used by the front-end as additional context.
 	Operation      AuditsCookieOperation `json:"operation"`
-	SiteForCookies string                `json:"siteForCookies,omitempty"`
-	CookieURL      string                `json:"cookieUrl,omitempty"`
-	Request        AuditsAffectedRequest `json:"request,omitempty"`
+	SiteForCookies string                `json:"siteForCookies,omitempty,omitzero"`
+	CookieURL      string                `json:"cookieUrl,omitempty,omitzero"`
+	Request        AuditsAffectedRequest `json:"request,omitempty,omitzero"`
 	// Insight The recommended solution to the issue.
-	Insight AuditsCookieIssueInsight `json:"insight,omitempty"`
+	Insight AuditsCookieIssueInsight `json:"insight,omitempty,omitzero"`
 }
 
 type AuditsPerformanceIssueType string
@@ -341,7 +341,7 @@ func (t AuditsPerformanceIssueType) String() string {
 // AuditsPerformanceIssueDetails Details for a performance issue.
 type AuditsPerformanceIssueDetails struct {
 	PerformanceIssueType AuditsPerformanceIssueType `json:"performanceIssueType"`
-	SourceCodeLocation   AuditsSourceCodeLocation   `json:"sourceCodeLocation,omitempty"`
+	SourceCodeLocation   AuditsSourceCodeLocation   `json:"sourceCodeLocation,omitempty,omitzero"`
 }
 
 type AuditsMixedContentResolutionStatus string
@@ -545,7 +545,7 @@ type AuditsMixedContentIssueDetails struct {
 	// form,...). Marked as optional because it is mapped to from
 	// blink::mojom::RequestContextType, which will be replaced
 	// by network::mojom::RequestDestination
-	ResourceType AuditsMixedContentResourceType `json:"resourceType,omitempty"`
+	ResourceType AuditsMixedContentResourceType `json:"resourceType,omitempty,omitzero"`
 	// ResolutionStatus The way the mixed content issue is being resolved.
 	ResolutionStatus AuditsMixedContentResolutionStatus `json:"resolutionStatus"`
 	// InsecureURL The unsafe http url causing the mixed content issue.
@@ -554,9 +554,9 @@ type AuditsMixedContentIssueDetails struct {
 	MainResourceURL string `json:"mainResourceURL"`
 	// Request The mixed content request.
 	// Does not always exist (e.g. for unsafe form submission urls).
-	Request AuditsAffectedRequest `json:"request,omitempty"`
+	Request AuditsAffectedRequest `json:"request,omitempty,omitzero"`
 	// Frame Optional because not every mixed content issue is necessarily linked to a frame.
-	Frame AuditsAffectedFrame `json:"frame,omitempty"`
+	Frame AuditsAffectedFrame `json:"frame,omitempty,omitzero"`
 }
 
 // AuditsBlockedByResponseReason Enum indicating the reason a response has been blocked. These reasons are
@@ -632,8 +632,8 @@ func (t AuditsBlockedByResponseReason) String() string {
 // some CSP errors in the future.
 type AuditsBlockedByResponseIssueDetails struct {
 	Request      AuditsAffectedRequest         `json:"request"`
-	ParentFrame  AuditsAffectedFrame           `json:"parentFrame,omitempty"`
-	BlockedFrame AuditsAffectedFrame           `json:"blockedFrame,omitempty"`
+	ParentFrame  AuditsAffectedFrame           `json:"parentFrame,omitempty,omitzero"`
+	BlockedFrame AuditsAffectedFrame           `json:"blockedFrame,omitempty,omitzero"`
 	Reason       AuditsBlockedByResponseReason `json:"reason"`
 }
 
@@ -797,7 +797,7 @@ func (t AuditsContentSecurityPolicyViolationType) String() string {
 }
 
 type AuditsSourceCodeLocation struct {
-	ScriptID     RuntimeScriptID `json:"scriptId,omitempty"`
+	ScriptID     RuntimeScriptID `json:"scriptId,omitempty,omitzero"`
 	URL          string          `json:"url"`
 	LineNumber   int64           `json:"lineNumber"`
 	ColumnNumber int64           `json:"columnNumber"`
@@ -805,14 +805,14 @@ type AuditsSourceCodeLocation struct {
 
 type AuditsContentSecurityPolicyIssueDetails struct {
 	// BlockedURL The url not included in allowed sources.
-	BlockedURL string `json:"blockedURL,omitempty"`
+	BlockedURL string `json:"blockedURL,omitempty,omitzero"`
 	// ViolatedDirective Specific directive that is violated, causing the CSP issue.
 	ViolatedDirective                  string                                   `json:"violatedDirective"`
 	IsReportOnly                       bool                                     `json:"isReportOnly"`
 	ContentSecurityPolicyViolationType AuditsContentSecurityPolicyViolationType `json:"contentSecurityPolicyViolationType"`
-	FrameAncestor                      AuditsAffectedFrame                      `json:"frameAncestor,omitempty"`
-	SourceCodeLocation                 AuditsSourceCodeLocation                 `json:"sourceCodeLocation,omitempty"`
-	ViolatingNodeID                    BackendNodeID                            `json:"violatingNodeId,omitempty"`
+	FrameAncestor                      AuditsAffectedFrame                      `json:"frameAncestor,omitempty,omitzero"`
+	SourceCodeLocation                 AuditsSourceCodeLocation                 `json:"sourceCodeLocation,omitempty,omitzero"`
+	ViolatingNodeID                    BackendNodeID                            `json:"violatingNodeId,omitempty,omitzero"`
 }
 
 type AuditsSharedArrayBufferIssueType string
@@ -871,10 +871,10 @@ type AuditsCorsIssueDetails struct {
 	CorsErrorStatus        NetworkCorsErrorStatus     `json:"corsErrorStatus"`
 	IsWarning              bool                       `json:"isWarning"`
 	Request                AuditsAffectedRequest      `json:"request"`
-	Location               AuditsSourceCodeLocation   `json:"location,omitempty"`
-	InitiatorOrigin        string                     `json:"initiatorOrigin,omitempty"`
-	ResourceIPAddressSpace NetworkIPAddressSpace      `json:"resourceIPAddressSpace,omitempty"`
-	ClientSecurityState    NetworkClientSecurityState `json:"clientSecurityState,omitempty"`
+	Location               AuditsSourceCodeLocation   `json:"location,omitempty,omitzero"`
+	InitiatorOrigin        string                     `json:"initiatorOrigin,omitempty,omitzero"`
+	ResourceIPAddressSpace NetworkIPAddressSpace      `json:"resourceIPAddressSpace,omitempty,omitzero"`
+	ClientSecurityState    NetworkClientSecurityState `json:"clientSecurityState,omitempty,omitzero"`
 }
 
 type AuditsAttributionReportingIssueType string
@@ -1359,9 +1359,9 @@ func (t AuditsConnectionAllowlistError) String() string {
 // Explainer: https://github.com/WICG/attribution-reporting-api
 type AuditsAttributionReportingIssueDetails struct {
 	ViolationType    AuditsAttributionReportingIssueType `json:"violationType"`
-	Request          AuditsAffectedRequest               `json:"request,omitempty"`
-	ViolatingNodeID  BackendNodeID                       `json:"violatingNodeId,omitempty"`
-	InvalidParameter string                              `json:"invalidParameter,omitempty"`
+	Request          AuditsAffectedRequest               `json:"request,omitempty,omitzero"`
+	ViolatingNodeID  BackendNodeID                       `json:"violatingNodeId,omitempty,omitzero"`
+	InvalidParameter string                              `json:"invalidParameter,omitempty,omitzero"`
 }
 
 // AuditsQuirksModeIssueDetails Details for issues about documents in Quirks Mode
@@ -1378,7 +1378,7 @@ type AuditsQuirksModeIssueDetails struct {
 
 type AuditsNavigatorUserAgentIssueDetails struct {
 	URL      string                   `json:"url"`
-	Location AuditsSourceCodeLocation `json:"location,omitempty"`
+	Location AuditsSourceCodeLocation `json:"location,omitempty,omitzero"`
 }
 
 type AuditsSharedDictionaryIssueDetails struct {
@@ -1505,16 +1505,16 @@ func (t AuditsGenericIssueErrorType) String() string {
 type AuditsGenericIssueDetails struct {
 	// ErrorType Issues with the same errorType are aggregated in the frontend.
 	ErrorType              AuditsGenericIssueErrorType `json:"errorType"`
-	FrameID                FrameID                     `json:"frameId,omitempty"`
-	ViolatingNodeID        BackendNodeID               `json:"violatingNodeId,omitempty"`
-	ViolatingNodeAttribute string                      `json:"violatingNodeAttribute,omitempty"`
-	Request                AuditsAffectedRequest       `json:"request,omitempty"`
+	FrameID                FrameID                     `json:"frameId,omitempty,omitzero"`
+	ViolatingNodeID        BackendNodeID               `json:"violatingNodeId,omitempty,omitzero"`
+	ViolatingNodeAttribute string                      `json:"violatingNodeAttribute,omitempty,omitzero"`
+	Request                AuditsAffectedRequest       `json:"request,omitempty,omitzero"`
 }
 
 // AuditsDeprecationIssueDetails This issue tracks information needed to print a deprecation message.
 // https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/core/frame/third_party/blink/renderer/core/frame/deprecation/README.md
 type AuditsDeprecationIssueDetails struct {
-	AffectedFrame      AuditsAffectedFrame      `json:"affectedFrame,omitempty"`
+	AffectedFrame      AuditsAffectedFrame      `json:"affectedFrame,omitempty,omitzero"`
 	SourceCodeLocation AuditsSourceCodeLocation `json:"sourceCodeLocation"`
 	// Type One of the deprecation names from third_party/blink/renderer/core/frame/deprecation/deprecation.json5
 	Type string `json:"type"`
@@ -1882,7 +1882,7 @@ type AuditsFailedRequestInfo struct {
 	URL string `json:"url"`
 	// FailureMessage The failure message for the failed request.
 	FailureMessage string    `json:"failureMessage"`
-	RequestID      RequestID `json:"requestId,omitempty"`
+	RequestID      RequestID `json:"requestId,omitempty,omitzero"`
 }
 
 type AuditsPartitioningBlobURLInfo string
@@ -2048,7 +2048,7 @@ type AuditsStylesheetLoadingIssueDetails struct {
 	// StyleSheetLoadingIssueReason Reason why the stylesheet couldn't be loaded.
 	StyleSheetLoadingIssueReason AuditsStyleSheetLoadingIssueReason `json:"styleSheetLoadingIssueReason"`
 	// FailedRequestInfo Contains additional info when the failure was due to a request.
-	FailedRequestInfo AuditsFailedRequestInfo `json:"failedRequestInfo,omitempty"`
+	FailedRequestInfo AuditsFailedRequestInfo `json:"failedRequestInfo,omitempty,omitzero"`
 }
 
 type AuditsPropertyRuleIssueReason string
@@ -2109,7 +2109,7 @@ type AuditsPropertyRuleIssueDetails struct {
 	// PropertyRuleIssueReason Reason why the property rule was discarded.
 	PropertyRuleIssueReason AuditsPropertyRuleIssueReason `json:"propertyRuleIssueReason"`
 	// PropertyValue The value of the property rule property that failed to parse
-	PropertyValue string `json:"propertyValue,omitempty"`
+	PropertyValue string `json:"propertyValue,omitempty,omitzero"`
 }
 
 type AuditsUserReidentificationIssueType string
@@ -2163,9 +2163,9 @@ func (t AuditsUserReidentificationIssueType) String() string {
 type AuditsUserReidentificationIssueDetails struct {
 	Type AuditsUserReidentificationIssueType `json:"type"`
 	// Request Applies to BlockedFrameNavigation and BlockedSubresource issue types.
-	Request AuditsAffectedRequest `json:"request,omitempty"`
+	Request AuditsAffectedRequest `json:"request,omitempty,omitzero"`
 	// SourceCodeLocation Applies to NoisedCanvasReadback issue type.
-	SourceCodeLocation AuditsSourceCodeLocation `json:"sourceCodeLocation,omitempty"`
+	SourceCodeLocation AuditsSourceCodeLocation `json:"sourceCodeLocation,omitempty,omitzero"`
 }
 
 type AuditsPermissionElementIssueType string
@@ -2290,20 +2290,20 @@ func (t AuditsPermissionElementIssueType) String() string {
 type AuditsPermissionElementIssueDetails struct {
 	IssueType AuditsPermissionElementIssueType `json:"issueType"`
 	// Type The value of the type attribute.
-	Type string `json:"type,omitempty"`
+	Type string `json:"type,omitempty,omitzero"`
 	// NodeID The node ID of the <permission> element.
-	NodeID BackendNodeID `json:"nodeId,omitempty"`
+	NodeID BackendNodeID `json:"nodeId,omitempty,omitzero"`
 	// IsWarning True if the issue is a warning, false if it is an error.
-	IsWarning bool `json:"isWarning,omitempty"`
+	IsWarning bool `json:"isWarning,omitempty,omitzero"`
 	// PermissionName Fields for message construction:
 	// Used for messages that reference a specific permission name
-	PermissionName string `json:"permissionName,omitempty"`
+	PermissionName string `json:"permissionName,omitempty,omitzero"`
 	// OccluderNodeInfo Used for messages about occlusion
-	OccluderNodeInfo string `json:"occluderNodeInfo,omitempty"`
+	OccluderNodeInfo string `json:"occluderNodeInfo,omitempty,omitzero"`
 	// OccluderParentNodeInfo Used for messages about occluder's parent
-	OccluderParentNodeInfo string `json:"occluderParentNodeInfo,omitempty"`
+	OccluderParentNodeInfo string `json:"occluderParentNodeInfo,omitempty,omitzero"`
 	// DisableReason Used for messages about activation disabled reason
-	DisableReason string `json:"disableReason,omitempty"`
+	DisableReason string `json:"disableReason,omitempty,omitzero"`
 }
 
 // AuditsSelectivePermissionsInterventionIssueDetails The issue warns about blocked calls to privacy sensitive APIs via the
@@ -2314,7 +2314,7 @@ type AuditsSelectivePermissionsInterventionIssueDetails struct {
 	// AdAncestry Why the ad script using the API is considered an ad.
 	AdAncestry NetworkAdAncestry `json:"adAncestry"`
 	// StackTrace The stack trace at the time of the intervention.
-	StackTrace RuntimeStackTrace `json:"stackTrace,omitempty"`
+	StackTrace RuntimeStackTrace `json:"stackTrace,omitempty,omitzero"`
 }
 
 // AuditsInspectorIssueCode A unique identifier for the type of issue. Each type may use one of the
@@ -2474,35 +2474,35 @@ func (t AuditsInspectorIssueCode) String() string {
 // specific to the kind of issue. When adding a new issue code, please also
 // add a new optional field to this type.
 type AuditsInspectorIssueDetails struct {
-	CookieIssueDetails                           AuditsCookieIssueDetails                           `json:"cookieIssueDetails,omitempty"`
-	MixedContentIssueDetails                     AuditsMixedContentIssueDetails                     `json:"mixedContentIssueDetails,omitempty"`
-	BlockedByResponseIssueDetails                AuditsBlockedByResponseIssueDetails                `json:"blockedByResponseIssueDetails,omitempty"`
-	HeavyAdIssueDetails                          AuditsHeavyAdIssueDetails                          `json:"heavyAdIssueDetails,omitempty"`
-	ContentSecurityPolicyIssueDetails            AuditsContentSecurityPolicyIssueDetails            `json:"contentSecurityPolicyIssueDetails,omitempty"`
-	SharedArrayBufferIssueDetails                AuditsSharedArrayBufferIssueDetails                `json:"sharedArrayBufferIssueDetails,omitempty"`
-	CorsIssueDetails                             AuditsCorsIssueDetails                             `json:"corsIssueDetails,omitempty"`
-	AttributionReportingIssueDetails             AuditsAttributionReportingIssueDetails             `json:"attributionReportingIssueDetails,omitempty"`
-	QuirksModeIssueDetails                       AuditsQuirksModeIssueDetails                       `json:"quirksModeIssueDetails,omitempty"`
-	PartitioningBlobURLIssueDetails              AuditsPartitioningBlobURLIssueDetails              `json:"partitioningBlobURLIssueDetails,omitempty"`
-	NavigatorUserAgentIssueDetails               AuditsNavigatorUserAgentIssueDetails               `json:"navigatorUserAgentIssueDetails,omitempty"`
-	GenericIssueDetails                          AuditsGenericIssueDetails                          `json:"genericIssueDetails,omitempty"`
-	DeprecationIssueDetails                      AuditsDeprecationIssueDetails                      `json:"deprecationIssueDetails,omitempty"`
-	ClientHintIssueDetails                       AuditsClientHintIssueDetails                       `json:"clientHintIssueDetails,omitempty"`
-	FederatedAuthRequestIssueDetails             AuditsFederatedAuthRequestIssueDetails             `json:"federatedAuthRequestIssueDetails,omitempty"`
-	BounceTrackingIssueDetails                   AuditsBounceTrackingIssueDetails                   `json:"bounceTrackingIssueDetails,omitempty"`
-	CookieDeprecationMetadataIssueDetails        AuditsCookieDeprecationMetadataIssueDetails        `json:"cookieDeprecationMetadataIssueDetails,omitempty"`
-	StylesheetLoadingIssueDetails                AuditsStylesheetLoadingIssueDetails                `json:"stylesheetLoadingIssueDetails,omitempty"`
-	PropertyRuleIssueDetails                     AuditsPropertyRuleIssueDetails                     `json:"propertyRuleIssueDetails,omitempty"`
-	FederatedAuthUserInfoRequestIssueDetails     AuditsFederatedAuthUserInfoRequestIssueDetails     `json:"federatedAuthUserInfoRequestIssueDetails,omitempty"`
-	SharedDictionaryIssueDetails                 AuditsSharedDictionaryIssueDetails                 `json:"sharedDictionaryIssueDetails,omitempty"`
-	ElementAccessibilityIssueDetails             AuditsElementAccessibilityIssueDetails             `json:"elementAccessibilityIssueDetails,omitempty"`
-	SriMessageSignatureIssueDetails              AuditsSRIMessageSignatureIssueDetails              `json:"sriMessageSignatureIssueDetails,omitempty"`
-	UnencodedDigestIssueDetails                  AuditsUnencodedDigestIssueDetails                  `json:"unencodedDigestIssueDetails,omitempty"`
-	ConnectionAllowlistIssueDetails              AuditsConnectionAllowlistIssueDetails              `json:"connectionAllowlistIssueDetails,omitempty"`
-	UserReidentificationIssueDetails             AuditsUserReidentificationIssueDetails             `json:"userReidentificationIssueDetails,omitempty"`
-	PermissionElementIssueDetails                AuditsPermissionElementIssueDetails                `json:"permissionElementIssueDetails,omitempty"`
-	PerformanceIssueDetails                      AuditsPerformanceIssueDetails                      `json:"performanceIssueDetails,omitempty"`
-	SelectivePermissionsInterventionIssueDetails AuditsSelectivePermissionsInterventionIssueDetails `json:"selectivePermissionsInterventionIssueDetails,omitempty"`
+	CookieIssueDetails                           AuditsCookieIssueDetails                           `json:"cookieIssueDetails,omitempty,omitzero"`
+	MixedContentIssueDetails                     AuditsMixedContentIssueDetails                     `json:"mixedContentIssueDetails,omitempty,omitzero"`
+	BlockedByResponseIssueDetails                AuditsBlockedByResponseIssueDetails                `json:"blockedByResponseIssueDetails,omitempty,omitzero"`
+	HeavyAdIssueDetails                          AuditsHeavyAdIssueDetails                          `json:"heavyAdIssueDetails,omitempty,omitzero"`
+	ContentSecurityPolicyIssueDetails            AuditsContentSecurityPolicyIssueDetails            `json:"contentSecurityPolicyIssueDetails,omitempty,omitzero"`
+	SharedArrayBufferIssueDetails                AuditsSharedArrayBufferIssueDetails                `json:"sharedArrayBufferIssueDetails,omitempty,omitzero"`
+	CorsIssueDetails                             AuditsCorsIssueDetails                             `json:"corsIssueDetails,omitempty,omitzero"`
+	AttributionReportingIssueDetails             AuditsAttributionReportingIssueDetails             `json:"attributionReportingIssueDetails,omitempty,omitzero"`
+	QuirksModeIssueDetails                       AuditsQuirksModeIssueDetails                       `json:"quirksModeIssueDetails,omitempty,omitzero"`
+	PartitioningBlobURLIssueDetails              AuditsPartitioningBlobURLIssueDetails              `json:"partitioningBlobURLIssueDetails,omitempty,omitzero"`
+	NavigatorUserAgentIssueDetails               AuditsNavigatorUserAgentIssueDetails               `json:"navigatorUserAgentIssueDetails,omitempty,omitzero"`
+	GenericIssueDetails                          AuditsGenericIssueDetails                          `json:"genericIssueDetails,omitempty,omitzero"`
+	DeprecationIssueDetails                      AuditsDeprecationIssueDetails                      `json:"deprecationIssueDetails,omitempty,omitzero"`
+	ClientHintIssueDetails                       AuditsClientHintIssueDetails                       `json:"clientHintIssueDetails,omitempty,omitzero"`
+	FederatedAuthRequestIssueDetails             AuditsFederatedAuthRequestIssueDetails             `json:"federatedAuthRequestIssueDetails,omitempty,omitzero"`
+	BounceTrackingIssueDetails                   AuditsBounceTrackingIssueDetails                   `json:"bounceTrackingIssueDetails,omitempty,omitzero"`
+	CookieDeprecationMetadataIssueDetails        AuditsCookieDeprecationMetadataIssueDetails        `json:"cookieDeprecationMetadataIssueDetails,omitempty,omitzero"`
+	StylesheetLoadingIssueDetails                AuditsStylesheetLoadingIssueDetails                `json:"stylesheetLoadingIssueDetails,omitempty,omitzero"`
+	PropertyRuleIssueDetails                     AuditsPropertyRuleIssueDetails                     `json:"propertyRuleIssueDetails,omitempty,omitzero"`
+	FederatedAuthUserInfoRequestIssueDetails     AuditsFederatedAuthUserInfoRequestIssueDetails     `json:"federatedAuthUserInfoRequestIssueDetails,omitempty,omitzero"`
+	SharedDictionaryIssueDetails                 AuditsSharedDictionaryIssueDetails                 `json:"sharedDictionaryIssueDetails,omitempty,omitzero"`
+	ElementAccessibilityIssueDetails             AuditsElementAccessibilityIssueDetails             `json:"elementAccessibilityIssueDetails,omitempty,omitzero"`
+	SriMessageSignatureIssueDetails              AuditsSRIMessageSignatureIssueDetails              `json:"sriMessageSignatureIssueDetails,omitempty,omitzero"`
+	UnencodedDigestIssueDetails                  AuditsUnencodedDigestIssueDetails                  `json:"unencodedDigestIssueDetails,omitempty,omitzero"`
+	ConnectionAllowlistIssueDetails              AuditsConnectionAllowlistIssueDetails              `json:"connectionAllowlistIssueDetails,omitempty,omitzero"`
+	UserReidentificationIssueDetails             AuditsUserReidentificationIssueDetails             `json:"userReidentificationIssueDetails,omitempty,omitzero"`
+	PermissionElementIssueDetails                AuditsPermissionElementIssueDetails                `json:"permissionElementIssueDetails,omitempty,omitzero"`
+	PerformanceIssueDetails                      AuditsPerformanceIssueDetails                      `json:"performanceIssueDetails,omitempty,omitzero"`
+	SelectivePermissionsInterventionIssueDetails AuditsSelectivePermissionsInterventionIssueDetails `json:"selectivePermissionsInterventionIssueDetails,omitempty,omitzero"`
 }
 
 // AuditsIssueID A unique id for a DevTools inspector issue. Allows other entities (e.g.
@@ -2520,7 +2520,7 @@ type AuditsInspectorIssue struct {
 	Details AuditsInspectorIssueDetails `json:"details"`
 	// IssueID A unique id for this issue. May be omitted if no other entity (e.g.
 	// exception, CDP message, etc.) is referencing this issue.
-	IssueID AuditsIssueID `json:"issueId,omitempty"`
+	IssueID AuditsIssueID `json:"issueId,omitempty,omitzero"`
 }
 
 // AuditsGetEncodedResponseEncoding The encoding to use.

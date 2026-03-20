@@ -20,15 +20,15 @@ type DebuggerEventPaused struct {
 	// Reason Pause reason.
 	Reason DebuggerPausedReason `json:"reason"`
 	// Data Object containing break-specific auxiliary properties.
-	Data json.RawMessage `json:"data,omitempty"`
+	Data json.RawMessage `json:"data,omitempty,omitzero"`
 	// HitBreakpoints Hit breakpoints IDs
-	HitBreakpoints []string `json:"hitBreakpoints,omitempty"`
+	HitBreakpoints []string `json:"hitBreakpoints,omitempty,omitzero"`
 	// AsyncStackTrace Async stack trace, if any.
-	AsyncStackTrace RuntimeStackTrace `json:"asyncStackTrace,omitempty"`
+	AsyncStackTrace RuntimeStackTrace `json:"asyncStackTrace,omitempty,omitzero"`
 	// AsyncStackTraceID Async stack trace, if any.
-	AsyncStackTraceID RuntimeStackTraceID `json:"asyncStackTraceId,omitempty"`
+	AsyncStackTraceID RuntimeStackTraceID `json:"asyncStackTraceId,omitempty,omitzero"`
 	// AsyncCallStackTraceID Never present, will be removed.
-	AsyncCallStackTraceID RuntimeStackTraceID `json:"asyncCallStackTraceId,omitempty"`
+	AsyncCallStackTraceID RuntimeStackTraceID `json:"asyncCallStackTraceId,omitempty,omitzero"`
 }
 
 // DebuggerEventResumed Fired when the virtual machine resumed execution.
@@ -55,23 +55,23 @@ type DebuggerEventScriptFailedToParse struct {
 	// BuildID For Wasm modules, the content of the `build_id` custom section. For JavaScript the `debugId` magic comment.
 	BuildID string `json:"buildId"`
 	// ExecutionContextAuxData Embedder-specific auxiliary data likely matching {isDefault: boolean, type: 'default'|'isolated'|'worker', frameId: string}
-	ExecutionContextAuxData json.RawMessage `json:"executionContextAuxData,omitempty"`
+	ExecutionContextAuxData json.RawMessage `json:"executionContextAuxData,omitempty,omitzero"`
 	// SourceMapURL URL of source map associated with script (if any).
-	SourceMapURL string `json:"sourceMapURL,omitempty"`
+	SourceMapURL string `json:"sourceMapURL,omitempty,omitzero"`
 	// HasSourceURL True, if this script has sourceURL.
-	HasSourceURL bool `json:"hasSourceURL,omitempty"`
+	HasSourceURL bool `json:"hasSourceURL,omitempty,omitzero"`
 	// IsModule True, if this script is ES6 module.
-	IsModule bool `json:"isModule,omitempty"`
+	IsModule bool `json:"isModule,omitempty,omitzero"`
 	// Length This script length.
-	Length int64 `json:"length,omitempty"`
+	Length int64 `json:"length,omitempty,omitzero"`
 	// StackTrace JavaScript top stack frame of where the script parsed event was triggered if available.
-	StackTrace RuntimeStackTrace `json:"stackTrace,omitempty"`
+	StackTrace RuntimeStackTrace `json:"stackTrace,omitempty,omitzero"`
 	// CodeOffset If the scriptLanguage is WebAssembly, the code section offset in the module.
-	CodeOffset int64 `json:"codeOffset,omitempty"`
+	CodeOffset int64 `json:"codeOffset,omitempty,omitzero"`
 	// ScriptLanguage The language of the script.
-	ScriptLanguage DebuggerScriptLanguage `json:"scriptLanguage,omitempty"`
+	ScriptLanguage DebuggerScriptLanguage `json:"scriptLanguage,omitempty,omitzero"`
 	// EmbedderName The name the embedder supplied for this script.
-	EmbedderName string `json:"embedderName,omitempty"`
+	EmbedderName string `json:"embedderName,omitempty,omitzero"`
 }
 
 // DebuggerEventScriptParsed Fired when virtual machine parses script. This event is also fired for all known and uncollected
@@ -96,31 +96,31 @@ type DebuggerEventScriptParsed struct {
 	// BuildID For Wasm modules, the content of the `build_id` custom section. For JavaScript the `debugId` magic comment.
 	BuildID string `json:"buildId"`
 	// ExecutionContextAuxData Embedder-specific auxiliary data likely matching {isDefault: boolean, type: 'default'|'isolated'|'worker', frameId: string}
-	ExecutionContextAuxData json.RawMessage `json:"executionContextAuxData,omitempty"`
+	ExecutionContextAuxData json.RawMessage `json:"executionContextAuxData,omitempty,omitzero"`
 	// IsLiveEdit True, if this script is generated as a result of the live edit operation.
-	IsLiveEdit bool `json:"isLiveEdit,omitempty"`
+	IsLiveEdit bool `json:"isLiveEdit,omitempty,omitzero"`
 	// SourceMapURL URL of source map associated with script (if any).
-	SourceMapURL string `json:"sourceMapURL,omitempty"`
+	SourceMapURL string `json:"sourceMapURL,omitempty,omitzero"`
 	// HasSourceURL True, if this script has sourceURL.
-	HasSourceURL bool `json:"hasSourceURL,omitempty"`
+	HasSourceURL bool `json:"hasSourceURL,omitempty,omitzero"`
 	// IsModule True, if this script is ES6 module.
-	IsModule bool `json:"isModule,omitempty"`
+	IsModule bool `json:"isModule,omitempty,omitzero"`
 	// Length This script length.
-	Length int64 `json:"length,omitempty"`
+	Length int64 `json:"length,omitempty,omitzero"`
 	// StackTrace JavaScript top stack frame of where the script parsed event was triggered if available.
-	StackTrace RuntimeStackTrace `json:"stackTrace,omitempty"`
+	StackTrace RuntimeStackTrace `json:"stackTrace,omitempty,omitzero"`
 	// CodeOffset If the scriptLanguage is WebAssembly, the code section offset in the module.
-	CodeOffset int64 `json:"codeOffset,omitempty"`
+	CodeOffset int64 `json:"codeOffset,omitempty,omitzero"`
 	// ScriptLanguage The language of the script.
-	ScriptLanguage DebuggerScriptLanguage `json:"scriptLanguage,omitempty"`
+	ScriptLanguage DebuggerScriptLanguage `json:"scriptLanguage,omitempty,omitzero"`
 	// DebugSymbols If the scriptLanguage is WebAssembly, the source of debug symbols for the module.
-	DebugSymbols []DebuggerDebugSymbols `json:"debugSymbols,omitempty"`
+	DebugSymbols []DebuggerDebugSymbols `json:"debugSymbols,omitempty,omitzero"`
 	// EmbedderName The name the embedder supplied for this script.
-	EmbedderName string `json:"embedderName,omitempty"`
+	EmbedderName string `json:"embedderName,omitempty,omitzero"`
 	// ResolvedBreakpoints The list of set breakpoints in this script if calls to `setBreakpointByUrl`
 	// matches this script's URL or hash. Clients that use this list can ignore the
 	// `breakpointResolved` event. They are equivalent.
-	ResolvedBreakpoints []DebuggerResolvedBreakpoint `json:"resolvedBreakpoints,omitempty"`
+	ResolvedBreakpoints []DebuggerResolvedBreakpoint `json:"resolvedBreakpoints,omitempty,omitzero"`
 }
 
 // Debugger event names.

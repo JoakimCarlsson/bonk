@@ -50,11 +50,11 @@ func (t FetchRequestStage) String() string {
 type FetchRequestPattern struct {
 	// URLPattern Wildcards (`'*'` -> zero or more, `'?'` -> exactly one) are allowed. Escape character is
 	// backslash. Omitting is equivalent to `"*"`.
-	URLPattern string `json:"urlPattern,omitempty"`
+	URLPattern string `json:"urlPattern,omitempty,omitzero"`
 	// ResourceType If set, only requests for matching resource types will be intercepted.
-	ResourceType NetworkResourceType `json:"resourceType,omitempty"`
+	ResourceType NetworkResourceType `json:"resourceType,omitempty,omitzero"`
 	// RequestStage Stage at which to begin intercepting requests. Default is Request.
-	RequestStage FetchRequestStage `json:"requestStage,omitempty"`
+	RequestStage FetchRequestStage `json:"requestStage,omitempty,omitzero"`
 }
 
 // FetchHeaderEntry Response HTTP header entry
@@ -66,7 +66,7 @@ type FetchHeaderEntry struct {
 // FetchAuthChallenge Authorization challenge for HTTP status code 401 or 407.
 type FetchAuthChallenge struct {
 	// Source Source of the authentication challenge.
-	Source FetchAuthChallengeSource `json:"source,omitempty"`
+	Source FetchAuthChallengeSource `json:"source,omitempty,omitzero"`
 	// Origin Origin of the challenger.
 	Origin string `json:"origin"`
 	// Scheme The authentication scheme used, such as basic or digest
@@ -83,10 +83,10 @@ type FetchAuthChallengeResponse struct {
 	Response FetchAuthChallengeResponseResponse `json:"response"`
 	// Username The username to provide, possibly empty. Should only be set if response is
 	// ProvideCredentials.
-	Username string `json:"username,omitempty"`
+	Username string `json:"username,omitempty,omitzero"`
 	// Password The password to provide, possibly empty. Should only be set if response is
 	// ProvideCredentials.
-	Password string `json:"password,omitempty"`
+	Password string `json:"password,omitempty,omitzero"`
 }
 
 // FetchAuthChallengeSource Source of the authentication challenge.

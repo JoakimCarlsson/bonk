@@ -10,21 +10,21 @@ type LogLogEntry struct {
 	Level LogLogEntryLevel `json:"level"`
 	// Text Logged text.
 	Text     string              `json:"text"`
-	Category LogLogEntryCategory `json:"category,omitempty"`
+	Category LogLogEntryCategory `json:"category,omitempty,omitzero"`
 	// Timestamp Timestamp when this entry was added.
 	Timestamp RuntimeTimestamp `json:"timestamp"`
 	// URL URL of the resource if known.
-	URL string `json:"url,omitempty"`
+	URL string `json:"url,omitempty,omitzero"`
 	// LineNumber Line number in the resource.
-	LineNumber int64 `json:"lineNumber,omitempty"`
+	LineNumber int64 `json:"lineNumber,omitempty,omitzero"`
 	// StackTrace JavaScript stack trace.
-	StackTrace RuntimeStackTrace `json:"stackTrace,omitempty"`
+	StackTrace RuntimeStackTrace `json:"stackTrace,omitempty,omitzero"`
 	// NetworkRequestID Identifier of the network request associated with this entry.
-	NetworkRequestID RequestID `json:"networkRequestId,omitempty"`
+	NetworkRequestID RequestID `json:"networkRequestId,omitempty,omitzero"`
 	// WorkerID Identifier of the worker associated with this entry.
-	WorkerID string `json:"workerId,omitempty"`
+	WorkerID string `json:"workerId,omitempty,omitzero"`
 	// Args Call arguments.
-	Args []RuntimeRemoteObject `json:"args,omitempty"`
+	Args []RuntimeRemoteObject `json:"args,omitempty,omitzero"`
 }
 
 // LogViolationSetting Violation configuration setting.

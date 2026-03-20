@@ -23,19 +23,19 @@ type FetchEventRequestPaused struct {
 	// ResourceType How the requested resource will be used.
 	ResourceType NetworkResourceType `json:"resourceType"`
 	// ResponseErrorReason Response error if intercepted at response stage.
-	ResponseErrorReason NetworkErrorReason `json:"responseErrorReason,omitempty"`
+	ResponseErrorReason NetworkErrorReason `json:"responseErrorReason,omitempty,omitzero"`
 	// ResponseStatusCode Response code if intercepted at response stage.
-	ResponseStatusCode int64 `json:"responseStatusCode,omitempty"`
+	ResponseStatusCode int64 `json:"responseStatusCode,omitempty,omitzero"`
 	// ResponseStatusText Response status text if intercepted at response stage.
-	ResponseStatusText string `json:"responseStatusText,omitempty"`
+	ResponseStatusText string `json:"responseStatusText,omitempty,omitzero"`
 	// ResponseHeaders Response headers if intercepted at the response stage.
-	ResponseHeaders []FetchHeaderEntry `json:"responseHeaders,omitempty"`
+	ResponseHeaders []FetchHeaderEntry `json:"responseHeaders,omitempty,omitzero"`
 	// NetworkID If the intercepted request had a corresponding Network.requestWillBeSent event fired for it,
 	// then this networkId will be the same as the requestId present in the requestWillBeSent event.
-	NetworkID RequestID `json:"networkId,omitempty"`
+	NetworkID RequestID `json:"networkId,omitempty,omitzero"`
 	// RedirectedRequestID If the request is due to a redirect response from the server, the id of the request that
 	// has caused the redirect.
-	RedirectedRequestID RequestID `json:"redirectedRequestId,omitempty"`
+	RedirectedRequestID RequestID `json:"redirectedRequestId,omitempty,omitzero"`
 }
 
 // FetchEventAuthRequired Issued when the domain is enabled with handleAuthRequests set to true.

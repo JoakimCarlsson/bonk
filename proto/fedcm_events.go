@@ -9,7 +9,7 @@ type FedCmEventDialogShown struct {
 	// Title These exist primarily so that the caller can verify the
 	// RP context was used appropriately.
 	Title    string `json:"title"`
-	Subtitle string `json:"subtitle,omitempty"`
+	Subtitle string `json:"subtitle,omitempty,omitzero"`
 }
 
 // FedCmEventDialogClosed Triggered when a dialog is closed, either by user action, JS abort,

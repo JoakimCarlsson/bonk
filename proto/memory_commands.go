@@ -117,9 +117,9 @@ func (p *MemorySimulatePressureNotificationParams) Do(ctx context.Context) error
 // MemoryStartSamplingParams Start collecting native memory profile.
 type MemoryStartSamplingParams struct {
 	// SamplingInterval Average number of bytes between samples.
-	SamplingInterval int64 `json:"samplingInterval,omitempty"`
+	SamplingInterval int64 `json:"samplingInterval,omitempty,omitzero"`
 	// SuppressRandomness Do not randomize intervals between samples.
-	SuppressRandomness bool `json:"suppressRandomness,omitempty"`
+	SuppressRandomness bool `json:"suppressRandomness,omitempty,omitzero"`
 }
 
 // MemoryStartSampling creates a new MemoryStartSamplingParams.

@@ -39,7 +39,7 @@ type ExtensionsLoadUnpackedParams struct {
 	// Path Absolute file path.
 	Path string `json:"path"`
 	// EnableInIncognito Enable the extension in incognito
-	EnableInIncognito bool `json:"enableInIncognito,omitempty"`
+	EnableInIncognito bool `json:"enableInIncognito,omitempty,omitzero"`
 }
 
 // ExtensionsLoadUnpackedReturns holds the return values for loadUnpacked.
@@ -122,7 +122,7 @@ type ExtensionsGetStorageItemsParams struct {
 	// StorageArea StorageArea to retrieve data from.
 	StorageArea ExtensionsStorageArea `json:"storageArea"`
 	// Keys Keys to retrieve.
-	Keys []string `json:"keys,omitempty"`
+	Keys []string `json:"keys,omitempty,omitzero"`
 }
 
 // ExtensionsGetStorageItemsReturns holds the return values for getStorageItems.

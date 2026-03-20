@@ -25,7 +25,7 @@ type HeapProfilerEventLastSeenObjectID struct {
 type HeapProfilerEventReportHeapSnapshotProgress struct {
 	Done     int64 `json:"done"`
 	Total    int64 `json:"total"`
-	Finished bool  `json:"finished,omitempty"`
+	Finished bool  `json:"finished,omitempty,omitzero"`
 }
 
 type HeapProfilerEventResetProfiles struct{}

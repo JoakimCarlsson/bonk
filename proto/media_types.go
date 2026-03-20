@@ -71,7 +71,7 @@ type MediaPlayerError struct {
 
 type MediaPlayer struct {
 	PlayerID  MediaPlayerID `json:"playerId"`
-	DOMNodeID BackendNodeID `json:"domNodeId,omitempty"`
+	DOMNodeID BackendNodeID `json:"domNodeId,omitempty,omitzero"`
 }
 
 // MediaPlayerMessageLevel Keep in sync with MediaLogMessageLevel

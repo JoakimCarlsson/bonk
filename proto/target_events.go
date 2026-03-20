@@ -16,7 +16,7 @@ type TargetEventDetachedFromTarget struct {
 	// SessionID Detached session identifier.
 	SessionID TargetSessionID `json:"sessionId"`
 	// TargetID Deprecated.
-	TargetID TargetTargetID `json:"targetId,omitempty"`
+	TargetID TargetTargetID `json:"targetId,omitempty,omitzero"`
 }
 
 // TargetEventReceivedMessageFromTarget Notifies about a new protocol message received from the session (as reported in
@@ -26,7 +26,7 @@ type TargetEventReceivedMessageFromTarget struct {
 	SessionID TargetSessionID `json:"sessionId"`
 	Message   string          `json:"message"`
 	// TargetID Deprecated.
-	TargetID TargetTargetID `json:"targetId,omitempty"`
+	TargetID TargetTargetID `json:"targetId,omitempty,omitzero"`
 }
 
 // TargetEventTargetCreated Issued when a possible inspection target is created.

@@ -15,8 +15,8 @@ type BluetoothEmulationEventGattOperationReceived struct {
 type BluetoothEmulationEventCharacteristicOperationReceived struct {
 	CharacteristicID string                                        `json:"characteristicId"`
 	Type             BluetoothEmulationCharacteristicOperationType `json:"type"`
-	Data             []byte                                        `json:"data,omitempty"`
-	WriteType        BluetoothEmulationCharacteristicWriteType     `json:"writeType,omitempty"`
+	Data             []byte                                        `json:"data,omitempty,omitzero"`
+	WriteType        BluetoothEmulationCharacteristicWriteType     `json:"writeType,omitempty,omitzero"`
 }
 
 // BluetoothEmulationEventDescriptorOperationReceived Event for when a descriptor operation of |type| to the descriptor
@@ -25,7 +25,7 @@ type BluetoothEmulationEventCharacteristicOperationReceived struct {
 type BluetoothEmulationEventDescriptorOperationReceived struct {
 	DescriptorID string                                    `json:"descriptorId"`
 	Type         BluetoothEmulationDescriptorOperationType `json:"type"`
-	Data         []byte                                    `json:"data,omitempty"`
+	Data         []byte                                    `json:"data,omitempty,omitzero"`
 }
 
 // BluetoothEmulation event names.

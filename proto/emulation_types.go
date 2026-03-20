@@ -4,21 +4,21 @@ package proto
 
 type EmulationSafeAreaInsets struct {
 	// Top Overrides safe-area-inset-top.
-	Top int64 `json:"top,omitempty"`
+	Top int64 `json:"top,omitempty,omitzero"`
 	// TopMax Overrides safe-area-max-inset-top.
-	TopMax int64 `json:"topMax,omitempty"`
+	TopMax int64 `json:"topMax,omitempty,omitzero"`
 	// Left Overrides safe-area-inset-left.
-	Left int64 `json:"left,omitempty"`
+	Left int64 `json:"left,omitempty,omitzero"`
 	// LeftMax Overrides safe-area-max-inset-left.
-	LeftMax int64 `json:"leftMax,omitempty"`
+	LeftMax int64 `json:"leftMax,omitempty,omitzero"`
 	// Bottom Overrides safe-area-inset-bottom.
-	Bottom int64 `json:"bottom,omitempty"`
+	Bottom int64 `json:"bottom,omitempty,omitzero"`
 	// BottomMax Overrides safe-area-max-inset-bottom.
-	BottomMax int64 `json:"bottomMax,omitempty"`
+	BottomMax int64 `json:"bottomMax,omitempty,omitzero"`
 	// Right Overrides safe-area-inset-right.
-	Right int64 `json:"right,omitempty"`
+	Right int64 `json:"right,omitempty,omitzero"`
 	// RightMax Overrides safe-area-max-inset-right.
-	RightMax int64 `json:"rightMax,omitempty"`
+	RightMax int64 `json:"rightMax,omitempty,omitzero"`
 }
 
 // EmulationScreenOrientation Screen orientation.
@@ -111,20 +111,20 @@ type EmulationUserAgentBrandVersion struct {
 // Missing optional values will be filled in by the target with what it would normally use.
 type EmulationUserAgentMetadata struct {
 	// Brands Brands appearing in Sec-CH-UA.
-	Brands []EmulationUserAgentBrandVersion `json:"brands,omitempty"`
+	Brands []EmulationUserAgentBrandVersion `json:"brands,omitempty,omitzero"`
 	// FullVersionList Brands appearing in Sec-CH-UA-Full-Version-List.
-	FullVersionList []EmulationUserAgentBrandVersion `json:"fullVersionList,omitempty"`
-	FullVersion     string                           `json:"fullVersion,omitempty"`
+	FullVersionList []EmulationUserAgentBrandVersion `json:"fullVersionList,omitempty,omitzero"`
+	FullVersion     string                           `json:"fullVersion,omitempty,omitzero"`
 	Platform        string                           `json:"platform"`
 	PlatformVersion string                           `json:"platformVersion"`
 	Architecture    string                           `json:"architecture"`
 	Model           string                           `json:"model"`
 	Mobile          bool                             `json:"mobile"`
-	Bitness         string                           `json:"bitness,omitempty"`
-	Wow64           bool                             `json:"wow64,omitempty"`
+	Bitness         string                           `json:"bitness,omitempty,omitzero"`
+	Wow64           bool                             `json:"wow64,omitempty,omitzero"`
 	// FormFactors Used to specify User Agent form-factor values.
 	// See https://wicg.github.io/ua-client-hints/#sec-ch-ua-form-factors
-	FormFactors []string `json:"formFactors,omitempty"`
+	FormFactors []string `json:"formFactors,omitempty,omitzero"`
 }
 
 // EmulationSensorType Used to specify sensor types to emulate.
@@ -196,9 +196,9 @@ func (t EmulationSensorType) String() string {
 }
 
 type EmulationSensorMetadata struct {
-	Available        bool    `json:"available,omitempty"`
-	MinimumFrequency float64 `json:"minimumFrequency,omitempty"`
-	MaximumFrequency float64 `json:"maximumFrequency,omitempty"`
+	Available        bool    `json:"available,omitempty,omitzero"`
+	MinimumFrequency float64 `json:"minimumFrequency,omitempty,omitzero"`
+	MaximumFrequency float64 `json:"maximumFrequency,omitempty,omitzero"`
 }
 
 type EmulationSensorReadingSingle struct {
@@ -219,9 +219,9 @@ type EmulationSensorReadingQuaternion struct {
 }
 
 type EmulationSensorReading struct {
-	Single     EmulationSensorReadingSingle     `json:"single,omitempty"`
-	Xyz        EmulationSensorReadingXYZ        `json:"xyz,omitempty"`
-	Quaternion EmulationSensorReadingQuaternion `json:"quaternion,omitempty"`
+	Single     EmulationSensorReadingSingle     `json:"single,omitempty,omitzero"`
+	Xyz        EmulationSensorReadingXYZ        `json:"xyz,omitempty,omitzero"`
+	Quaternion EmulationSensorReadingQuaternion `json:"quaternion,omitempty,omitzero"`
 }
 
 type EmulationPressureSource string
@@ -313,18 +313,18 @@ func (t EmulationPressureState) String() string {
 }
 
 type EmulationPressureMetadata struct {
-	Available bool `json:"available,omitempty"`
+	Available bool `json:"available,omitempty,omitzero"`
 }
 
 type EmulationWorkAreaInsets struct {
 	// Top Work area top inset in pixels. Default is 0;
-	Top int64 `json:"top,omitempty"`
+	Top int64 `json:"top,omitempty,omitzero"`
 	// Left Work area left inset in pixels. Default is 0;
-	Left int64 `json:"left,omitempty"`
+	Left int64 `json:"left,omitempty,omitzero"`
 	// Bottom Work area bottom inset in pixels. Default is 0;
-	Bottom int64 `json:"bottom,omitempty"`
+	Bottom int64 `json:"bottom,omitempty,omitzero"`
 	// Right Work area right inset in pixels. Default is 0;
-	Right int64 `json:"right,omitempty"`
+	Right int64 `json:"right,omitempty,omitzero"`
 }
 
 type EmulationScreenID string

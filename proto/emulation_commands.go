@@ -88,7 +88,7 @@ func (p *EmulationSetFocusEmulationEnabledParams) Do(ctx context.Context) error 
 type EmulationSetAutoDarkModeOverrideParams struct {
 	// Enabled Whether to enable or disable automatic dark mode.
 	// If not specified, any existing override will be cleared.
-	Enabled bool `json:"enabled,omitempty"`
+	Enabled bool `json:"enabled,omitempty,omitzero"`
 }
 
 // EmulationSetAutoDarkModeOverride creates a new EmulationSetAutoDarkModeOverrideParams.
@@ -130,7 +130,7 @@ func (p *EmulationSetCPUThrottlingRateParams) Do(ctx context.Context) error {
 type EmulationSetDefaultBackgroundColorOverrideParams struct {
 	// Color RGBA of the default background color. If not specified, any existing override will be
 	// cleared.
-	Color DOMRGBA `json:"color,omitempty"`
+	Color DOMRGBA `json:"color,omitempty,omitzero"`
 }
 
 // EmulationSetDefaultBackgroundColorOverride creates a new EmulationSetDefaultBackgroundColorOverrideParams.
@@ -181,38 +181,38 @@ type EmulationSetDeviceMetricsOverrideParams struct {
 	// autosizing and more.
 	Mobile bool `json:"mobile"`
 	// Scale Scale to apply to resulting view image.
-	Scale float64 `json:"scale,omitempty"`
+	Scale float64 `json:"scale,omitempty,omitzero"`
 	// ScreenWidth Overriding screen width value in pixels (minimum 0, maximum 10000000).
-	ScreenWidth int64 `json:"screenWidth,omitempty"`
+	ScreenWidth int64 `json:"screenWidth,omitempty,omitzero"`
 	// ScreenHeight Overriding screen height value in pixels (minimum 0, maximum 10000000).
-	ScreenHeight int64 `json:"screenHeight,omitempty"`
+	ScreenHeight int64 `json:"screenHeight,omitempty,omitzero"`
 	// PositionX Overriding view X position on screen in pixels (minimum 0, maximum 10000000).
-	PositionX int64 `json:"positionX,omitempty"`
+	PositionX int64 `json:"positionX,omitempty,omitzero"`
 	// PositionY Overriding view Y position on screen in pixels (minimum 0, maximum 10000000).
-	PositionY int64 `json:"positionY,omitempty"`
+	PositionY int64 `json:"positionY,omitempty,omitzero"`
 	// DontSetVisibleSize Do not set visible view size, rely upon explicit setVisibleSize call.
-	DontSetVisibleSize bool `json:"dontSetVisibleSize,omitempty"`
+	DontSetVisibleSize bool `json:"dontSetVisibleSize,omitempty,omitzero"`
 	// ScreenOrientation Screen orientation override.
-	ScreenOrientation EmulationScreenOrientation `json:"screenOrientation,omitempty"`
+	ScreenOrientation EmulationScreenOrientation `json:"screenOrientation,omitempty,omitzero"`
 	// Viewport If set, the visible area of the page will be overridden to this viewport. This viewport
 	// change is not observed by the page, e.g. viewport-relative elements do not change positions.
-	Viewport PageViewport `json:"viewport,omitempty"`
+	Viewport PageViewport `json:"viewport,omitempty,omitzero"`
 	// DisplayFeature If set, the display feature of a multi-segment screen. If not set, multi-segment support
 	// is turned-off.
 	// Deprecated, use Emulation.setDisplayFeaturesOverride.
-	DisplayFeature EmulationDisplayFeature `json:"displayFeature,omitempty"`
+	DisplayFeature EmulationDisplayFeature `json:"displayFeature,omitempty,omitzero"`
 	// DevicePosture If set, the posture of a foldable device. If not set the posture is set
 	// to continuous.
 	// Deprecated, use Emulation.setDevicePostureOverride.
-	DevicePosture EmulationDevicePosture `json:"devicePosture,omitempty"`
+	DevicePosture EmulationDevicePosture `json:"devicePosture,omitempty,omitzero"`
 	// ScrollbarType Scrollbar type. Default: `default`.
-	ScrollbarType EmulationSetDeviceMetricsOverrideScrollbarType `json:"scrollbarType,omitempty"`
+	ScrollbarType EmulationSetDeviceMetricsOverrideScrollbarType `json:"scrollbarType,omitempty,omitzero"`
 	// ScreenOrientationLockEmulation If set to true, enables screen orientation lock emulation, which
 	// intercepts screen.orientation.lock() calls from the page and reports
 	// orientation changes via screenOrientationLockChanged events. This is
 	// useful for emulating mobile device orientation lock behavior in
 	// responsive design mode.
-	ScreenOrientationLockEmulation bool `json:"screenOrientationLockEmulation,omitempty"`
+	ScreenOrientationLockEmulation bool `json:"screenOrientationLockEmulation,omitempty,omitzero"`
 }
 
 // EmulationSetDeviceMetricsOverride creates a new EmulationSetDeviceMetricsOverrideParams.
@@ -408,7 +408,7 @@ type EmulationSetEmitTouchEventsForMouseParams struct {
 	// Enabled Whether touch emulation based on mouse input should be enabled.
 	Enabled bool `json:"enabled"`
 	// Configuration Touch/gesture events configuration. Default: current platform.
-	Configuration EmulationSetEmitTouchEventsForMouseConfiguration `json:"configuration,omitempty"`
+	Configuration EmulationSetEmitTouchEventsForMouseConfiguration `json:"configuration,omitempty,omitzero"`
 }
 
 // EmulationSetEmitTouchEventsForMouse creates a new EmulationSetEmitTouchEventsForMouseParams.
@@ -432,9 +432,9 @@ func (p *EmulationSetEmitTouchEventsForMouseParams) Do(ctx context.Context) erro
 // EmulationSetEmulatedMediaParams Emulates the given media type or media feature for CSS media queries.
 type EmulationSetEmulatedMediaParams struct {
 	// Media Media type to emulate. Empty string disables the override.
-	Media string `json:"media,omitempty"`
+	Media string `json:"media,omitempty,omitzero"`
 	// Features Media features to emulate.
-	Features []EmulationMediaFeature `json:"features,omitempty"`
+	Features []EmulationMediaFeature `json:"features,omitempty,omitzero"`
 }
 
 // EmulationSetEmulatedMedia creates a new EmulationSetEmulatedMediaParams.
@@ -480,7 +480,7 @@ func (p *EmulationSetEmulatedVisionDeficiencyParams) Do(ctx context.Context) err
 
 // EmulationSetEmulatedOSTextScaleParams Emulates the given OS text scale.
 type EmulationSetEmulatedOSTextScaleParams struct {
-	Scale float64 `json:"scale,omitempty"`
+	Scale float64 `json:"scale,omitempty,omitzero"`
 }
 
 // EmulationSetEmulatedOSTextScale creates a new EmulationSetEmulatedOSTextScaleParams.
@@ -503,19 +503,19 @@ func (p *EmulationSetEmulatedOSTextScaleParams) Do(ctx context.Context) error {
 // accuracy emulates position unavailable.
 type EmulationSetGeolocationOverrideParams struct {
 	// Latitude Mock latitude
-	Latitude float64 `json:"latitude,omitempty"`
+	Latitude float64 `json:"latitude,omitempty,omitzero"`
 	// Longitude Mock longitude
-	Longitude float64 `json:"longitude,omitempty"`
+	Longitude float64 `json:"longitude,omitempty,omitzero"`
 	// Accuracy Mock accuracy
-	Accuracy float64 `json:"accuracy,omitempty"`
+	Accuracy float64 `json:"accuracy,omitempty,omitzero"`
 	// Altitude Mock altitude
-	Altitude float64 `json:"altitude,omitempty"`
+	Altitude float64 `json:"altitude,omitempty,omitzero"`
 	// AltitudeAccuracy Mock altitudeAccuracy
-	AltitudeAccuracy float64 `json:"altitudeAccuracy,omitempty"`
+	AltitudeAccuracy float64 `json:"altitudeAccuracy,omitempty,omitzero"`
 	// Heading Mock heading
-	Heading float64 `json:"heading,omitempty"`
+	Heading float64 `json:"heading,omitempty,omitzero"`
 	// Speed Mock speed
-	Speed float64 `json:"speed,omitempty"`
+	Speed float64 `json:"speed,omitempty,omitzero"`
 }
 
 // EmulationSetGeolocationOverride creates a new EmulationSetGeolocationOverrideParams.
@@ -603,7 +603,7 @@ func (p *EmulationGetOverriddenSensorInformationParams) Do(ctx context.Context) 
 type EmulationSetSensorOverrideEnabledParams struct {
 	Enabled  bool                    `json:"enabled"`
 	Type     EmulationSensorType     `json:"type"`
-	Metadata EmulationSensorMetadata `json:"metadata,omitempty"`
+	Metadata EmulationSensorMetadata `json:"metadata,omitempty,omitzero"`
 }
 
 // EmulationSetSensorOverrideEnabled creates a new EmulationSetSensorOverrideEnabledParams.
@@ -652,7 +652,7 @@ func (p *EmulationSetSensorOverrideReadingsParams) Do(ctx context.Context) error
 type EmulationSetPressureSourceOverrideEnabledParams struct {
 	Enabled  bool                      `json:"enabled"`
 	Source   EmulationPressureSource   `json:"source"`
-	Metadata EmulationPressureMetadata `json:"metadata,omitempty"`
+	Metadata EmulationPressureMetadata `json:"metadata,omitempty,omitzero"`
 }
 
 // EmulationSetPressureSourceOverrideEnabled creates a new EmulationSetPressureSourceOverrideEnabledParams.
@@ -702,7 +702,7 @@ func (p *EmulationSetPressureStateOverrideParams) Do(ctx context.Context) error 
 type EmulationSetPressureDataOverrideParams struct {
 	Source                  EmulationPressureSource `json:"source"`
 	State                   EmulationPressureState  `json:"state"`
-	OwnContributionEstimate float64                 `json:"ownContributionEstimate,omitempty"`
+	OwnContributionEstimate float64                 `json:"ownContributionEstimate,omitempty,omitzero"`
 }
 
 // EmulationSetPressureDataOverride creates a new EmulationSetPressureDataOverrideParams.
@@ -817,7 +817,7 @@ type EmulationSetTouchEmulationEnabledParams struct {
 	// Enabled Whether the touch event emulation should be enabled.
 	Enabled bool `json:"enabled"`
 	// MaxTouchPoints Maximum touch points supported. Defaults to one.
-	MaxTouchPoints int64 `json:"maxTouchPoints,omitempty"`
+	MaxTouchPoints int64 `json:"maxTouchPoints,omitempty,omitzero"`
 }
 
 // EmulationSetTouchEmulationEnabled creates a new EmulationSetTouchEmulationEnabledParams.
@@ -844,12 +844,12 @@ type EmulationSetVirtualTimePolicyParams struct {
 	Policy EmulationVirtualTimePolicy `json:"policy"`
 	// Budget If set, after this many virtual milliseconds have elapsed virtual time will be paused and a
 	// virtualTimeBudgetExpired event is sent.
-	Budget float64 `json:"budget,omitempty"`
+	Budget float64 `json:"budget,omitempty,omitzero"`
 	// MaxVirtualTimeTaskStarvationCount If set this specifies the maximum number of tasks that can be run before virtual is forced
 	// forwards to prevent deadlock.
-	MaxVirtualTimeTaskStarvationCount int64 `json:"maxVirtualTimeTaskStarvationCount,omitempty"`
+	MaxVirtualTimeTaskStarvationCount int64 `json:"maxVirtualTimeTaskStarvationCount,omitempty,omitzero"`
 	// InitialVirtualTime If set, base::Time::Now will be overridden to initially return this value.
-	InitialVirtualTime TimeSinceEpoch `json:"initialVirtualTime,omitempty"`
+	InitialVirtualTime TimeSinceEpoch `json:"initialVirtualTime,omitempty,omitzero"`
 }
 
 // EmulationSetVirtualTimePolicyReturns holds the return values for setVirtualTimePolicy.
@@ -896,7 +896,7 @@ func (p *EmulationSetVirtualTimePolicyParams) Do(ctx context.Context) (*Emulatio
 type EmulationSetLocaleOverrideParams struct {
 	// Locale ICU style C locale (e.g. "en_US"). If not specified or empty, disables the override and
 	// restores default host system locale.
-	Locale string `json:"locale,omitempty"`
+	Locale string `json:"locale,omitempty,omitzero"`
 }
 
 // EmulationSetLocaleOverride creates a new EmulationSetLocaleOverrideParams.
@@ -978,7 +978,7 @@ func (p *EmulationSetDisabledImageTypesParams) Do(ctx context.Context) error {
 // EmulationSetDataSaverOverrideParams Override the value of navigator.connection.saveData
 type EmulationSetDataSaverOverrideParams struct {
 	// DataSaverEnabled Override value. Omitting the parameter disables the override.
-	DataSaverEnabled bool `json:"dataSaverEnabled,omitempty"`
+	DataSaverEnabled bool `json:"dataSaverEnabled,omitempty,omitzero"`
 }
 
 // EmulationSetDataSaverOverride creates a new EmulationSetDataSaverOverrideParams.
@@ -1020,11 +1020,11 @@ type EmulationSetUserAgentOverrideParams struct {
 	// UserAgent User agent to use.
 	UserAgent string `json:"userAgent"`
 	// AcceptLanguage Browser language to emulate.
-	AcceptLanguage string `json:"acceptLanguage,omitempty"`
+	AcceptLanguage string `json:"acceptLanguage,omitempty,omitzero"`
 	// Platform The platform navigator.platform should return.
-	Platform string `json:"platform,omitempty"`
+	Platform string `json:"platform,omitempty,omitzero"`
 	// UserAgentMetadata To be sent in Sec-CH-UA-* headers and returned in navigator.userAgentData
-	UserAgentMetadata EmulationUserAgentMetadata `json:"userAgentMetadata,omitempty"`
+	UserAgentMetadata EmulationUserAgentMetadata `json:"userAgentMetadata,omitempty,omitzero"`
 }
 
 // EmulationSetUserAgentOverride creates a new EmulationSetUserAgentOverrideParams.
@@ -1129,17 +1129,17 @@ type EmulationAddScreenParams struct {
 	// Height The height of the screen in pixels.
 	Height int64 `json:"height"`
 	// WorkAreaInsets Specifies the screen's work area. Default is entire screen.
-	WorkAreaInsets EmulationWorkAreaInsets `json:"workAreaInsets,omitempty"`
+	WorkAreaInsets EmulationWorkAreaInsets `json:"workAreaInsets,omitempty,omitzero"`
 	// DevicePixelRatio Specifies the screen's device pixel ratio. Default is 1.
-	DevicePixelRatio float64 `json:"devicePixelRatio,omitempty"`
+	DevicePixelRatio float64 `json:"devicePixelRatio,omitempty,omitzero"`
 	// Rotation Specifies the screen's rotation angle. Available values are 0, 90, 180 and 270. Default is 0.
-	Rotation int64 `json:"rotation,omitempty"`
+	Rotation int64 `json:"rotation,omitempty,omitzero"`
 	// ColorDepth Specifies the screen's color depth in bits. Default is 24.
-	ColorDepth int64 `json:"colorDepth,omitempty"`
+	ColorDepth int64 `json:"colorDepth,omitempty,omitzero"`
 	// Label Specifies the descriptive label for the screen. Default is none.
-	Label string `json:"label,omitempty"`
+	Label string `json:"label,omitempty,omitzero"`
 	// IsInternal Indicates whether the screen is internal to the device or external, attached to the device. Default is false.
-	IsInternal bool `json:"isInternal,omitempty"`
+	IsInternal bool `json:"isInternal,omitempty,omitzero"`
 }
 
 // EmulationAddScreenReturns holds the return values for addScreen.
@@ -1207,25 +1207,25 @@ type EmulationUpdateScreenParams struct {
 	// ScreenID Target screen identifier.
 	ScreenID EmulationScreenID `json:"screenId"`
 	// Left Offset of the left edge of the screen in pixels.
-	Left int64 `json:"left,omitempty"`
+	Left int64 `json:"left,omitempty,omitzero"`
 	// Top Offset of the top edge of the screen in pixels.
-	Top int64 `json:"top,omitempty"`
+	Top int64 `json:"top,omitempty,omitzero"`
 	// Width The width of the screen in pixels.
-	Width int64 `json:"width,omitempty"`
+	Width int64 `json:"width,omitempty,omitzero"`
 	// Height The height of the screen in pixels.
-	Height int64 `json:"height,omitempty"`
+	Height int64 `json:"height,omitempty,omitzero"`
 	// WorkAreaInsets Specifies the screen's work area.
-	WorkAreaInsets EmulationWorkAreaInsets `json:"workAreaInsets,omitempty"`
+	WorkAreaInsets EmulationWorkAreaInsets `json:"workAreaInsets,omitempty,omitzero"`
 	// DevicePixelRatio Specifies the screen's device pixel ratio.
-	DevicePixelRatio float64 `json:"devicePixelRatio,omitempty"`
+	DevicePixelRatio float64 `json:"devicePixelRatio,omitempty,omitzero"`
 	// Rotation Specifies the screen's rotation angle. Available values are 0, 90, 180 and 270.
-	Rotation int64 `json:"rotation,omitempty"`
+	Rotation int64 `json:"rotation,omitempty,omitzero"`
 	// ColorDepth Specifies the screen's color depth in bits.
-	ColorDepth int64 `json:"colorDepth,omitempty"`
+	ColorDepth int64 `json:"colorDepth,omitempty,omitzero"`
 	// Label Specifies the descriptive label for the screen.
-	Label string `json:"label,omitempty"`
+	Label string `json:"label,omitempty,omitzero"`
 	// IsInternal Indicates whether the screen is internal to the device or external, attached to the device. Default is false.
-	IsInternal bool `json:"isInternal,omitempty"`
+	IsInternal bool `json:"isInternal,omitempty,omitzero"`
 }
 
 // EmulationUpdateScreenReturns holds the return values for updateScreen.

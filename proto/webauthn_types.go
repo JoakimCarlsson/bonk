@@ -154,50 +154,50 @@ func (t WebAuthnAuthenticatorTransport) String() string {
 type WebAuthnVirtualAuthenticatorOptions struct {
 	Protocol WebAuthnAuthenticatorProtocol `json:"protocol"`
 	// Ctap2Version Defaults to ctap2_0. Ignored if |protocol| == u2f.
-	Ctap2Version WebAuthnCtap2Version           `json:"ctap2Version,omitempty"`
+	Ctap2Version WebAuthnCtap2Version           `json:"ctap2Version,omitempty,omitzero"`
 	Transport    WebAuthnAuthenticatorTransport `json:"transport"`
 	// HasResidentKey Defaults to false.
-	HasResidentKey bool `json:"hasResidentKey,omitempty"`
+	HasResidentKey bool `json:"hasResidentKey,omitempty,omitzero"`
 	// HasUserVerification Defaults to false.
-	HasUserVerification bool `json:"hasUserVerification,omitempty"`
+	HasUserVerification bool `json:"hasUserVerification,omitempty,omitzero"`
 	// HasLargeBlob If set to true, the authenticator will support the largeBlob extension.
 	// https://w3c.github.io/webauthn#largeBlob
 	// Defaults to false.
-	HasLargeBlob bool `json:"hasLargeBlob,omitempty"`
+	HasLargeBlob bool `json:"hasLargeBlob,omitempty,omitzero"`
 	// HasCredBlob If set to true, the authenticator will support the credBlob extension.
 	// https://fidoalliance.org/specs/fido-v2.1-rd-20201208/fido-client-to-authenticator-protocol-v2.1-rd-20201208.html#sctn-credBlob-extension
 	// Defaults to false.
-	HasCredBlob bool `json:"hasCredBlob,omitempty"`
+	HasCredBlob bool `json:"hasCredBlob,omitempty,omitzero"`
 	// HasMinPinLength If set to true, the authenticator will support the minPinLength extension.
 	// https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#sctn-minpinlength-extension
 	// Defaults to false.
-	HasMinPinLength bool `json:"hasMinPinLength,omitempty"`
+	HasMinPinLength bool `json:"hasMinPinLength,omitempty,omitzero"`
 	// HasPrf If set to true, the authenticator will support the prf extension.
 	// https://w3c.github.io/webauthn/#prf-extension
 	// Defaults to false.
-	HasPrf bool `json:"hasPrf,omitempty"`
+	HasPrf bool `json:"hasPrf,omitempty,omitzero"`
 	// HasHmacSecret If set to true, the authenticator will support the hmac-secret extension.
 	// https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#sctn-hmac-secret-extension
 	// Defaults to false.
-	HasHmacSecret bool `json:"hasHmacSecret,omitempty"`
+	HasHmacSecret bool `json:"hasHmacSecret,omitempty,omitzero"`
 	// HasHmacSecretMc If set to true, the authenticator will support the hmac-secret-mc extension.
 	// https://fidoalliance.org/specs/fido-v2.2-rd-20241003/fido-client-to-authenticator-protocol-v2.2-rd-20241003.html#sctn-hmac-secret-make-cred-extension
 	// Defaults to false.
-	HasHmacSecretMc bool `json:"hasHmacSecretMc,omitempty"`
+	HasHmacSecretMc bool `json:"hasHmacSecretMc,omitempty,omitzero"`
 	// AutomaticPresenceSimulation If set to true, tests of user presence will succeed immediately.
 	// Otherwise, they will not be resolved. Defaults to true.
-	AutomaticPresenceSimulation bool `json:"automaticPresenceSimulation,omitempty"`
+	AutomaticPresenceSimulation bool `json:"automaticPresenceSimulation,omitempty,omitzero"`
 	// IsUserVerified Sets whether User Verification succeeds or fails for an authenticator.
 	// Defaults to false.
-	IsUserVerified bool `json:"isUserVerified,omitempty"`
+	IsUserVerified bool `json:"isUserVerified,omitempty,omitzero"`
 	// DefaultBackupEligibility Credentials created by this authenticator will have the backup
 	// eligibility (BE) flag set to this value. Defaults to false.
 	// https://w3c.github.io/webauthn/#sctn-credential-backup
-	DefaultBackupEligibility bool `json:"defaultBackupEligibility,omitempty"`
+	DefaultBackupEligibility bool `json:"defaultBackupEligibility,omitempty,omitzero"`
 	// DefaultBackupState Credentials created by this authenticator will have the backup state
 	// (BS) flag set to this value. Defaults to false.
 	// https://w3c.github.io/webauthn/#sctn-credential-backup
-	DefaultBackupState bool `json:"defaultBackupState,omitempty"`
+	DefaultBackupState bool `json:"defaultBackupState,omitempty,omitzero"`
 }
 
 type WebAuthnCredential struct {
@@ -205,32 +205,32 @@ type WebAuthnCredential struct {
 	IsResidentCredential bool   `json:"isResidentCredential"`
 	// RpID Relying Party ID the credential is scoped to. Must be set when adding a
 	// credential.
-	RpID string `json:"rpId,omitempty"`
+	RpID string `json:"rpId,omitempty,omitzero"`
 	// PrivateKey The ECDSA P-256 private key in PKCS#8 format.
 	PrivateKey []byte `json:"privateKey"`
 	// UserHandle An opaque byte sequence with a maximum size of 64 bytes mapping the
 	// credential to a specific user.
-	UserHandle []byte `json:"userHandle,omitempty"`
+	UserHandle []byte `json:"userHandle,omitempty,omitzero"`
 	// SignCount Signature counter. This is incremented by one for each successful
 	// assertion.
 	// See https://w3c.github.io/webauthn/#signature-counter
 	SignCount int64 `json:"signCount"`
 	// LargeBlob The large blob associated with the credential.
 	// See https://w3c.github.io/webauthn/#sctn-large-blob-extension
-	LargeBlob []byte `json:"largeBlob,omitempty"`
+	LargeBlob []byte `json:"largeBlob,omitempty,omitzero"`
 	// BackupEligibility Assertions returned by this credential will have the backup eligibility
 	// (BE) flag set to this value. Defaults to the authenticator's
 	// defaultBackupEligibility value.
-	BackupEligibility bool `json:"backupEligibility,omitempty"`
+	BackupEligibility bool `json:"backupEligibility,omitempty,omitzero"`
 	// BackupState Assertions returned by this credential will have the backup state (BS)
 	// flag set to this value. Defaults to the authenticator's
 	// defaultBackupState value.
-	BackupState bool `json:"backupState,omitempty"`
+	BackupState bool `json:"backupState,omitempty,omitzero"`
 	// UserName The credential's user.name property. Equivalent to empty if not set.
 	// https://w3c.github.io/webauthn/#dom-publickeycredentialentity-name
-	UserName string `json:"userName,omitempty"`
+	UserName string `json:"userName,omitempty,omitzero"`
 	// UserDisplayName The credential's user.displayName property. Equivalent to empty if
 	// not set.
 	// https://w3c.github.io/webauthn/#dom-publickeycredentialuserentity-displayname
-	UserDisplayName string `json:"userDisplayName,omitempty"`
+	UserDisplayName string `json:"userDisplayName,omitempty,omitzero"`
 }

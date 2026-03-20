@@ -33,7 +33,7 @@ type SecurityEventSecurityStateChanged struct {
 	// InsecureContentStatus Information about insecure content on the page.
 	InsecureContentStatus SecurityInsecureContentStatus `json:"insecureContentStatus"`
 	// Summary Overrides user-visible description of the state. Always omitted.
-	Summary string `json:"summary,omitempty"`
+	Summary string `json:"summary,omitempty,omitzero"`
 }
 
 // Security event names.

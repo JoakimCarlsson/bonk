@@ -59,12 +59,12 @@ type StorageEventInterestGroupAccessed struct {
 	Name        string                         `json:"name"`
 	// ComponentSellerOrigin For topLevelBid/topLevelAdditionalBid, and when appropriate,
 	// win and additionalBidWin
-	ComponentSellerOrigin string `json:"componentSellerOrigin,omitempty"`
+	ComponentSellerOrigin string `json:"componentSellerOrigin,omitempty,omitzero"`
 	// Bid For bid or somethingBid event, if done locally and not on a server.
-	Bid         float64 `json:"bid,omitempty"`
-	BidCurrency string  `json:"bidCurrency,omitempty"`
+	Bid         float64 `json:"bid,omitempty,omitzero"`
+	BidCurrency string  `json:"bidCurrency,omitempty,omitzero"`
 	// UniqueAuctionID For non-global events --- links to interestGroupAuctionEvent
-	UniqueAuctionID StorageInterestGroupAuctionID `json:"uniqueAuctionId,omitempty"`
+	UniqueAuctionID StorageInterestGroupAuctionID `json:"uniqueAuctionId,omitempty,omitzero"`
 }
 
 // StorageEventInterestGroupAuctionEventOccurred An auction involving interest groups is taking place. These events are
@@ -74,9 +74,9 @@ type StorageEventInterestGroupAuctionEventOccurred struct {
 	Type            StorageInterestGroupAuctionEventType `json:"type"`
 	UniqueAuctionID StorageInterestGroupAuctionID        `json:"uniqueAuctionId"`
 	// ParentAuctionID Set for child auctions.
-	ParentAuctionID StorageInterestGroupAuctionID `json:"parentAuctionId,omitempty"`
+	ParentAuctionID StorageInterestGroupAuctionID `json:"parentAuctionId,omitempty,omitzero"`
 	// AuctionConfig Set for started and configResolved
-	AuctionConfig json.RawMessage `json:"auctionConfig,omitempty"`
+	AuctionConfig json.RawMessage `json:"auctionConfig,omitempty,omitzero"`
 }
 
 // StorageEventInterestGroupAuctionNetworkRequestCreated Specifies which auctions a particular network fetch may be related to, and
@@ -159,17 +159,17 @@ type StorageEventAttributionReportingReportSent struct {
 	Body   json.RawMessage                         `json:"body"`
 	Result StorageAttributionReportingReportResult `json:"result"`
 	// NetError If result is `sent`, populated with net/HTTP status.
-	NetError       int64  `json:"netError,omitempty"`
-	NetErrorName   string `json:"netErrorName,omitempty"`
-	HTTPStatusCode int64  `json:"httpStatusCode,omitempty"`
+	NetError       int64  `json:"netError,omitempty,omitzero"`
+	NetErrorName   string `json:"netErrorName,omitempty,omitzero"`
+	HTTPStatusCode int64  `json:"httpStatusCode,omitempty,omitzero"`
 }
 
 type StorageEventAttributionReportingVerboseDebugReportSent struct {
 	URL            string            `json:"url"`
-	Body           []json.RawMessage `json:"body,omitempty"`
-	NetError       int64             `json:"netError,omitempty"`
-	NetErrorName   string            `json:"netErrorName,omitempty"`
-	HTTPStatusCode int64             `json:"httpStatusCode,omitempty"`
+	Body           []json.RawMessage `json:"body,omitempty,omitzero"`
+	NetError       int64             `json:"netError,omitempty,omitzero"`
+	NetErrorName   string            `json:"netErrorName,omitempty,omitzero"`
+	HTTPStatusCode int64             `json:"httpStatusCode,omitempty,omitzero"`
 }
 
 // Storage event names.

@@ -12,15 +12,15 @@ type AuditsGetEncodedResponseParams struct {
 	// Encoding The encoding to use.
 	Encoding AuditsGetEncodedResponseEncoding `json:"encoding"`
 	// Quality The quality of the encoding (0-1). (defaults to 1)
-	Quality float64 `json:"quality,omitempty"`
+	Quality float64 `json:"quality,omitempty,omitzero"`
 	// SizeOnly Whether to only return the size information (defaults to false).
-	SizeOnly bool `json:"sizeOnly,omitempty"`
+	SizeOnly bool `json:"sizeOnly,omitempty,omitzero"`
 }
 
 // AuditsGetEncodedResponseReturns holds the return values for getEncodedResponse.
 type AuditsGetEncodedResponseReturns struct {
 	// Body The encoded body as a base64 string. Omitted if sizeOnly is true.
-	Body []byte `json:"body,omitempty"`
+	Body []byte `json:"body,omitempty,omitzero"`
 	// OriginalSize Size before re-encoding.
 	OriginalSize int64 `json:"originalSize"`
 	// EncodedSize Size after re-encoding.

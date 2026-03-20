@@ -198,6 +198,6 @@ type FedCmAccount struct {
 	IdpLoginURL  string          `json:"idpLoginUrl"`
 	LoginState   FedCmLoginState `json:"loginState"`
 	// TermsOfServiceURL These two are only set if the loginState is signUp
-	TermsOfServiceURL string `json:"termsOfServiceUrl,omitempty"`
-	PrivacyPolicyURL  string `json:"privacyPolicyUrl,omitempty"`
+	TermsOfServiceURL string `json:"termsOfServiceUrl,omitempty,omitzero"`
+	PrivacyPolicyURL  string `json:"privacyPolicyUrl,omitempty,omitzero"`
 }

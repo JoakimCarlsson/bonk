@@ -9,14 +9,14 @@ type ProfilerProfileNode struct {
 	// CallFrame Function location.
 	CallFrame RuntimeCallFrame `json:"callFrame"`
 	// HitCount Number of samples where this node was on top of the call stack.
-	HitCount int64 `json:"hitCount,omitempty"`
+	HitCount int64 `json:"hitCount,omitempty,omitzero"`
 	// Children Child node ids.
-	Children []int64 `json:"children,omitempty"`
+	Children []int64 `json:"children,omitempty,omitzero"`
 	// DeoptReason The reason of being not optimized. The function may be deoptimized or marked as don't
 	// optimize.
-	DeoptReason string `json:"deoptReason,omitempty"`
+	DeoptReason string `json:"deoptReason,omitempty,omitzero"`
 	// PositionTicks An array of source position ticks.
-	PositionTicks []ProfilerPositionTickInfo `json:"positionTicks,omitempty"`
+	PositionTicks []ProfilerPositionTickInfo `json:"positionTicks,omitempty,omitzero"`
 }
 
 // ProfilerProfile Profile.
@@ -28,10 +28,10 @@ type ProfilerProfile struct {
 	// EndTime Profiling end timestamp in microseconds.
 	EndTime float64 `json:"endTime"`
 	// Samples Ids of samples top nodes.
-	Samples []int64 `json:"samples,omitempty"`
+	Samples []int64 `json:"samples,omitempty,omitzero"`
 	// TimeDeltas Time intervals between adjacent samples in microseconds. The first delta is relative to the
 	// profile startTime.
-	TimeDeltas []int64 `json:"timeDeltas,omitempty"`
+	TimeDeltas []int64 `json:"timeDeltas,omitempty,omitzero"`
 }
 
 // ProfilerPositionTickInfo Specifies a number of samples attributed to a certain source position.

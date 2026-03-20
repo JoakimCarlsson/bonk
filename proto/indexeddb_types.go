@@ -42,21 +42,21 @@ type IndexedDBKey struct {
 	// Type Key type.
 	Type IndexedDBKeyType `json:"type"`
 	// Number Number value.
-	Number float64 `json:"number,omitempty"`
+	Number float64 `json:"number,omitempty,omitzero"`
 	// String String value.
-	String string `json:"string,omitempty"`
+	String string `json:"string,omitempty,omitzero"`
 	// Date Date value.
-	Date float64 `json:"date,omitempty"`
+	Date float64 `json:"date,omitempty,omitzero"`
 	// Array Array value.
-	Array []IndexedDBKey `json:"array,omitempty"`
+	Array []IndexedDBKey `json:"array,omitempty,omitzero"`
 }
 
 // IndexedDBKeyRange Key range.
 type IndexedDBKeyRange struct {
 	// Lower Lower bound.
-	Lower IndexedDBKey `json:"lower,omitempty"`
+	Lower IndexedDBKey `json:"lower,omitempty,omitzero"`
 	// Upper Upper bound.
-	Upper IndexedDBKey `json:"upper,omitempty"`
+	Upper IndexedDBKey `json:"upper,omitempty,omitzero"`
 	// LowerOpen If true lower bound is open.
 	LowerOpen bool `json:"lowerOpen"`
 	// UpperOpen If true upper bound is open.
@@ -78,9 +78,9 @@ type IndexedDBKeyPath struct {
 	// Type Key path type.
 	Type IndexedDBKeyPathType `json:"type"`
 	// String String value.
-	String string `json:"string,omitempty"`
+	String string `json:"string,omitempty,omitzero"`
 	// Array Array value.
-	Array []string `json:"array,omitempty"`
+	Array []string `json:"array,omitempty,omitzero"`
 }
 
 // IndexedDBKeyType Key type.

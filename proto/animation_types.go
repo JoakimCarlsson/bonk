@@ -24,28 +24,28 @@ type AnimationAnimation struct {
 	// Type Animation type of `Animation`.
 	Type AnimationAnimationType `json:"type"`
 	// Source `Animation`'s source animation node.
-	Source AnimationAnimationEffect `json:"source,omitempty"`
+	Source AnimationAnimationEffect `json:"source,omitempty,omitzero"`
 	// CSSID A unique ID for `Animation` representing the sources that triggered this CSS
 	// animation/transition.
-	CSSID string `json:"cssId,omitempty"`
+	CSSID string `json:"cssId,omitempty,omitzero"`
 	// ViewOrScrollTimeline View or scroll timeline
-	ViewOrScrollTimeline AnimationViewOrScrollTimeline `json:"viewOrScrollTimeline,omitempty"`
+	ViewOrScrollTimeline AnimationViewOrScrollTimeline `json:"viewOrScrollTimeline,omitempty,omitzero"`
 }
 
 // AnimationViewOrScrollTimeline Timeline instance
 type AnimationViewOrScrollTimeline struct {
 	// SourceNodeID Scroll container node
-	SourceNodeID BackendNodeID `json:"sourceNodeId,omitempty"`
+	SourceNodeID BackendNodeID `json:"sourceNodeId,omitempty,omitzero"`
 	// StartOffset Represents the starting scroll position of the timeline
 	// as a length offset in pixels from scroll origin.
-	StartOffset float64 `json:"startOffset,omitempty"`
+	StartOffset float64 `json:"startOffset,omitempty,omitzero"`
 	// EndOffset Represents the ending scroll position of the timeline
 	// as a length offset in pixels from scroll origin.
-	EndOffset float64 `json:"endOffset,omitempty"`
+	EndOffset float64 `json:"endOffset,omitempty,omitzero"`
 	// SubjectNodeID The element whose principal box's visibility in the
 	// scrollport defined the progress of the timeline.
 	// Does not exist for animations with ScrollTimeline
-	SubjectNodeID BackendNodeID `json:"subjectNodeId,omitempty"`
+	SubjectNodeID BackendNodeID `json:"subjectNodeId,omitempty,omitzero"`
 	// Axis Orientation of the scroll
 	Axis DOMScrollOrientation `json:"axis"`
 }
@@ -59,7 +59,7 @@ type AnimationAnimationEffect struct {
 	// IterationStart `AnimationEffect`'s iteration start.
 	IterationStart float64 `json:"iterationStart"`
 	// Iterations `AnimationEffect`'s iterations. Omitted if the value is infinite.
-	Iterations float64 `json:"iterations,omitempty"`
+	Iterations float64 `json:"iterations,omitempty,omitzero"`
 	// Duration `AnimationEffect`'s iteration duration.
 	// Milliseconds for time based animations and
 	// percentage [0 - 100] for scroll driven animations
@@ -70,9 +70,9 @@ type AnimationAnimationEffect struct {
 	// Fill `AnimationEffect`'s fill mode.
 	Fill string `json:"fill"`
 	// BackendNodeID `AnimationEffect`'s target node.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// KeyframesRule `AnimationEffect`'s keyframes.
-	KeyframesRule AnimationKeyframesRule `json:"keyframesRule,omitempty"`
+	KeyframesRule AnimationKeyframesRule `json:"keyframesRule,omitempty,omitzero"`
 	// Easing `AnimationEffect`'s timing function.
 	Easing string `json:"easing"`
 }
@@ -80,7 +80,7 @@ type AnimationAnimationEffect struct {
 // AnimationKeyframesRule Keyframes Rule
 type AnimationKeyframesRule struct {
 	// Name CSS keyframed animation's name.
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty,omitzero"`
 	// Keyframes List of animation keyframes.
 	Keyframes []AnimationKeyframeStyle `json:"keyframes"`
 }

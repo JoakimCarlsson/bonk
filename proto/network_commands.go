@@ -140,23 +140,23 @@ type NetworkContinueInterceptedRequestParams struct {
 	// ErrorReason If set this causes the request to fail with the given reason. Passing `Aborted` for requests
 	// marked with `isNavigationRequest` also cancels the navigation. Must not be set in response
 	// to an authChallenge.
-	ErrorReason NetworkErrorReason `json:"errorReason,omitempty"`
+	ErrorReason NetworkErrorReason `json:"errorReason,omitempty,omitzero"`
 	// RawResponse If set the requests completes using with the provided base64 encoded raw response, including
 	// HTTP status line and headers etc... Must not be set in response to an authChallenge.
-	RawResponse []byte `json:"rawResponse,omitempty"`
+	RawResponse []byte `json:"rawResponse,omitempty,omitzero"`
 	// URL If set the request url will be modified in a way that's not observable by page. Must not be
 	// set in response to an authChallenge.
-	URL string `json:"url,omitempty"`
+	URL string `json:"url,omitempty,omitzero"`
 	// Method If set this allows the request method to be overridden. Must not be set in response to an
 	// authChallenge.
-	Method string `json:"method,omitempty"`
+	Method string `json:"method,omitempty,omitzero"`
 	// PostData If set this allows postData to be set. Must not be set in response to an authChallenge.
-	PostData string `json:"postData,omitempty"`
+	PostData string `json:"postData,omitempty,omitzero"`
 	// Headers If set this allows the request headers to be changed. Must not be set in response to an
 	// authChallenge.
-	Headers NetworkHeaders `json:"headers,omitempty"`
+	Headers NetworkHeaders `json:"headers,omitempty,omitzero"`
 	// AuthChallengeResponse Response to a requestIntercepted with an authChallenge. Must not be set otherwise.
-	AuthChallengeResponse NetworkAuthChallengeResponse `json:"authChallengeResponse,omitempty"`
+	AuthChallengeResponse NetworkAuthChallengeResponse `json:"authChallengeResponse,omitempty,omitzero"`
 }
 
 // NetworkContinueInterceptedRequest creates a new NetworkContinueInterceptedRequestParams.
@@ -219,14 +219,14 @@ type NetworkDeleteCookiesParams struct {
 	Name string `json:"name"`
 	// URL If specified, deletes all the cookies with the given name where domain and path match
 	// provided URL.
-	URL string `json:"url,omitempty"`
+	URL string `json:"url,omitempty,omitzero"`
 	// Domain If specified, deletes only cookies with the exact domain.
-	Domain string `json:"domain,omitempty"`
+	Domain string `json:"domain,omitempty,omitzero"`
 	// Path If specified, deletes only cookies with the exact path.
-	Path string `json:"path,omitempty"`
+	Path string `json:"path,omitempty,omitzero"`
 	// PartitionKey If specified, deletes only cookies with the the given name and partitionKey where
 	// all partition key attributes match the cookie partition key attribute.
-	PartitionKey NetworkCookiePartitionKey `json:"partitionKey,omitempty"`
+	PartitionKey NetworkCookiePartitionKey `json:"partitionKey,omitempty,omitzero"`
 }
 
 // NetworkDeleteCookies creates a new NetworkDeleteCookiesParams.
@@ -290,13 +290,13 @@ type NetworkEmulateNetworkConditionsParams struct {
 	// UploadThroughput Maximal aggregated upload throughput (bytes/sec).  -1 disables upload throttling.
 	UploadThroughput float64 `json:"uploadThroughput"`
 	// ConnectionType Connection type if known.
-	ConnectionType NetworkConnectionType `json:"connectionType,omitempty"`
+	ConnectionType NetworkConnectionType `json:"connectionType,omitempty,omitzero"`
 	// PacketLoss WebRTC packet loss (percent, 0-100). 0 disables packet loss emulation, 100 drops all the packets.
-	PacketLoss float64 `json:"packetLoss,omitempty"`
+	PacketLoss float64 `json:"packetLoss,omitempty,omitzero"`
 	// PacketQueueLength WebRTC packet queue length (packet). 0 removes any queue length limitations.
-	PacketQueueLength int64 `json:"packetQueueLength,omitempty"`
+	PacketQueueLength int64 `json:"packetQueueLength,omitempty,omitzero"`
 	// PacketReordering WebRTC packetReordering feature.
-	PacketReordering bool `json:"packetReordering,omitempty"`
+	PacketReordering bool `json:"packetReordering,omitempty,omitzero"`
 }
 
 // NetworkEmulateNetworkConditions creates a new NetworkEmulateNetworkConditionsParams.
@@ -385,7 +385,7 @@ type NetworkOverrideNetworkStateParams struct {
 	// UploadThroughput Maximal aggregated upload throughput (bytes/sec).  -1 disables upload throttling.
 	UploadThroughput float64 `json:"uploadThroughput"`
 	// ConnectionType Connection type if known.
-	ConnectionType NetworkConnectionType `json:"connectionType,omitempty"`
+	ConnectionType NetworkConnectionType `json:"connectionType,omitempty,omitzero"`
 }
 
 // NetworkOverrideNetworkState creates a new NetworkOverrideNetworkStateParams.
@@ -414,19 +414,19 @@ type NetworkEnableParams struct {
 	// MaxTotalBufferSize Buffer size in bytes to use when preserving network payloads (XHRs, etc).
 	// This is the maximum number of bytes that will be collected by this
 	// DevTools session.
-	MaxTotalBufferSize int64 `json:"maxTotalBufferSize,omitempty"`
+	MaxTotalBufferSize int64 `json:"maxTotalBufferSize,omitempty,omitzero"`
 	// MaxResourceBufferSize Per-resource buffer size in bytes to use when preserving network payloads (XHRs, etc).
-	MaxResourceBufferSize int64 `json:"maxResourceBufferSize,omitempty"`
+	MaxResourceBufferSize int64 `json:"maxResourceBufferSize,omitempty,omitzero"`
 	// MaxPostDataSize Longest post body size (in bytes) that would be included in requestWillBeSent notification
-	MaxPostDataSize int64 `json:"maxPostDataSize,omitempty"`
+	MaxPostDataSize int64 `json:"maxPostDataSize,omitempty,omitzero"`
 	// ReportDirectSocketTraffic Whether DirectSocket chunk send/receive events should be reported.
-	ReportDirectSocketTraffic bool `json:"reportDirectSocketTraffic,omitempty"`
+	ReportDirectSocketTraffic bool `json:"reportDirectSocketTraffic,omitempty,omitzero"`
 	// EnableDurableMessages Enable storing response bodies outside of renderer, so that these survive
 	// a cross-process navigation. Requires maxTotalBufferSize to be set.
 	// Currently defaults to false. This field is being deprecated in favor of the dedicated
 	// configureDurableMessages command, due to the possibility of deadlocks when awaiting
 	// Network.enable before issuing Runtime.runIfWaitingForDebugger.
-	EnableDurableMessages bool `json:"enableDurableMessages,omitempty"`
+	EnableDurableMessages bool `json:"enableDurableMessages,omitempty,omitzero"`
 }
 
 // NetworkEnable creates a new NetworkEnableParams.
@@ -474,9 +474,9 @@ func (p *NetworkEnableParams) Do(ctx context.Context) error {
 // If maxTotalBufferSize is not set, durable messages are disabled.
 type NetworkConfigureDurableMessagesParams struct {
 	// MaxTotalBufferSize Buffer size in bytes to use when preserving network payloads (XHRs, etc).
-	MaxTotalBufferSize int64 `json:"maxTotalBufferSize,omitempty"`
+	MaxTotalBufferSize int64 `json:"maxTotalBufferSize,omitempty,omitzero"`
 	// MaxResourceBufferSize Per-resource buffer size in bytes to use when preserving network payloads (XHRs, etc).
-	MaxResourceBufferSize int64 `json:"maxResourceBufferSize,omitempty"`
+	MaxResourceBufferSize int64 `json:"maxResourceBufferSize,omitempty,omitzero"`
 }
 
 // NetworkConfigureDurableMessages creates a new NetworkConfigureDurableMessagesParams.
@@ -559,7 +559,7 @@ type NetworkGetCookiesParams struct {
 	// Urls The list of URLs for which applicable cookies will be fetched.
 	// If not specified, it's assumed to be set to the list containing
 	// the URLs of the page and all of its subframes.
-	Urls []string `json:"urls,omitempty"`
+	Urls []string `json:"urls,omitempty,omitzero"`
 }
 
 // NetworkGetCookiesReturns holds the return values for getCookies.
@@ -734,9 +734,9 @@ type NetworkSearchInResponseBodyParams struct {
 	// Query String to search for.
 	Query string `json:"query"`
 	// CaseSensitive If true, search is case sensitive.
-	CaseSensitive bool `json:"caseSensitive,omitempty"`
+	CaseSensitive bool `json:"caseSensitive,omitempty,omitzero"`
 	// IsRegex If true, treats string parameter as regex.
-	IsRegex bool `json:"isRegex,omitempty"`
+	IsRegex bool `json:"isRegex,omitempty,omitzero"`
 }
 
 // NetworkSearchInResponseBodyReturns holds the return values for searchInResponseBody.
@@ -778,9 +778,9 @@ func (p *NetworkSearchInResponseBodyParams) Do(ctx context.Context) (*NetworkSea
 type NetworkSetBlockedURLsParams struct {
 	// URLPatterns Patterns to match in the order in which they are given. These patterns
 	// also take precedence over any wildcard patterns defined in `urls`.
-	URLPatterns []NetworkBlockPattern `json:"urlPatterns,omitempty"`
+	URLPatterns []NetworkBlockPattern `json:"urlPatterns,omitempty,omitzero"`
 	// Urls URL patterns to block. Wildcards ('*') are allowed.
-	Urls []string `json:"urls,omitempty"`
+	Urls []string `json:"urls,omitempty,omitzero"`
 }
 
 // NetworkSetBlockedURLs creates a new NetworkSetBlockedURLsParams.
@@ -849,29 +849,29 @@ type NetworkSetCookieParams struct {
 	Value string `json:"value"`
 	// URL The request-URI to associate with the setting of the cookie. This value can affect the
 	// default domain, path, source port, and source scheme values of the created cookie.
-	URL string `json:"url,omitempty"`
+	URL string `json:"url,omitempty,omitzero"`
 	// Domain Cookie domain.
-	Domain string `json:"domain,omitempty"`
+	Domain string `json:"domain,omitempty,omitzero"`
 	// Path Cookie path.
-	Path string `json:"path,omitempty"`
+	Path string `json:"path,omitempty,omitzero"`
 	// Secure True if cookie is secure.
-	Secure bool `json:"secure,omitempty"`
+	Secure bool `json:"secure,omitempty,omitzero"`
 	// HTTPOnly True if cookie is http-only.
-	HTTPOnly bool `json:"httpOnly,omitempty"`
+	HTTPOnly bool `json:"httpOnly,omitempty,omitzero"`
 	// SameSite Cookie SameSite type.
-	SameSite NetworkCookieSameSite `json:"sameSite,omitempty"`
+	SameSite NetworkCookieSameSite `json:"sameSite,omitempty,omitzero"`
 	// Expires Cookie expiration date, session cookie if not set
-	Expires TimeSinceEpoch `json:"expires,omitempty"`
+	Expires TimeSinceEpoch `json:"expires,omitempty,omitzero"`
 	// Priority Cookie Priority type.
-	Priority NetworkCookiePriority `json:"priority,omitempty"`
+	Priority NetworkCookiePriority `json:"priority,omitempty,omitzero"`
 	// SourceScheme Cookie source scheme type.
-	SourceScheme NetworkCookieSourceScheme `json:"sourceScheme,omitempty"`
+	SourceScheme NetworkCookieSourceScheme `json:"sourceScheme,omitempty,omitzero"`
 	// SourcePort Cookie source port. Valid values are {-1, [1, 65535]}, -1 indicates an unspecified port.
 	// An unspecified port value allows protocol clients to emulate legacy cookie scope for the port.
 	// This is a temporary ability and it will be removed in the future.
-	SourcePort int64 `json:"sourcePort,omitempty"`
+	SourcePort int64 `json:"sourcePort,omitempty,omitzero"`
 	// PartitionKey Cookie partition key. If not set, the cookie will be set as not partitioned.
-	PartitionKey NetworkCookiePartitionKey `json:"partitionKey,omitempty"`
+	PartitionKey NetworkCookiePartitionKey `json:"partitionKey,omitempty,omitzero"`
 }
 
 // NetworkSetCookieReturns holds the return values for setCookie.
@@ -1042,11 +1042,11 @@ type NetworkSetUserAgentOverrideParams struct {
 	// UserAgent User agent to use.
 	UserAgent string `json:"userAgent"`
 	// AcceptLanguage Browser language to emulate.
-	AcceptLanguage string `json:"acceptLanguage,omitempty"`
+	AcceptLanguage string `json:"acceptLanguage,omitempty,omitzero"`
 	// Platform The platform navigator.platform should return.
-	Platform string `json:"platform,omitempty"`
+	Platform string `json:"platform,omitempty,omitzero"`
 	// UserAgentMetadata To be sent in Sec-CH-UA-* headers and returned in navigator.userAgentData
-	UserAgentMetadata EmulationUserAgentMetadata `json:"userAgentMetadata,omitempty"`
+	UserAgentMetadata EmulationUserAgentMetadata `json:"userAgentMetadata,omitempty,omitzero"`
 }
 
 // NetworkSetUserAgentOverride creates a new NetworkSetUserAgentOverrideParams.
@@ -1111,7 +1111,7 @@ func (p *NetworkStreamResourceContentParams) Do(ctx context.Context) (*NetworkSt
 // NetworkGetSecurityIsolationStatusParams Returns information about the COEP/COOP isolation status.
 type NetworkGetSecurityIsolationStatusParams struct {
 	// FrameID If no frameId is provided, the status of the target is provided.
-	FrameID FrameID `json:"frameId,omitempty"`
+	FrameID FrameID `json:"frameId,omitempty,omitzero"`
 }
 
 // NetworkGetSecurityIsolationStatusReturns holds the return values for getSecurityIsolationStatus.
@@ -1208,7 +1208,7 @@ func (p *NetworkFetchSchemefulSiteParams) Do(ctx context.Context) (*NetworkFetch
 type NetworkLoadNetworkResourceParams struct {
 	// FrameID Frame id to get the resource for. Mandatory for frame targets, and
 	// should be omitted for worker targets.
-	FrameID FrameID `json:"frameId,omitempty"`
+	FrameID FrameID `json:"frameId,omitempty,omitzero"`
 	// URL URL of the resource to get content for.
 	URL string `json:"url"`
 	// Options Options for the request.

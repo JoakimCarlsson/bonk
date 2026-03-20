@@ -19,7 +19,7 @@ type CSSAddRuleParams struct {
 	// NodeForPropertySyntaxValidation NodeId for the DOM node in whose context custom property declarations for registered properties should be
 	// validated. If omitted, declarations in the new rule text can only be validated statically, which may produce
 	// incorrect results if the declaration contains a var() for example.
-	NodeForPropertySyntaxValidation NodeID `json:"nodeForPropertySyntaxValidation,omitempty"`
+	NodeForPropertySyntaxValidation NodeID `json:"nodeForPropertySyntaxValidation,omitempty,omitzero"`
 }
 
 // CSSAddRuleReturns holds the return values for addRule.
@@ -87,7 +87,7 @@ type CSSCreateStyleSheetParams struct {
 	// returns a stylesheet previously created by a call with force=false
 	// for the frame's document if it exists or creates a new stylesheet
 	// (default: false).
-	Force bool `json:"force,omitempty"`
+	Force bool `json:"force,omitempty,omitzero"`
 }
 
 // CSSCreateStyleSheetReturns holds the return values for createStyleSheet.
@@ -200,12 +200,12 @@ type CSSGetBackgroundColorsReturns struct {
 	// this will consist of simply that color. In the case of a gradient, this will consist of each
 	// of the color stops. For anything more complicated, this will be an empty array. Images will
 	// be ignored (as if the image had failed to load).
-	BackgroundColors []string `json:"backgroundColors,omitempty"`
+	BackgroundColors []string `json:"backgroundColors,omitempty,omitzero"`
 	// ComputedFontSize The computed font size for this node, as a CSS computed value string (e.g. '12px').
-	ComputedFontSize string `json:"computedFontSize,omitempty"`
+	ComputedFontSize string `json:"computedFontSize,omitempty,omitzero"`
 	// ComputedFontWeight The computed font weight for this node, as a CSS computed value string (e.g. 'normal' or
 	// '100').
-	ComputedFontWeight string `json:"computedFontWeight,omitempty"`
+	ComputedFontWeight string `json:"computedFontWeight,omitempty,omitzero"`
 }
 
 // CSSGetBackgroundColors creates a new CSSGetBackgroundColorsParams.
@@ -271,12 +271,12 @@ type CSSResolveValuesParams struct {
 	// NodeID Id of the node in whose context the expression is evaluated
 	NodeID NodeID `json:"nodeId"`
 	// PropertyName Only longhands and custom property names are accepted.
-	PropertyName string `json:"propertyName,omitempty"`
+	PropertyName string `json:"propertyName,omitempty,omitzero"`
 	// PseudoType Pseudo element type, only works for pseudo elements that generate
 	// elements in the tree, such as ::before and ::after.
-	PseudoType DOMPseudoType `json:"pseudoType,omitempty"`
+	PseudoType DOMPseudoType `json:"pseudoType,omitempty,omitzero"`
 	// PseudoIdentifier Pseudo element custom ident.
-	PseudoIdentifier string `json:"pseudoIdentifier,omitempty"`
+	PseudoIdentifier string `json:"pseudoIdentifier,omitempty,omitzero"`
 }
 
 // CSSResolveValuesReturns holds the return values for resolveValues.
@@ -355,9 +355,9 @@ type CSSGetInlineStylesForNodeParams struct {
 // CSSGetInlineStylesForNodeReturns holds the return values for getInlineStylesForNode.
 type CSSGetInlineStylesForNodeReturns struct {
 	// InlineStyle Inline style for the specified DOM node.
-	InlineStyle CSSCSSStyle `json:"inlineStyle,omitempty"`
+	InlineStyle CSSCSSStyle `json:"inlineStyle,omitempty,omitzero"`
 	// AttributesStyle Attribute-defined element style (e.g. resulting from "width=20 height=100%").
-	AttributesStyle CSSCSSStyle `json:"attributesStyle,omitempty"`
+	AttributesStyle CSSCSSStyle `json:"attributesStyle,omitempty,omitzero"`
 }
 
 // CSSGetInlineStylesForNode creates a new CSSGetInlineStylesForNodeParams.
@@ -385,12 +385,12 @@ type CSSGetAnimatedStylesForNodeParams struct {
 // CSSGetAnimatedStylesForNodeReturns holds the return values for getAnimatedStylesForNode.
 type CSSGetAnimatedStylesForNodeReturns struct {
 	// AnimationStyles Styles coming from animations.
-	AnimationStyles []CSSCSSAnimationStyle `json:"animationStyles,omitempty"`
+	AnimationStyles []CSSCSSAnimationStyle `json:"animationStyles,omitempty,omitzero"`
 	// TransitionsStyle Style coming from transitions.
-	TransitionsStyle CSSCSSStyle `json:"transitionsStyle,omitempty"`
+	TransitionsStyle CSSCSSStyle `json:"transitionsStyle,omitempty,omitzero"`
 	// Inherited Inherited style entries for animationsStyle and transitionsStyle from
 	// the inheritance chain of the element.
-	Inherited []CSSInheritedAnimatedStyleEntry `json:"inherited,omitempty"`
+	Inherited []CSSInheritedAnimatedStyleEntry `json:"inherited,omitempty,omitzero"`
 }
 
 // CSSGetAnimatedStylesForNode creates a new CSSGetAnimatedStylesForNodeParams.
@@ -417,34 +417,34 @@ type CSSGetMatchedStylesForNodeParams struct {
 // CSSGetMatchedStylesForNodeReturns holds the return values for getMatchedStylesForNode.
 type CSSGetMatchedStylesForNodeReturns struct {
 	// InlineStyle Inline style for the specified DOM node.
-	InlineStyle CSSCSSStyle `json:"inlineStyle,omitempty"`
+	InlineStyle CSSCSSStyle `json:"inlineStyle,omitempty,omitzero"`
 	// AttributesStyle Attribute-defined element style (e.g. resulting from "width=20 height=100%").
-	AttributesStyle CSSCSSStyle `json:"attributesStyle,omitempty"`
+	AttributesStyle CSSCSSStyle `json:"attributesStyle,omitempty,omitzero"`
 	// MatchedCSSRules CSS rules matching this node, from all applicable stylesheets.
-	MatchedCSSRules []CSSRuleMatch `json:"matchedCSSRules,omitempty"`
+	MatchedCSSRules []CSSRuleMatch `json:"matchedCSSRules,omitempty,omitzero"`
 	// PseudoElements Pseudo style matches for this node.
-	PseudoElements []CSSPseudoElementMatches `json:"pseudoElements,omitempty"`
+	PseudoElements []CSSPseudoElementMatches `json:"pseudoElements,omitempty,omitzero"`
 	// Inherited A chain of inherited styles (from the immediate node parent up to the DOM tree root).
-	Inherited []CSSInheritedStyleEntry `json:"inherited,omitempty"`
+	Inherited []CSSInheritedStyleEntry `json:"inherited,omitempty,omitzero"`
 	// InheritedPseudoElements A chain of inherited pseudo element styles (from the immediate node parent up to the DOM tree root).
-	InheritedPseudoElements []CSSInheritedPseudoElementMatches `json:"inheritedPseudoElements,omitempty"`
+	InheritedPseudoElements []CSSInheritedPseudoElementMatches `json:"inheritedPseudoElements,omitempty,omitzero"`
 	// CSSKeyframesRules A list of CSS keyframed animations matching this node.
-	CSSKeyframesRules []CSSCSSKeyframesRule `json:"cssKeyframesRules,omitempty"`
+	CSSKeyframesRules []CSSCSSKeyframesRule `json:"cssKeyframesRules,omitempty,omitzero"`
 	// CSSPositionTryRules A list of CSS @position-try rules matching this node, based on the position-try-fallbacks property.
-	CSSPositionTryRules []CSSCSSPositionTryRule `json:"cssPositionTryRules,omitempty"`
+	CSSPositionTryRules []CSSCSSPositionTryRule `json:"cssPositionTryRules,omitempty,omitzero"`
 	// ActivePositionFallbackIndex Index of the active fallback in the applied position-try-fallback property,
 	// will not be set if there is no active position-try fallback.
-	ActivePositionFallbackIndex int64 `json:"activePositionFallbackIndex,omitempty"`
+	ActivePositionFallbackIndex int64 `json:"activePositionFallbackIndex,omitempty,omitzero"`
 	// CSSPropertyRules A list of CSS at-property rules matching this node.
-	CSSPropertyRules []CSSCSSPropertyRule `json:"cssPropertyRules,omitempty"`
+	CSSPropertyRules []CSSCSSPropertyRule `json:"cssPropertyRules,omitempty,omitzero"`
 	// CSSPropertyRegistrations A list of CSS property registrations matching this node.
-	CSSPropertyRegistrations []CSSCSSPropertyRegistration `json:"cssPropertyRegistrations,omitempty"`
+	CSSPropertyRegistrations []CSSCSSPropertyRegistration `json:"cssPropertyRegistrations,omitempty,omitzero"`
 	// CSSAtRules A list of simple @rules matching this node or its pseudo-elements.
-	CSSAtRules []CSSCSSAtRule `json:"cssAtRules,omitempty"`
+	CSSAtRules []CSSCSSAtRule `json:"cssAtRules,omitempty,omitzero"`
 	// ParentLayoutNodeID Id of the first parent element that does not have display: contents.
-	ParentLayoutNodeID NodeID `json:"parentLayoutNodeId,omitempty"`
+	ParentLayoutNodeID NodeID `json:"parentLayoutNodeId,omitempty,omitzero"`
 	// CSSFunctionRules A list of CSS at-function rules referenced by styles of this node.
-	CSSFunctionRules []CSSCSSFunctionRule `json:"cssFunctionRules,omitempty"`
+	CSSFunctionRules []CSSCSSFunctionRule `json:"cssFunctionRules,omitempty,omitzero"`
 }
 
 // CSSGetMatchedStylesForNode creates a new CSSGetMatchedStylesForNodeParams.
@@ -627,7 +627,7 @@ func (p *CSSGetLocationForSelectorParams) Do(ctx context.Context) (*CSSGetLocati
 // so passing a new node id removes tracking from the previous node.
 // Pass `undefined` to disable tracking.
 type CSSTrackComputedStyleUpdatesForNodeParams struct {
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 }
 
 // CSSTrackComputedStyleUpdatesForNode creates a new CSSTrackComputedStyleUpdatesForNodeParams.
@@ -971,7 +971,7 @@ type CSSSetStyleSheetTextParams struct {
 // CSSSetStyleSheetTextReturns holds the return values for setStyleSheetText.
 type CSSSetStyleSheetTextReturns struct {
 	// SourceMapURL URL of source map associated with script (if any).
-	SourceMapURL string `json:"sourceMapURL,omitempty"`
+	SourceMapURL string `json:"sourceMapURL,omitempty,omitzero"`
 }
 
 // CSSSetStyleSheetText creates a new CSSSetStyleSheetTextParams.
@@ -997,7 +997,7 @@ type CSSSetStyleTextsParams struct {
 	// NodeForPropertySyntaxValidation NodeId for the DOM node in whose context custom property declarations for registered properties should be
 	// validated. If omitted, declarations in the new rule text can only be validated statically, which may produce
 	// incorrect results if the declaration contains a var() for example.
-	NodeForPropertySyntaxValidation NodeID `json:"nodeForPropertySyntaxValidation,omitempty"`
+	NodeForPropertySyntaxValidation NodeID `json:"nodeForPropertySyntaxValidation,omitempty,omitzero"`
 }
 
 // CSSSetStyleTextsReturns holds the return values for setStyleTexts.

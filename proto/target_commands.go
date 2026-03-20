@@ -27,7 +27,7 @@ type TargetAttachToTargetParams struct {
 	// Flatten Enables "flat" access to the session via specifying sessionId attribute in the commands.
 	// We plan to make this the default, deprecate non-flattened mode,
 	// and eventually retire it. See crbug.com/991325.
-	Flatten bool `json:"flatten,omitempty"`
+	Flatten bool `json:"flatten,omitempty,omitzero"`
 }
 
 // TargetAttachToTargetReturns holds the return values for attachToTarget.
@@ -119,9 +119,9 @@ func (p *TargetCloseTargetParams) Do(ctx context.Context) (*TargetCloseTargetRet
 type TargetExposeDevToolsProtocolParams struct {
 	TargetID TargetTargetID `json:"targetId"`
 	// BindingName Binding name, 'cdp' if not specified.
-	BindingName string `json:"bindingName,omitempty"`
+	BindingName string `json:"bindingName,omitempty,omitzero"`
 	// InheritPermissions If true, inherits the current root session's permissions (default: false).
-	InheritPermissions bool `json:"inheritPermissions,omitempty"`
+	InheritPermissions bool `json:"inheritPermissions,omitempty,omitzero"`
 }
 
 // TargetExposeDevToolsProtocol creates a new TargetExposeDevToolsProtocolParams.
@@ -152,14 +152,14 @@ func (p *TargetExposeDevToolsProtocolParams) Do(ctx context.Context) error {
 // one.
 type TargetCreateBrowserContextParams struct {
 	// DisposeOnDetach If specified, disposes this context when debugging session disconnects.
-	DisposeOnDetach bool `json:"disposeOnDetach,omitempty"`
+	DisposeOnDetach bool `json:"disposeOnDetach,omitempty,omitzero"`
 	// ProxyServer Proxy server, similar to the one passed to --proxy-server
-	ProxyServer string `json:"proxyServer,omitempty"`
+	ProxyServer string `json:"proxyServer,omitempty,omitzero"`
 	// ProxyBypassList Proxy bypass list, similar to the one passed to --proxy-bypass-list
-	ProxyBypassList string `json:"proxyBypassList,omitempty"`
+	ProxyBypassList string `json:"proxyBypassList,omitempty,omitzero"`
 	// OriginsWithUniversalNetworkAccess An optional list of origins to grant unlimited cross-origin access to.
 	// Parts of the URL other than those constituting origin are ignored.
-	OriginsWithUniversalNetworkAccess []string `json:"originsWithUniversalNetworkAccess,omitempty"`
+	OriginsWithUniversalNetworkAccess []string `json:"originsWithUniversalNetworkAccess,omitempty,omitzero"`
 }
 
 // TargetCreateBrowserContextReturns holds the return values for createBrowserContext.
@@ -214,7 +214,7 @@ type TargetGetBrowserContextsReturns struct {
 	// BrowserContextIds An array of browser context ids.
 	BrowserContextIds []BrowserContextID `json:"browserContextIds"`
 	// DefaultBrowserContextID The id of the default browser context if available.
-	DefaultBrowserContextID BrowserContextID `json:"defaultBrowserContextId,omitempty"`
+	DefaultBrowserContextID BrowserContextID `json:"defaultBrowserContextId,omitempty,omitzero"`
 }
 
 // TargetGetBrowserContexts creates a new TargetGetBrowserContextsParams.
@@ -236,32 +236,32 @@ type TargetCreateTargetParams struct {
 	// URL The initial URL the page will be navigated to. An empty string indicates about:blank.
 	URL string `json:"url"`
 	// Left Frame left origin in DIP (requires newWindow to be true or headless shell).
-	Left int64 `json:"left,omitempty"`
+	Left int64 `json:"left,omitempty,omitzero"`
 	// Top Frame top origin in DIP (requires newWindow to be true or headless shell).
-	Top int64 `json:"top,omitempty"`
+	Top int64 `json:"top,omitempty,omitzero"`
 	// Width Frame width in DIP (requires newWindow to be true or headless shell).
-	Width int64 `json:"width,omitempty"`
+	Width int64 `json:"width,omitempty,omitzero"`
 	// Height Frame height in DIP (requires newWindow to be true or headless shell).
-	Height int64 `json:"height,omitempty"`
+	Height int64 `json:"height,omitempty,omitzero"`
 	// WindowState Frame window state (requires newWindow to be true or headless shell).
 	// Default is normal.
-	WindowState TargetWindowState `json:"windowState,omitempty"`
+	WindowState TargetWindowState `json:"windowState,omitempty,omitzero"`
 	// BrowserContextID The browser context to create the page in.
-	BrowserContextID BrowserContextID `json:"browserContextId,omitempty"`
+	BrowserContextID BrowserContextID `json:"browserContextId,omitempty,omitzero"`
 	// EnableBeginFrameControl Whether BeginFrames for this target will be controlled via DevTools (headless shell only,
 	// not supported on MacOS yet, false by default).
-	EnableBeginFrameControl bool `json:"enableBeginFrameControl,omitempty"`
+	EnableBeginFrameControl bool `json:"enableBeginFrameControl,omitempty,omitzero"`
 	// NewWindow Whether to create a new Window or Tab (false by default, not supported by headless shell).
-	NewWindow bool `json:"newWindow,omitempty"`
+	NewWindow bool `json:"newWindow,omitempty,omitzero"`
 	// Background Whether to create the target in background or foreground (false by default, not supported
 	// by headless shell).
-	Background bool `json:"background,omitempty"`
+	Background bool `json:"background,omitempty,omitzero"`
 	// ForTab Whether to create the target of type "tab".
-	ForTab bool `json:"forTab,omitempty"`
+	ForTab bool `json:"forTab,omitempty,omitzero"`
 	// Hidden Whether to create a hidden target. The hidden target is observable via protocol, but not
 	// present in the tab UI strip. Cannot be created with `forTab: true`, `newWindow: true` or
 	// `background: false`. The life-time of the tab is limited to the life-time of the session.
-	Hidden bool `json:"hidden,omitempty"`
+	Hidden bool `json:"hidden,omitempty,omitzero"`
 	// Focus If specified, the option is used to determine if the new target should
 	// be focused or not. By default, the focus behavior depends on the
 	// value of the background field. For example, background=false and focus=false
@@ -269,7 +269,7 @@ type TargetCreateTargetParams struct {
 	// unchanged (if it was in the background, it will remain in the background)
 	// and background=false with focus=undefined will result in the window being focused.
 	// Using background: true and focus: true is not supported and will result in an error.
-	Focus bool `json:"focus,omitempty"`
+	Focus bool `json:"focus,omitempty,omitzero"`
 }
 
 // TargetCreateTargetReturns holds the return values for createTarget.
@@ -369,9 +369,9 @@ func (p *TargetCreateTargetParams) Do(ctx context.Context) (*TargetCreateTargetR
 // TargetDetachFromTargetParams Detaches session with given id.
 type TargetDetachFromTargetParams struct {
 	// SessionID Session to detach.
-	SessionID TargetSessionID `json:"sessionId,omitempty"`
+	SessionID TargetSessionID `json:"sessionId,omitempty,omitzero"`
 	// TargetID Deprecated.
-	TargetID TargetTargetID `json:"targetId,omitempty"`
+	TargetID TargetTargetID `json:"targetId,omitempty,omitzero"`
 }
 
 // TargetDetachFromTarget creates a new TargetDetachFromTargetParams.
@@ -416,7 +416,7 @@ func (p *TargetDisposeBrowserContextParams) Do(ctx context.Context) error {
 
 // TargetGetTargetInfoParams Returns information about a target.
 type TargetGetTargetInfoParams struct {
-	TargetID TargetTargetID `json:"targetId,omitempty"`
+	TargetID TargetTargetID `json:"targetId,omitempty,omitzero"`
 }
 
 // TargetGetTargetInfoReturns holds the return values for getTargetInfo.
@@ -449,7 +449,7 @@ type TargetGetTargetsParams struct {
 	// Filter Only targets matching filter will be reported. If filter is not specified
 	// and target discovery is currently enabled, a filter used for target discovery
 	// is used for consistency.
-	Filter TargetTargetFilter `json:"filter,omitempty"`
+	Filter TargetTargetFilter `json:"filter,omitempty,omitzero"`
 }
 
 // TargetGetTargetsReturns holds the return values for getTargets.
@@ -484,9 +484,9 @@ func (p *TargetGetTargetsParams) Do(ctx context.Context) (*TargetGetTargetsRetur
 type TargetSendMessageToTargetParams struct {
 	Message string `json:"message"`
 	// SessionID Identifier of the session.
-	SessionID TargetSessionID `json:"sessionId,omitempty"`
+	SessionID TargetSessionID `json:"sessionId,omitempty,omitzero"`
 	// TargetID Deprecated.
-	TargetID TargetTargetID `json:"targetId,omitempty"`
+	TargetID TargetTargetID `json:"targetId,omitempty,omitzero"`
 }
 
 // TargetSendMessageToTarget creates a new TargetSendMessageToTargetParams.
@@ -530,9 +530,9 @@ type TargetSetAutoAttachParams struct {
 	// Flatten Enables "flat" access to the session via specifying sessionId attribute in the commands.
 	// We plan to make this the default, deprecate non-flattened mode,
 	// and eventually retire it. See crbug.com/991325.
-	Flatten bool `json:"flatten,omitempty"`
+	Flatten bool `json:"flatten,omitempty,omitzero"`
 	// Filter Only targets matching filter will be attached.
-	Filter TargetTargetFilter `json:"filter,omitempty"`
+	Filter TargetTargetFilter `json:"filter,omitempty,omitzero"`
 }
 
 // TargetSetAutoAttach creates a new TargetSetAutoAttachParams.
@@ -571,7 +571,7 @@ type TargetAutoAttachRelatedParams struct {
 	// to run paused targets.
 	WaitForDebuggerOnStart bool `json:"waitForDebuggerOnStart"`
 	// Filter Only targets matching filter will be attached.
-	Filter TargetTargetFilter `json:"filter,omitempty"`
+	Filter TargetTargetFilter `json:"filter,omitempty,omitzero"`
 }
 
 // TargetAutoAttachRelated creates a new TargetAutoAttachRelatedParams.
@@ -600,7 +600,7 @@ type TargetSetDiscoverTargetsParams struct {
 	Discover bool `json:"discover"`
 	// Filter Only targets matching filter will be attached. If `discover` is false,
 	// `filter` must be omitted or empty.
-	Filter TargetTargetFilter `json:"filter,omitempty"`
+	Filter TargetTargetFilter `json:"filter,omitempty,omitzero"`
 }
 
 // TargetSetDiscoverTargets creates a new TargetSetDiscoverTargetsParams.
@@ -650,7 +650,7 @@ type TargetGetDevToolsTargetParams struct {
 // TargetGetDevToolsTargetReturns holds the return values for getDevToolsTarget.
 type TargetGetDevToolsTargetReturns struct {
 	// TargetID The targetId of DevTools page target if exists.
-	TargetID TargetTargetID `json:"targetId,omitempty"`
+	TargetID TargetTargetID `json:"targetId,omitempty,omitzero"`
 }
 
 // TargetGetDevToolsTarget creates a new TargetGetDevToolsTargetParams.
@@ -676,7 +676,7 @@ type TargetOpenDevToolsParams struct {
 	// PanelID The id of the panel we want DevTools to open initially. Currently
 	// supported panels are elements, console, network, sources, resources
 	// and performance.
-	PanelID string `json:"panelId,omitempty"`
+	PanelID string `json:"panelId,omitempty,omitzero"`
 }
 
 // TargetOpenDevToolsReturns holds the return values for openDevTools.

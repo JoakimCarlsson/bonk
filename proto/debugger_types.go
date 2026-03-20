@@ -25,7 +25,7 @@ type DebuggerLocation struct {
 	// LineNumber Line number in the script (0-based).
 	LineNumber int64 `json:"lineNumber"`
 	// ColumnNumber Column number in the script (0-based).
-	ColumnNumber int64 `json:"columnNumber,omitempty"`
+	ColumnNumber int64 `json:"columnNumber,omitempty,omitzero"`
 }
 
 // DebuggerScriptPosition Location in the source code.
@@ -48,7 +48,7 @@ type DebuggerCallFrame struct {
 	// FunctionName Name of the JavaScript function called on this call frame.
 	FunctionName string `json:"functionName"`
 	// FunctionLocation Location in the source code.
-	FunctionLocation DebuggerLocation `json:"functionLocation,omitempty"`
+	FunctionLocation DebuggerLocation `json:"functionLocation,omitempty,omitzero"`
 	// Location Location in the source code.
 	Location DebuggerLocation `json:"location"`
 	// URL JavaScript script name or url.
@@ -60,12 +60,12 @@ type DebuggerCallFrame struct {
 	// This `this` object for this call frame.
 	This RuntimeRemoteObject `json:"this"`
 	// ReturnValue The value being returned, if the function is at return point.
-	ReturnValue RuntimeRemoteObject `json:"returnValue,omitempty"`
+	ReturnValue RuntimeRemoteObject `json:"returnValue,omitempty,omitzero"`
 	// CanBeRestarted Valid only while the VM is paused and indicates whether this frame
 	// can be restarted or not. Note that a `true` value here does not
 	// guarantee that Debugger#restartFrame with this CallFrameId will be
 	// successful, but it is very likely.
-	CanBeRestarted bool `json:"canBeRestarted,omitempty"`
+	CanBeRestarted bool `json:"canBeRestarted,omitempty,omitzero"`
 }
 
 // DebuggerScope Scope description.
@@ -76,11 +76,11 @@ type DebuggerScope struct {
 	// object; for the rest of the scopes, it is artificial transient object enumerating scope
 	// variables as its properties.
 	Object RuntimeRemoteObject `json:"object"`
-	Name   string              `json:"name,omitempty"`
+	Name   string              `json:"name,omitempty,omitzero"`
 	// StartLocation Location in the source code where scope starts
-	StartLocation DebuggerLocation `json:"startLocation,omitempty"`
+	StartLocation DebuggerLocation `json:"startLocation,omitempty,omitzero"`
 	// EndLocation Location in the source code where scope ends
-	EndLocation DebuggerLocation `json:"endLocation,omitempty"`
+	EndLocation DebuggerLocation `json:"endLocation,omitempty,omitzero"`
 }
 
 // DebuggerSearchMatch Search match for resource.
@@ -97,8 +97,8 @@ type DebuggerBreakLocation struct {
 	// LineNumber Line number in the script (0-based).
 	LineNumber int64 `json:"lineNumber"`
 	// ColumnNumber Column number in the script (0-based).
-	ColumnNumber int64                     `json:"columnNumber,omitempty"`
-	Type         DebuggerBreakLocationType `json:"type,omitempty"`
+	ColumnNumber int64                     `json:"columnNumber,omitempty,omitzero"`
+	Type         DebuggerBreakLocationType `json:"type,omitempty,omitzero"`
 }
 
 type DebuggerWASMDisassemblyChunk struct {
@@ -156,7 +156,7 @@ type DebuggerDebugSymbols struct {
 	// Type Type of the debug symbols.
 	Type DebuggerDebugSymbolsType `json:"type"`
 	// ExternalURL URL of the external symbol source.
-	ExternalURL string `json:"externalURL,omitempty"`
+	ExternalURL string `json:"externalURL,omitempty,omitzero"`
 }
 
 type DebuggerResolvedBreakpoint struct {

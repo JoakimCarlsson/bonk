@@ -26,25 +26,25 @@ type TargetTargetInfo struct {
 	// Attached Whether the target has an attached client.
 	Attached bool `json:"attached"`
 	// OpenerID Opener target Id
-	OpenerID TargetTargetID `json:"openerId,omitempty"`
+	OpenerID TargetTargetID `json:"openerId,omitempty,omitzero"`
 	// CanAccessOpener Whether the target has access to the originating window.
 	CanAccessOpener bool `json:"canAccessOpener"`
 	// OpenerFrameID Frame id of originating window (is only set if target has an opener).
-	OpenerFrameID FrameID `json:"openerFrameId,omitempty"`
+	OpenerFrameID FrameID `json:"openerFrameId,omitempty,omitzero"`
 	// ParentFrameID Id of the parent frame, only present for the "iframe" targets.
-	ParentFrameID    FrameID          `json:"parentFrameId,omitempty"`
-	BrowserContextID BrowserContextID `json:"browserContextId,omitempty"`
+	ParentFrameID    FrameID          `json:"parentFrameId,omitempty,omitzero"`
+	BrowserContextID BrowserContextID `json:"browserContextId,omitempty,omitzero"`
 	// Subtype Provides additional details for specific target types. For example, for
 	// the type of "page", this may be set to "prerender".
-	Subtype string `json:"subtype,omitempty"`
+	Subtype string `json:"subtype,omitempty,omitzero"`
 }
 
 // TargetFilterEntry A filter used by target query/discovery/auto-attach operations.
 type TargetFilterEntry struct {
 	// Exclude If set, causes exclusion of matching targets from the list.
-	Exclude bool `json:"exclude,omitempty"`
+	Exclude bool `json:"exclude,omitempty,omitzero"`
 	// Type If not present, matches any type.
-	Type string `json:"type,omitempty"`
+	Type string `json:"type,omitempty,omitzero"`
 }
 
 // TargetTargetFilter The entries in TargetFilter are matched sequentially against targets and

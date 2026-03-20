@@ -28,15 +28,15 @@ type IOReadParams struct {
 	Handle IOStreamHandle `json:"handle"`
 	// Offset Seek to the specified offset before reading (if not specified, proceed with offset
 	// following the last read). Some types of streams may only support sequential reads.
-	Offset int64 `json:"offset,omitempty"`
+	Offset int64 `json:"offset,omitempty,omitzero"`
 	// Size Maximum number of bytes to read (left upon the agent discretion if not specified).
-	Size int64 `json:"size,omitempty"`
+	Size int64 `json:"size,omitempty,omitzero"`
 }
 
 // IOReadReturns holds the return values for read.
 type IOReadReturns struct {
 	// Base64Encoded Set if the data is base64-encoded
-	Base64Encoded bool `json:"base64Encoded,omitempty"`
+	Base64Encoded bool `json:"base64Encoded,omitempty,omitzero"`
 	// Data Data that were read.
 	Data string `json:"data"`
 	// EOF Set if the end-of-file condition occurred while reading.

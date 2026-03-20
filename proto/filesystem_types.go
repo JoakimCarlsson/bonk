@@ -22,7 +22,7 @@ type FileSystemBucketFileSystemLocator struct {
 	// StorageKey Storage key
 	StorageKey StorageSerializedStorageKey `json:"storageKey"`
 	// BucketName Bucket name. Not passing a `bucketName` will retrieve the default Bucket. (https://developer.mozilla.org/en-US/docs/Web/API/Storage_API#storage_buckets)
-	BucketName string `json:"bucketName,omitempty"`
+	BucketName string `json:"bucketName,omitempty,omitzero"`
 	// PathComponents Path to the directory using each path component as an array item.
 	PathComponents []string `json:"pathComponents"`
 }

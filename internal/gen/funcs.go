@@ -125,7 +125,7 @@ func domainPrefix(domain, name string) string {
 
 func jsonTag(name string, optional bool) string {
 	if optional {
-		return name + ",omitempty"
+		return name + ",omitempty,omitzero"
 	}
 	return name
 }

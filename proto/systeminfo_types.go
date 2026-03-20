@@ -11,9 +11,9 @@ type SystemInfoGPUDevice struct {
 	// DeviceID PCI ID of the GPU device, if available; 0 otherwise.
 	DeviceID float64 `json:"deviceId"`
 	// SubSysID Sub sys ID of the GPU, only available on Windows.
-	SubSysID float64 `json:"subSysId,omitempty"`
+	SubSysID float64 `json:"subSysId,omitempty,omitzero"`
 	// Revision Revision of the GPU, only available on Windows.
-	Revision float64 `json:"revision,omitempty"`
+	Revision float64 `json:"revision,omitempty,omitzero"`
 	// VendorString String description of the GPU vendor, if the PCI ID is not available.
 	VendorString string `json:"vendorString"`
 	// DeviceString String description of the GPU device, if the PCI ID is not available.
@@ -156,9 +156,9 @@ type SystemInfoGPUInfo struct {
 	// Devices The graphics devices on the system. Element 0 is the primary GPU.
 	Devices []SystemInfoGPUDevice `json:"devices"`
 	// AuxAttributes An optional dictionary of additional GPU related attributes.
-	AuxAttributes json.RawMessage `json:"auxAttributes,omitempty"`
+	AuxAttributes json.RawMessage `json:"auxAttributes,omitempty,omitzero"`
 	// FeatureStatus An optional dictionary of graphics features and their status.
-	FeatureStatus json.RawMessage `json:"featureStatus,omitempty"`
+	FeatureStatus json.RawMessage `json:"featureStatus,omitempty,omitzero"`
 	// DriverBugWorkarounds An optional array of GPU driver bug workarounds.
 	DriverBugWorkarounds []string `json:"driverBugWorkarounds"`
 	// VideoDecoding Supported accelerated video decoding capabilities.

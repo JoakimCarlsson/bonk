@@ -8,7 +8,7 @@ type ProfilerEventConsoleProfileFinished struct {
 	Location DebuggerLocation `json:"location"`
 	Profile  ProfilerProfile  `json:"profile"`
 	// Title Profile title passed as an argument to console.profile().
-	Title string `json:"title,omitempty"`
+	Title string `json:"title,omitempty,omitzero"`
 }
 
 // ProfilerEventConsoleProfileStarted Sent when new profile recording is started using console.profile() call.
@@ -17,7 +17,7 @@ type ProfilerEventConsoleProfileStarted struct {
 	// Location Location of console.profile().
 	Location DebuggerLocation `json:"location"`
 	// Title Profile title passed as an argument to console.profile().
-	Title string `json:"title,omitempty"`
+	Title string `json:"title,omitempty,omitzero"`
 }
 
 // ProfilerEventPreciseCoverageDeltaUpdate Reports coverage delta since the last poll (either from an event like this, or from

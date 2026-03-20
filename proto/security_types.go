@@ -139,11 +139,11 @@ type SecurityCertificateSecurityState struct {
 	// KeyExchange Key Exchange used by the connection, or the empty string if not applicable.
 	KeyExchange string `json:"keyExchange"`
 	// KeyExchangeGroup (EC)DH group used by the connection, if applicable.
-	KeyExchangeGroup string `json:"keyExchangeGroup,omitempty"`
+	KeyExchangeGroup string `json:"keyExchangeGroup,omitempty,omitzero"`
 	// Cipher Cipher name.
 	Cipher string `json:"cipher"`
 	// Mac TLS MAC. Note that AEAD ciphers do not have separate MACs.
-	Mac string `json:"mac,omitempty"`
+	Mac string `json:"mac,omitempty,omitzero"`
 	// Certificate Page certificate.
 	Certificate []string `json:"certificate"`
 	// SubjectName Certificate subject name.
@@ -155,7 +155,7 @@ type SecurityCertificateSecurityState struct {
 	// ValidTo Certificate valid to (expiration) date
 	ValidTo TimeSinceEpoch `json:"validTo"`
 	// CertificateNetworkError The highest priority network error code, if the certificate has an error.
-	CertificateNetworkError string `json:"certificateNetworkError,omitempty"`
+	CertificateNetworkError string `json:"certificateNetworkError,omitempty,omitzero"`
 	// CertificateHasWeakSignature True if the certificate uses a weak signature algorithm.
 	CertificateHasWeakSignature bool `json:"certificateHasWeakSignature"`
 	// CertificateHasSha1Signature True if the certificate has a SHA1 signature in the chain.
@@ -218,7 +218,7 @@ type SecuritySafetyTipInfo struct {
 	// SafetyTipStatus Describes whether the page triggers any safety tips or reputation warnings. Default is unknown.
 	SafetyTipStatus SecuritySafetyTipStatus `json:"safetyTipStatus"`
 	// SafeURL The URL the safety tip suggested ("Did you mean?"). Only filled in for lookalike matches.
-	SafeURL string `json:"safeUrl,omitempty"`
+	SafeURL string `json:"safeUrl,omitempty,omitzero"`
 }
 
 // SecurityVisibleSecurityState Security state information about the page.
@@ -226,9 +226,9 @@ type SecurityVisibleSecurityState struct {
 	// SecurityState The security level of the page.
 	SecurityState SecuritySecurityState `json:"securityState"`
 	// CertificateSecurityState Security state details about the page certificate.
-	CertificateSecurityState SecurityCertificateSecurityState `json:"certificateSecurityState,omitempty"`
+	CertificateSecurityState SecurityCertificateSecurityState `json:"certificateSecurityState,omitempty,omitzero"`
 	// SafetyTipInfo The type of Safety Tip triggered on the page. Note that this field will be set even if the Safety Tip UI was not actually shown.
-	SafetyTipInfo SecuritySafetyTipInfo `json:"safetyTipInfo,omitempty"`
+	SafetyTipInfo SecuritySafetyTipInfo `json:"safetyTipInfo,omitempty,omitzero"`
 	// SecurityStateIssueIds Array of security state issues ids.
 	SecurityStateIssueIds []string `json:"securityStateIssueIds"`
 }
@@ -248,7 +248,7 @@ type SecuritySecurityStateExplanation struct {
 	// Certificate Page certificate.
 	Certificate []string `json:"certificate"`
 	// Recommendations Recommendations to fix any issues.
-	Recommendations []string `json:"recommendations,omitempty"`
+	Recommendations []string `json:"recommendations,omitempty,omitzero"`
 }
 
 // SecurityInsecureContentStatus Information about insecure content on the page.

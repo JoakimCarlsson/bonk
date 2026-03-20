@@ -11,18 +11,18 @@ import "context"
 type HeadlessExperimentalBeginFrameParams struct {
 	// FrameTimeTicks Timestamp of this BeginFrame in Renderer TimeTicks (milliseconds of uptime). If not set,
 	// the current time will be used.
-	FrameTimeTicks float64 `json:"frameTimeTicks,omitempty"`
+	FrameTimeTicks float64 `json:"frameTimeTicks,omitempty,omitzero"`
 	// Interval The interval between BeginFrames that is reported to the compositor, in milliseconds.
 	// Defaults to a 60 frames/second interval, i.e. about 16.666 milliseconds.
-	Interval float64 `json:"interval,omitempty"`
+	Interval float64 `json:"interval,omitempty,omitzero"`
 	// NoDisplayUpdates Whether updates should not be committed and drawn onto the display. False by default. If
 	// true, only side effects of the BeginFrame will be run, such as layout and animations, but
 	// any visual updates may not be visible on the display or in screenshots.
-	NoDisplayUpdates bool `json:"noDisplayUpdates,omitempty"`
+	NoDisplayUpdates bool `json:"noDisplayUpdates,omitempty,omitzero"`
 	// Screenshot If set, a screenshot of the frame will be captured and returned in the response. Otherwise,
 	// no screenshot will be captured. Note that capturing a screenshot can fail, for example,
 	// during renderer initialization. In such a case, no screenshot data will be returned.
-	Screenshot HeadlessExperimentalScreenshotParams `json:"screenshot,omitempty"`
+	Screenshot HeadlessExperimentalScreenshotParams `json:"screenshot,omitempty,omitzero"`
 }
 
 // HeadlessExperimentalBeginFrameReturns holds the return values for beginFrame.
@@ -31,7 +31,7 @@ type HeadlessExperimentalBeginFrameReturns struct {
 	// display. Reported for diagnostic uses, may be removed in the future.
 	HasDamage bool `json:"hasDamage"`
 	// ScreenshotData Base64-encoded image data of the screenshot, if one was requested and successfully taken.
-	ScreenshotData []byte `json:"screenshotData,omitempty"`
+	ScreenshotData []byte `json:"screenshotData,omitempty,omitzero"`
 }
 
 // HeadlessExperimentalBeginFrame creates a new HeadlessExperimentalBeginFrameParams.

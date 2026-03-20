@@ -37,7 +37,7 @@ func (p *StorageGetStorageKeyForFrameParams) Do(ctx context.Context) (*StorageGe
 // StorageGetStorageKeyParams Returns storage key for the given frame. If no frame ID is provided,
 // the storage key of the target executing this command is returned.
 type StorageGetStorageKeyParams struct {
-	FrameID FrameID `json:"frameId,omitempty"`
+	FrameID FrameID `json:"frameId,omitempty,omitzero"`
 }
 
 // StorageGetStorageKeyReturns holds the return values for getStorageKey.
@@ -110,7 +110,7 @@ func (p *StorageClearDataForStorageKeyParams) Do(ctx context.Context) error {
 // StorageGetCookiesParams Returns all browser cookies.
 type StorageGetCookiesParams struct {
 	// BrowserContextID Browser context to use when called on the browser endpoint.
-	BrowserContextID BrowserContextID `json:"browserContextId,omitempty"`
+	BrowserContextID BrowserContextID `json:"browserContextId,omitempty,omitzero"`
 }
 
 // StorageGetCookiesReturns holds the return values for getCookies.
@@ -144,7 +144,7 @@ type StorageSetCookiesParams struct {
 	// Cookies Cookies to be set.
 	Cookies []NetworkCookieParam `json:"cookies"`
 	// BrowserContextID Browser context to use when called on the browser endpoint.
-	BrowserContextID BrowserContextID `json:"browserContextId,omitempty"`
+	BrowserContextID BrowserContextID `json:"browserContextId,omitempty,omitzero"`
 }
 
 // StorageSetCookies creates a new StorageSetCookiesParams.
@@ -168,7 +168,7 @@ func (p *StorageSetCookiesParams) Do(ctx context.Context) error {
 // StorageClearCookiesParams Clears cookies.
 type StorageClearCookiesParams struct {
 	// BrowserContextID Browser context to use when called on the browser endpoint.
-	BrowserContextID BrowserContextID `json:"browserContextId,omitempty"`
+	BrowserContextID BrowserContextID `json:"browserContextId,omitempty,omitzero"`
 }
 
 // StorageClearCookies creates a new StorageClearCookiesParams.
@@ -232,7 +232,7 @@ type StorageOverrideQuotaForOriginParams struct {
 	// the specified origin. If this is called multiple times with different
 	// origins, the override will be maintained for each origin until it is
 	// disabled (called without a quotaSize).
-	QuotaSize float64 `json:"quotaSize,omitempty"`
+	QuotaSize float64 `json:"quotaSize,omitempty,omitzero"`
 }
 
 // StorageOverrideQuotaForOrigin creates a new StorageOverrideQuotaForOriginParams.
@@ -574,7 +574,7 @@ type StorageSetSharedStorageEntryParams struct {
 	Value       string `json:"value"`
 	// IgnoreIfPresent If `ignoreIfPresent` is included and true, then only sets the entry if
 	// `key` doesn't already exist.
-	IgnoreIfPresent bool `json:"ignoreIfPresent,omitempty"`
+	IgnoreIfPresent bool `json:"ignoreIfPresent,omitempty,omitzero"`
 }
 
 // StorageSetSharedStorageEntry creates a new StorageSetSharedStorageEntryParams.

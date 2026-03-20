@@ -13,7 +13,7 @@ type PageEventFileChooserOpened struct {
 	// Mode Input mode.
 	Mode PageFileChooserOpenedMode `json:"mode"`
 	// BackendNodeID Input node id. Only present for file choosers opened via an `<input type="file">` element.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 }
 
 // PageEventFrameAttached Fired when frame has been attached to its parent.
@@ -23,7 +23,7 @@ type PageEventFrameAttached struct {
 	// ParentFrameID Parent frame identifier.
 	ParentFrameID FrameID `json:"parentFrameId"`
 	// Stack JavaScript stack trace of when frame was attached, only set if frame initiated from script.
-	Stack RuntimeStackTrace `json:"stack,omitempty"`
+	Stack RuntimeStackTrace `json:"stack,omitempty,omitzero"`
 }
 
 // PageEventFrameClearedScheduledNavigation Fired when frame no longer has a scheduled navigation.
@@ -178,7 +178,7 @@ type PageEventJavascriptDialogOpening struct {
 	// the page execution. Execution can be resumed via calling Page.handleJavaScriptDialog.
 	HasBrowserHandler bool `json:"hasBrowserHandler"`
 	// DefaultPrompt Default dialog prompt.
-	DefaultPrompt string `json:"defaultPrompt,omitempty"`
+	DefaultPrompt string `json:"defaultPrompt,omitempty,omitzero"`
 }
 
 // PageEventLifecycleEvent Fired for lifecycle events (navigation, load, paint, etc) in the current
@@ -204,7 +204,7 @@ type PageEventBackForwardCacheNotUsed struct {
 	// NotRestoredExplanations Array of reasons why the page could not be cached. This must not be empty.
 	NotRestoredExplanations []PageBackForwardCacheNotRestoredExplanation `json:"notRestoredExplanations"`
 	// NotRestoredExplanationsTree Tree structure of reasons why the page could not be cached for each frame.
-	NotRestoredExplanationsTree PageBackForwardCacheNotRestoredExplanationTree `json:"notRestoredExplanationsTree,omitempty"`
+	NotRestoredExplanationsTree PageBackForwardCacheNotRestoredExplanationTree `json:"notRestoredExplanationsTree,omitempty,omitzero"`
 }
 
 type PageEventLoadEventFired struct {

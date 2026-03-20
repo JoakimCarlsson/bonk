@@ -20,7 +20,7 @@ func (p *PerformanceDisableParams) Do(ctx context.Context) error {
 // PerformanceEnableParams Enable collecting and reporting metrics.
 type PerformanceEnableParams struct {
 	// TimeDomain Time domain to use for collecting and reporting duration metrics.
-	TimeDomain PerformanceEnableTimeDomain `json:"timeDomain,omitempty"`
+	TimeDomain PerformanceEnableTimeDomain `json:"timeDomain,omitempty,omitzero"`
 }
 
 // PerformanceEnable creates a new PerformanceEnableParams.

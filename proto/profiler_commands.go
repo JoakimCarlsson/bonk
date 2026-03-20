@@ -87,11 +87,11 @@ func (p *ProfilerStartParams) Do(ctx context.Context) error {
 // counters.
 type ProfilerStartPreciseCoverageParams struct {
 	// CallCount Collect accurate call counts beyond simple 'covered' or 'not covered'.
-	CallCount bool `json:"callCount,omitempty"`
+	CallCount bool `json:"callCount,omitempty,omitzero"`
 	// Detailed Collect block-based coverage.
-	Detailed bool `json:"detailed,omitempty"`
+	Detailed bool `json:"detailed,omitempty,omitzero"`
 	// AllowTriggeredUpdates Allow the backend to send updates on its own initiative
-	AllowTriggeredUpdates bool `json:"allowTriggeredUpdates,omitempty"`
+	AllowTriggeredUpdates bool `json:"allowTriggeredUpdates,omitempty,omitzero"`
 }
 
 // ProfilerStartPreciseCoverageReturns holds the return values for startPreciseCoverage.

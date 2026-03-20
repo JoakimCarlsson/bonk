@@ -9,23 +9,23 @@ type InputTouchPoint struct {
 	// the top of the viewport and Y increases as it proceeds towards the bottom of the viewport.
 	Y float64 `json:"y"`
 	// RadiusX X radius of the touch area (default: 1.0).
-	RadiusX float64 `json:"radiusX,omitempty"`
+	RadiusX float64 `json:"radiusX,omitempty,omitzero"`
 	// RadiusY Y radius of the touch area (default: 1.0).
-	RadiusY float64 `json:"radiusY,omitempty"`
+	RadiusY float64 `json:"radiusY,omitempty,omitzero"`
 	// RotationAngle Rotation angle (default: 0.0).
-	RotationAngle float64 `json:"rotationAngle,omitempty"`
+	RotationAngle float64 `json:"rotationAngle,omitempty,omitzero"`
 	// Force Force (default: 1.0).
-	Force float64 `json:"force,omitempty"`
+	Force float64 `json:"force,omitempty,omitzero"`
 	// TangentialPressure The normalized tangential pressure, which has a range of [-1,1] (default: 0).
-	TangentialPressure float64 `json:"tangentialPressure,omitempty"`
+	TangentialPressure float64 `json:"tangentialPressure,omitempty,omitzero"`
 	// TiltX The plane angle between the Y-Z plane and the plane containing both the stylus axis and the Y axis, in degrees of the range [-90,90], a positive tiltX is to the right (default: 0)
-	TiltX float64 `json:"tiltX,omitempty"`
+	TiltX float64 `json:"tiltX,omitempty,omitzero"`
 	// TiltY The plane angle between the X-Z plane and the plane containing both the stylus axis and the X axis, in degrees of the range [-90,90], a positive tiltY is towards the user (default: 0).
-	TiltY float64 `json:"tiltY,omitempty"`
+	TiltY float64 `json:"tiltY,omitempty,omitzero"`
 	// Twist The clockwise rotation of a pen stylus around its own major axis, in degrees in the range [0,359] (default: 0).
-	Twist int64 `json:"twist,omitempty"`
+	Twist int64 `json:"twist,omitempty,omitzero"`
 	// ID Identifier used to track touch sources between events, must be unique within an event.
-	ID float64 `json:"id,omitempty"`
+	ID float64 `json:"id,omitempty,omitzero"`
 }
 
 type InputGestureSourceType string
@@ -139,16 +139,16 @@ type InputDragDataItem struct {
 	// text, HTML markup or any other data.
 	Data string `json:"data"`
 	// Title Title associated with a link. Only valid when `mimeType` == "text/uri-list".
-	Title string `json:"title,omitempty"`
+	Title string `json:"title,omitempty,omitzero"`
 	// BaseURL Stores the base URL for the contained markup. Only valid when `mimeType`
 	// == "text/html".
-	BaseURL string `json:"baseURL,omitempty"`
+	BaseURL string `json:"baseURL,omitempty,omitzero"`
 }
 
 type InputDragData struct {
 	Items []InputDragDataItem `json:"items"`
 	// Files List of filenames that should be included when dropping
-	Files []string `json:"files,omitempty"`
+	Files []string `json:"files,omitempty,omitzero"`
 	// DragOperationsMask Bit field representing allowed drag operations. Copy = 1, Link = 2, Move = 16
 	DragOperationsMask int64 `json:"dragOperationsMask"`
 }

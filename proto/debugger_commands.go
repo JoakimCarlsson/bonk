@@ -8,7 +8,7 @@ import "context"
 type DebuggerContinueToLocationParams struct {
 	// Location Location to continue to.
 	Location         DebuggerLocation                           `json:"location"`
-	TargetCallFrames DebuggerContinueToLocationTargetCallFrames `json:"targetCallFrames,omitempty"`
+	TargetCallFrames DebuggerContinueToLocationTargetCallFrames `json:"targetCallFrames,omitempty,omitzero"`
 }
 
 // DebuggerContinueToLocation creates a new DebuggerContinueToLocationParams.
@@ -47,7 +47,7 @@ func (p *DebuggerDisableParams) Do(ctx context.Context) error {
 type DebuggerEnableParams struct {
 	// MaxScriptsCacheSize The maximum size in bytes of collected scripts (not referenced by other heap objects)
 	// the debugger can hold. Puts no limit if parameter is omitted.
-	MaxScriptsCacheSize float64 `json:"maxScriptsCacheSize,omitempty"`
+	MaxScriptsCacheSize float64 `json:"maxScriptsCacheSize,omitempty,omitzero"`
 }
 
 // DebuggerEnableReturns holds the return values for enable.
@@ -84,21 +84,21 @@ type DebuggerEvaluateOnCallFrameParams struct {
 	Expression string `json:"expression"`
 	// ObjectGroup String object group name to put result into (allows rapid releasing resulting object handles
 	// using `releaseObjectGroup`).
-	ObjectGroup string `json:"objectGroup,omitempty"`
+	ObjectGroup string `json:"objectGroup,omitempty,omitzero"`
 	// IncludeCommandLineAPI Specifies whether command line API should be available to the evaluated expression, defaults
 	// to false.
-	IncludeCommandLineAPI bool `json:"includeCommandLineAPI,omitempty"`
+	IncludeCommandLineAPI bool `json:"includeCommandLineAPI,omitempty,omitzero"`
 	// Silent In silent mode exceptions thrown during evaluation are not reported and do not pause
 	// execution. Overrides `setPauseOnException` state.
-	Silent bool `json:"silent,omitempty"`
+	Silent bool `json:"silent,omitempty,omitzero"`
 	// ReturnByValue Whether the result is expected to be a JSON object that should be sent by value.
-	ReturnByValue bool `json:"returnByValue,omitempty"`
+	ReturnByValue bool `json:"returnByValue,omitempty,omitzero"`
 	// GeneratePreview Whether preview should be generated for the result.
-	GeneratePreview bool `json:"generatePreview,omitempty"`
+	GeneratePreview bool `json:"generatePreview,omitempty,omitzero"`
 	// ThrowOnSideEffect Whether to throw an exception if side effect cannot be ruled out during evaluation.
-	ThrowOnSideEffect bool `json:"throwOnSideEffect,omitempty"`
+	ThrowOnSideEffect bool `json:"throwOnSideEffect,omitempty,omitzero"`
 	// Timeout Terminate execution after timing out (number of milliseconds).
-	Timeout RuntimeTimeDelta `json:"timeout,omitempty"`
+	Timeout RuntimeTimeDelta `json:"timeout,omitempty,omitzero"`
 }
 
 // DebuggerEvaluateOnCallFrameReturns holds the return values for evaluateOnCallFrame.
@@ -106,7 +106,7 @@ type DebuggerEvaluateOnCallFrameReturns struct {
 	// Result Object wrapper for the evaluation result.
 	Result RuntimeRemoteObject `json:"result"`
 	// ExceptionDetails Exception details.
-	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty"`
+	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty,omitzero"`
 }
 
 // DebuggerEvaluateOnCallFrame creates a new DebuggerEvaluateOnCallFrameParams.
@@ -175,9 +175,9 @@ type DebuggerGetPossibleBreakpointsParams struct {
 	Start DebuggerLocation `json:"start"`
 	// End End of range to search possible breakpoint locations in (excluding). When not specified, end
 	// of scripts is used as end of range.
-	End DebuggerLocation `json:"end,omitempty"`
+	End DebuggerLocation `json:"end,omitempty,omitzero"`
 	// RestrictToFunction Only consider locations which are in the same (non-nested) function as start.
-	RestrictToFunction bool `json:"restrictToFunction,omitempty"`
+	RestrictToFunction bool `json:"restrictToFunction,omitempty,omitzero"`
 }
 
 // DebuggerGetPossibleBreakpointsReturns holds the return values for getPossibleBreakpoints.
@@ -225,7 +225,7 @@ type DebuggerGetScriptSourceReturns struct {
 	// ScriptSource Script source (empty in case of Wasm bytecode).
 	ScriptSource string `json:"scriptSource"`
 	// Bytecode Wasm bytecode.
-	Bytecode []byte `json:"bytecode,omitempty"`
+	Bytecode []byte `json:"bytecode,omitempty,omitzero"`
 }
 
 // DebuggerGetScriptSource creates a new DebuggerGetScriptSourceParams.
@@ -253,7 +253,7 @@ type DebuggerDisassembleWASMModuleParams struct {
 type DebuggerDisassembleWASMModuleReturns struct {
 	// StreamID For large modules, return a stream from which additional chunks of
 	// disassembly can be read successively.
-	StreamID string `json:"streamId,omitempty"`
+	StreamID string `json:"streamId,omitempty,omitzero"`
 	// TotalNumberOfLines The total number of lines in the disassembly text.
 	TotalNumberOfLines int64 `json:"totalNumberOfLines"`
 	// FunctionBodyOffsets The offsets of all function bodies, in the format [start1, end1,
@@ -428,7 +428,7 @@ type DebuggerRestartFrameParams struct {
 	CallFrameID DebuggerCallFrameID `json:"callFrameId"`
 	// Mode The `mode` parameter must be present and set to 'StepInto', otherwise
 	// `restartFrame` will error out.
-	Mode DebuggerRestartFrameMode `json:"mode,omitempty"`
+	Mode DebuggerRestartFrameMode `json:"mode,omitempty,omitzero"`
 }
 
 // DebuggerRestartFrameReturns holds the return values for restartFrame.
@@ -436,9 +436,9 @@ type DebuggerRestartFrameReturns struct {
 	// CallFrames New stack trace.
 	CallFrames []DebuggerCallFrame `json:"callFrames"`
 	// AsyncStackTrace Async stack trace, if any.
-	AsyncStackTrace RuntimeStackTrace `json:"asyncStackTrace,omitempty"`
+	AsyncStackTrace RuntimeStackTrace `json:"asyncStackTrace,omitempty,omitzero"`
 	// AsyncStackTraceID Async stack trace, if any.
-	AsyncStackTraceID RuntimeStackTraceID `json:"asyncStackTraceId,omitempty"`
+	AsyncStackTraceID RuntimeStackTraceID `json:"asyncStackTraceId,omitempty,omitzero"`
 }
 
 // DebuggerRestartFrame creates a new DebuggerRestartFrameParams.
@@ -470,7 +470,7 @@ type DebuggerResumeParams struct {
 	// JavaScript (i.e. via evaluation) until execution of the paused code
 	// is actually resumed, at which point termination is triggered.
 	// If execution is currently not paused, this parameter has no effect.
-	TerminateOnResume bool `json:"terminateOnResume,omitempty"`
+	TerminateOnResume bool `json:"terminateOnResume,omitempty,omitzero"`
 }
 
 // DebuggerResume creates a new DebuggerResumeParams.
@@ -496,9 +496,9 @@ type DebuggerSearchInContentParams struct {
 	// Query String to search for.
 	Query string `json:"query"`
 	// CaseSensitive If true, search is case sensitive.
-	CaseSensitive bool `json:"caseSensitive,omitempty"`
+	CaseSensitive bool `json:"caseSensitive,omitempty,omitzero"`
 	// IsRegex If true, treats string parameter as regex.
-	IsRegex bool `json:"isRegex,omitempty"`
+	IsRegex bool `json:"isRegex,omitempty,omitzero"`
 }
 
 // DebuggerSearchInContentReturns holds the return values for searchInContent.
@@ -582,7 +582,7 @@ type DebuggerSetBlackboxPatternsParams struct {
 	// Patterns Array of regexps that will be used to check script url for blackbox state.
 	Patterns []string `json:"patterns"`
 	// SkipAnonymous If true, also ignore scripts with no source url.
-	SkipAnonymous bool `json:"skipAnonymous,omitempty"`
+	SkipAnonymous bool `json:"skipAnonymous,omitempty,omitzero"`
 }
 
 // DebuggerSetBlackboxPatterns creates a new DebuggerSetBlackboxPatternsParams.
@@ -632,7 +632,7 @@ type DebuggerSetBreakpointParams struct {
 	Location DebuggerLocation `json:"location"`
 	// Condition Expression to use as a breakpoint condition. When specified, debugger will only stop on the
 	// breakpoint if this expression evaluates to true.
-	Condition string `json:"condition,omitempty"`
+	Condition string `json:"condition,omitempty,omitzero"`
 }
 
 // DebuggerSetBreakpointReturns holds the return values for setBreakpoint.
@@ -701,17 +701,17 @@ type DebuggerSetBreakpointByURLParams struct {
 	// LineNumber Line number to set breakpoint at.
 	LineNumber int64 `json:"lineNumber"`
 	// URL URL of the resources to set breakpoint on.
-	URL string `json:"url,omitempty"`
+	URL string `json:"url,omitempty,omitzero"`
 	// URLRegex Regex pattern for the URLs of the resources to set breakpoints on. Either `url` or
 	// `urlRegex` must be specified.
-	URLRegex string `json:"urlRegex,omitempty"`
+	URLRegex string `json:"urlRegex,omitempty,omitzero"`
 	// ScriptHash Script hash of the resources to set breakpoint on.
-	ScriptHash string `json:"scriptHash,omitempty"`
+	ScriptHash string `json:"scriptHash,omitempty,omitzero"`
 	// ColumnNumber Offset in the line to set breakpoint at.
-	ColumnNumber int64 `json:"columnNumber,omitempty"`
+	ColumnNumber int64 `json:"columnNumber,omitempty,omitzero"`
 	// Condition Expression to use as a breakpoint condition. When specified, debugger will only stop on the
 	// breakpoint if this expression evaluates to true.
-	Condition string `json:"condition,omitempty"`
+	Condition string `json:"condition,omitempty,omitzero"`
 }
 
 // DebuggerSetBreakpointByURLReturns holds the return values for setBreakpointByUrl.
@@ -776,7 +776,7 @@ type DebuggerSetBreakpointOnFunctionCallParams struct {
 	ObjectID RemoteObjectID `json:"objectId"`
 	// Condition Expression to use as a breakpoint condition. When specified, debugger will
 	// stop on the breakpoint if this expression evaluates to true.
-	Condition string `json:"condition,omitempty"`
+	Condition string `json:"condition,omitempty,omitzero"`
 }
 
 // DebuggerSetBreakpointOnFunctionCallReturns holds the return values for setBreakpointOnFunctionCall.
@@ -876,28 +876,28 @@ type DebuggerSetScriptSourceParams struct {
 	ScriptSource string `json:"scriptSource"`
 	// DryRun  If true the change will not actually be applied. Dry run may be used to get result
 	// description without actually modifying the code.
-	DryRun bool `json:"dryRun,omitempty"`
+	DryRun bool `json:"dryRun,omitempty,omitzero"`
 	// AllowTopFrameEditing If true, then `scriptSource` is allowed to change the function on top of the stack
 	// as long as the top-most stack frame is the only activation of that function.
-	AllowTopFrameEditing bool `json:"allowTopFrameEditing,omitempty"`
+	AllowTopFrameEditing bool `json:"allowTopFrameEditing,omitempty,omitzero"`
 }
 
 // DebuggerSetScriptSourceReturns holds the return values for setScriptSource.
 type DebuggerSetScriptSourceReturns struct {
 	// CallFrames New stack trace in case editing has happened while VM was stopped.
-	CallFrames []DebuggerCallFrame `json:"callFrames,omitempty"`
+	CallFrames []DebuggerCallFrame `json:"callFrames,omitempty,omitzero"`
 	// StackChanged Whether current call stack  was modified after applying the changes.
-	StackChanged bool `json:"stackChanged,omitempty"`
+	StackChanged bool `json:"stackChanged,omitempty,omitzero"`
 	// AsyncStackTrace Async stack trace, if any.
-	AsyncStackTrace RuntimeStackTrace `json:"asyncStackTrace,omitempty"`
+	AsyncStackTrace RuntimeStackTrace `json:"asyncStackTrace,omitempty,omitzero"`
 	// AsyncStackTraceID Async stack trace, if any.
-	AsyncStackTraceID RuntimeStackTraceID `json:"asyncStackTraceId,omitempty"`
+	AsyncStackTraceID RuntimeStackTraceID `json:"asyncStackTraceId,omitempty,omitzero"`
 	// Status Whether the operation was successful or not. Only `Ok` denotes a
 	// successful live edit while the other enum variants denote why
 	// the live edit failed.
 	Status DebuggerSetScriptSourceReturnStatus `json:"status"`
 	// ExceptionDetails Exception details if any. Only present when `status` is `CompileError`.
-	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty"`
+	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty,omitzero"`
 }
 
 // DebuggerSetScriptSource creates a new DebuggerSetScriptSourceParams.
@@ -980,9 +980,9 @@ func (p *DebuggerSetVariableValueParams) Do(ctx context.Context) error {
 type DebuggerStepIntoParams struct {
 	// BreakOnAsyncCall Debugger will pause on the execution of the first async task which was scheduled
 	// before next pause.
-	BreakOnAsyncCall bool `json:"breakOnAsyncCall,omitempty"`
+	BreakOnAsyncCall bool `json:"breakOnAsyncCall,omitempty,omitzero"`
 	// SkipList The skipList specifies location ranges that should be skipped on step into.
-	SkipList []DebuggerLocationRange `json:"skipList,omitempty"`
+	SkipList []DebuggerLocationRange `json:"skipList,omitempty,omitzero"`
 }
 
 // DebuggerStepInto creates a new DebuggerStepIntoParams.
@@ -1023,7 +1023,7 @@ func (p *DebuggerStepOutParams) Do(ctx context.Context) error {
 // DebuggerStepOverParams Steps over the statement.
 type DebuggerStepOverParams struct {
 	// SkipList The skipList specifies location ranges that should be skipped on step over.
-	SkipList []DebuggerLocationRange `json:"skipList,omitempty"`
+	SkipList []DebuggerLocationRange `json:"skipList,omitempty,omitzero"`
 }
 
 // DebuggerStepOver creates a new DebuggerStepOverParams.

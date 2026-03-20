@@ -27,7 +27,7 @@ type BrowserEventDownloadProgress struct {
 	// FilePath If download is "completed", provides the path of the downloaded file.
 	// Depending on the platform, it is not guaranteed to be set, nor the file
 	// is guaranteed to exist.
-	FilePath string `json:"filePath,omitempty"`
+	FilePath string `json:"filePath,omitempty,omitzero"`
 }
 
 // Browser event names.

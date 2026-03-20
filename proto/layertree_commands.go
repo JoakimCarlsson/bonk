@@ -123,11 +123,11 @@ type LayerTreeProfileSnapshotParams struct {
 	// SnapshotID The id of the layer snapshot.
 	SnapshotID LayerTreeSnapshotID `json:"snapshotId"`
 	// MinRepeatCount The maximum number of times to replay the snapshot (1, if not specified).
-	MinRepeatCount int64 `json:"minRepeatCount,omitempty"`
+	MinRepeatCount int64 `json:"minRepeatCount,omitempty,omitzero"`
 	// MinDuration The minimum duration (in seconds) to replay the snapshot.
-	MinDuration float64 `json:"minDuration,omitempty"`
+	MinDuration float64 `json:"minDuration,omitempty,omitzero"`
 	// ClipRect The clip rectangle to apply when replaying the snapshot.
-	ClipRect DOMRect `json:"clipRect,omitempty"`
+	ClipRect DOMRect `json:"clipRect,omitempty,omitzero"`
 }
 
 // LayerTreeProfileSnapshotReturns holds the return values for profileSnapshot.
@@ -193,11 +193,11 @@ type LayerTreeReplaySnapshotParams struct {
 	// SnapshotID The id of the layer snapshot.
 	SnapshotID LayerTreeSnapshotID `json:"snapshotId"`
 	// FromStep The first step to replay from (replay from the very start if not specified).
-	FromStep int64 `json:"fromStep,omitempty"`
+	FromStep int64 `json:"fromStep,omitempty,omitzero"`
 	// ToStep The last step to replay to (replay till the end if not specified).
-	ToStep int64 `json:"toStep,omitempty"`
+	ToStep int64 `json:"toStep,omitempty,omitzero"`
 	// Scale The scale to apply while replaying (defaults to 1).
-	Scale float64 `json:"scale,omitempty"`
+	Scale float64 `json:"scale,omitempty,omitzero"`
 }
 
 // LayerTreeReplaySnapshotReturns holds the return values for replaySnapshot.

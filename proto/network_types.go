@@ -464,9 +464,9 @@ type NetworkResourceTiming struct {
 	// WorkerRespondWithSettled Settled fetch event respondWith promise.
 	WorkerRespondWithSettled float64 `json:"workerRespondWithSettled"`
 	// WorkerRouterEvaluationStart Started ServiceWorker static routing source evaluation.
-	WorkerRouterEvaluationStart float64 `json:"workerRouterEvaluationStart,omitempty"`
+	WorkerRouterEvaluationStart float64 `json:"workerRouterEvaluationStart,omitempty,omitzero"`
 	// WorkerCacheLookupStart Started cache lookup when the source was evaluated to `cache`.
-	WorkerCacheLookupStart float64 `json:"workerCacheLookupStart,omitempty"`
+	WorkerCacheLookupStart float64 `json:"workerCacheLookupStart,omitempty,omitzero"`
 	// SendStart Started sending request.
 	SendStart float64 `json:"sendStart"`
 	// SendEnd Finished sending request.
@@ -593,7 +593,7 @@ func (t NetworkRenderBlockingBehavior) String() string {
 
 // NetworkPostDataEntry Post data entry for HTTP request
 type NetworkPostDataEntry struct {
-	Bytes []byte `json:"bytes,omitempty"`
+	Bytes []byte `json:"bytes,omitempty,omitzero"`
 }
 
 // NetworkRequest HTTP request data.
@@ -601,34 +601,34 @@ type NetworkRequest struct {
 	// URL Request URL (without fragment).
 	URL string `json:"url"`
 	// URLFragment Fragment of the requested URL starting with hash, if present.
-	URLFragment string `json:"urlFragment,omitempty"`
+	URLFragment string `json:"urlFragment,omitempty,omitzero"`
 	// Method HTTP request method.
 	Method string `json:"method"`
 	// Headers HTTP request headers.
 	Headers NetworkHeaders `json:"headers"`
 	// PostData HTTP POST request data.
 	// Use postDataEntries instead.
-	PostData string `json:"postData,omitempty"`
+	PostData string `json:"postData,omitempty,omitzero"`
 	// HasPostData True when the request has POST data. Note that postData might still be omitted when this flag is true when the data is too long.
-	HasPostData bool `json:"hasPostData,omitempty"`
+	HasPostData bool `json:"hasPostData,omitempty,omitzero"`
 	// PostDataEntries Request body elements (post data broken into individual entries).
-	PostDataEntries []NetworkPostDataEntry `json:"postDataEntries,omitempty"`
+	PostDataEntries []NetworkPostDataEntry `json:"postDataEntries,omitempty,omitzero"`
 	// MixedContentType The mixed content type of the request.
-	MixedContentType SecurityMixedContentType `json:"mixedContentType,omitempty"`
+	MixedContentType SecurityMixedContentType `json:"mixedContentType,omitempty,omitzero"`
 	// InitialPriority Priority of the resource request at the time request is sent.
 	InitialPriority NetworkResourcePriority `json:"initialPriority"`
 	// ReferrerPolicy The referrer policy of the request, as defined in https://www.w3.org/TR/referrer-policy/
 	ReferrerPolicy NetworkRequestReferrerPolicy `json:"referrerPolicy"`
 	// IsLinkPreload Whether is loaded via link preload.
-	IsLinkPreload bool `json:"isLinkPreload,omitempty"`
+	IsLinkPreload bool `json:"isLinkPreload,omitempty,omitzero"`
 	// TrustTokenParams Set for requests when the TrustToken API is used. Contains the parameters
 	// passed by the developer (e.g. via "fetch") as understood by the backend.
-	TrustTokenParams NetworkTrustTokenParams `json:"trustTokenParams,omitempty"`
+	TrustTokenParams NetworkTrustTokenParams `json:"trustTokenParams,omitempty,omitzero"`
 	// IsSameSite True if this resource request is considered to be the 'same site' as the
 	// request corresponding to the main frame.
-	IsSameSite bool `json:"isSameSite,omitempty"`
+	IsSameSite bool `json:"isSameSite,omitempty,omitzero"`
 	// IsAdRelated True when the resource request is ad-related.
-	IsAdRelated bool `json:"isAdRelated,omitempty"`
+	IsAdRelated bool `json:"isAdRelated,omitempty,omitzero"`
 }
 
 // NetworkSignedCertificateTimestamp Details of a signed certificate timestamp (SCT).
@@ -659,11 +659,11 @@ type NetworkSecurityDetails struct {
 	// KeyExchange Key Exchange used by the connection, or the empty string if not applicable.
 	KeyExchange string `json:"keyExchange"`
 	// KeyExchangeGroup (EC)DH group used by the connection, if applicable.
-	KeyExchangeGroup string `json:"keyExchangeGroup,omitempty"`
+	KeyExchangeGroup string `json:"keyExchangeGroup,omitempty,omitzero"`
 	// Cipher Cipher name.
 	Cipher string `json:"cipher"`
 	// Mac TLS MAC. Note that AEAD ciphers do not have separate MACs.
-	Mac string `json:"mac,omitempty"`
+	Mac string `json:"mac,omitempty,omitzero"`
 	// CertificateID Certificate ID value.
 	CertificateID SecurityCertificateID `json:"certificateId"`
 	// SubjectName Certificate subject name.
@@ -683,7 +683,7 @@ type NetworkSecurityDetails struct {
 	// ServerSignatureAlgorithm The signature algorithm used by the server in the TLS server signature,
 	// represented as a TLS SignatureScheme code point. Omitted if not
 	// applicable or not known.
-	ServerSignatureAlgorithm int64 `json:"serverSignatureAlgorithm,omitempty"`
+	ServerSignatureAlgorithm int64 `json:"serverSignatureAlgorithm,omitempty,omitzero"`
 	// EncryptedClientHello Whether the connection used Encrypted ClientHello
 	EncryptedClientHello bool `json:"encryptedClientHello"`
 }
@@ -1047,7 +1047,7 @@ type NetworkTrustTokenParams struct {
 	RefreshPolicy NetworkTrustTokenParamsRefreshPolicy `json:"refreshPolicy"`
 	// Issuers Origins of issuers from whom to request tokens or redemption
 	// records.
-	Issuers []string `json:"issuers,omitempty"`
+	Issuers []string `json:"issuers,omitempty,omitzero"`
 }
 
 type NetworkTrustTokenOperationType string
@@ -1221,12 +1221,12 @@ func (t NetworkServiceWorkerRouterSource) String() string {
 type NetworkServiceWorkerRouterInfo struct {
 	// RuleIDMatched ID of the rule matched. If there is a matched rule, this field will
 	// be set, otherwiser no value will be set.
-	RuleIDMatched int64 `json:"ruleIdMatched,omitempty"`
+	RuleIDMatched int64 `json:"ruleIdMatched,omitempty,omitzero"`
 	// MatchedSourceType The router source of the matched rule. If there is a matched rule, this
 	// field will be set, otherwise no value will be set.
-	MatchedSourceType NetworkServiceWorkerRouterSource `json:"matchedSourceType,omitempty"`
+	MatchedSourceType NetworkServiceWorkerRouterSource `json:"matchedSourceType,omitempty,omitzero"`
 	// ActualSourceType The actual router source used.
-	ActualSourceType NetworkServiceWorkerRouterSource `json:"actualSourceType,omitempty"`
+	ActualSourceType NetworkServiceWorkerRouterSource `json:"actualSourceType,omitempty,omitzero"`
 }
 
 // NetworkResponse HTTP response data.
@@ -1240,54 +1240,54 @@ type NetworkResponse struct {
 	// Headers HTTP response headers.
 	Headers NetworkHeaders `json:"headers"`
 	// HeadersText HTTP response headers text. This has been replaced by the headers in Network.responseReceivedExtraInfo.
-	HeadersText string `json:"headersText,omitempty"`
+	HeadersText string `json:"headersText,omitempty,omitzero"`
 	// MimeType Resource mimeType as determined by the browser.
 	MimeType string `json:"mimeType"`
 	// Charset Resource charset as determined by the browser (if applicable).
 	Charset string `json:"charset"`
 	// RequestHeaders Refined HTTP request headers that were actually transmitted over the network.
-	RequestHeaders NetworkHeaders `json:"requestHeaders,omitempty"`
+	RequestHeaders NetworkHeaders `json:"requestHeaders,omitempty,omitzero"`
 	// RequestHeadersText HTTP request headers text. This has been replaced by the headers in Network.requestWillBeSentExtraInfo.
-	RequestHeadersText string `json:"requestHeadersText,omitempty"`
+	RequestHeadersText string `json:"requestHeadersText,omitempty,omitzero"`
 	// ConnectionReused Specifies whether physical connection was actually reused for this request.
 	ConnectionReused bool `json:"connectionReused"`
 	// ConnectionID Physical connection id that was actually used for this request.
 	ConnectionID float64 `json:"connectionId"`
 	// RemoteIPAddress Remote IP address.
-	RemoteIPAddress string `json:"remoteIPAddress,omitempty"`
+	RemoteIPAddress string `json:"remoteIPAddress,omitempty,omitzero"`
 	// RemotePort Remote port.
-	RemotePort int64 `json:"remotePort,omitempty"`
+	RemotePort int64 `json:"remotePort,omitempty,omitzero"`
 	// FromDiskCache Specifies that the request was served from the disk cache.
-	FromDiskCache bool `json:"fromDiskCache,omitempty"`
+	FromDiskCache bool `json:"fromDiskCache,omitempty,omitzero"`
 	// FromServiceWorker Specifies that the request was served from the ServiceWorker.
-	FromServiceWorker bool `json:"fromServiceWorker,omitempty"`
+	FromServiceWorker bool `json:"fromServiceWorker,omitempty,omitzero"`
 	// FromPrefetchCache Specifies that the request was served from the prefetch cache.
-	FromPrefetchCache bool `json:"fromPrefetchCache,omitempty"`
+	FromPrefetchCache bool `json:"fromPrefetchCache,omitempty,omitzero"`
 	// FromEarlyHints Specifies that the request was served from the prefetch cache.
-	FromEarlyHints bool `json:"fromEarlyHints,omitempty"`
+	FromEarlyHints bool `json:"fromEarlyHints,omitempty,omitzero"`
 	// ServiceWorkerRouterInfo Information about how ServiceWorker Static Router API was used. If this
 	// field is set with `matchedSourceType` field, a matching rule is found.
 	// If this field is set without `matchedSource`, no matching rule is found.
 	// Otherwise, the API is not used.
-	ServiceWorkerRouterInfo NetworkServiceWorkerRouterInfo `json:"serviceWorkerRouterInfo,omitempty"`
+	ServiceWorkerRouterInfo NetworkServiceWorkerRouterInfo `json:"serviceWorkerRouterInfo,omitempty,omitzero"`
 	// EncodedDataLength Total number of bytes received for this request so far.
 	EncodedDataLength float64 `json:"encodedDataLength"`
 	// Timing Timing information for the given request.
-	Timing NetworkResourceTiming `json:"timing,omitempty"`
+	Timing NetworkResourceTiming `json:"timing,omitempty,omitzero"`
 	// ServiceWorkerResponseSource Response source of response from ServiceWorker.
-	ServiceWorkerResponseSource NetworkServiceWorkerResponseSource `json:"serviceWorkerResponseSource,omitempty"`
+	ServiceWorkerResponseSource NetworkServiceWorkerResponseSource `json:"serviceWorkerResponseSource,omitempty,omitzero"`
 	// ResponseTime The time at which the returned response was generated.
-	ResponseTime TimeSinceEpoch `json:"responseTime,omitempty"`
+	ResponseTime TimeSinceEpoch `json:"responseTime,omitempty,omitzero"`
 	// CacheStorageCacheName Cache Storage Cache Name.
-	CacheStorageCacheName string `json:"cacheStorageCacheName,omitempty"`
+	CacheStorageCacheName string `json:"cacheStorageCacheName,omitempty,omitzero"`
 	// Protocol Protocol used to fetch this request.
-	Protocol string `json:"protocol,omitempty"`
+	Protocol string `json:"protocol,omitempty,omitzero"`
 	// AlternateProtocolUsage The reason why Chrome uses a specific transport protocol for HTTP semantics.
-	AlternateProtocolUsage NetworkAlternateProtocolUsage `json:"alternateProtocolUsage,omitempty"`
+	AlternateProtocolUsage NetworkAlternateProtocolUsage `json:"alternateProtocolUsage,omitempty,omitzero"`
 	// SecurityState Security state of the request resource.
 	SecurityState SecuritySecurityState `json:"securityState"`
 	// SecurityDetails Security details for the request.
-	SecurityDetails NetworkSecurityDetails `json:"securityDetails,omitempty"`
+	SecurityDetails NetworkSecurityDetails `json:"securityDetails,omitempty,omitzero"`
 }
 
 // NetworkWebSocketRequest WebSocket request data.
@@ -1305,11 +1305,11 @@ type NetworkWebSocketResponse struct {
 	// Headers HTTP response headers.
 	Headers NetworkHeaders `json:"headers"`
 	// HeadersText HTTP response headers text.
-	HeadersText string `json:"headersText,omitempty"`
+	HeadersText string `json:"headersText,omitempty,omitzero"`
 	// RequestHeaders HTTP request headers.
-	RequestHeaders NetworkHeaders `json:"requestHeaders,omitempty"`
+	RequestHeaders NetworkHeaders `json:"requestHeaders,omitempty,omitzero"`
 	// RequestHeadersText HTTP request headers text.
-	RequestHeadersText string `json:"requestHeadersText,omitempty"`
+	RequestHeadersText string `json:"requestHeadersText,omitempty,omitzero"`
 }
 
 // NetworkWebSocketFrame WebSocket message data. This represents an entire WebSocket message, not just a fragmented frame as the name suggests.
@@ -1331,7 +1331,7 @@ type NetworkCachedResource struct {
 	// Type Type of this resource.
 	Type NetworkResourceType `json:"type"`
 	// Response Cached response data.
-	Response NetworkResponse `json:"response,omitempty"`
+	Response NetworkResponse `json:"response,omitempty,omitzero"`
 	// BodySize Cached response body size.
 	BodySize float64 `json:"bodySize"`
 }
@@ -1342,17 +1342,17 @@ type NetworkInitiator struct {
 	Type NetworkInitiatorType `json:"type"`
 	// Stack Initiator JavaScript stack trace, set for Script only.
 	// Requires the Debugger domain to be enabled.
-	Stack RuntimeStackTrace `json:"stack,omitempty"`
+	Stack RuntimeStackTrace `json:"stack,omitempty,omitzero"`
 	// URL Initiator URL, set for Parser type or for Script type (when script is importing module) or for SignedExchange type.
-	URL string `json:"url,omitempty"`
+	URL string `json:"url,omitempty,omitzero"`
 	// LineNumber Initiator line number, set for Parser type or for Script type (when script is importing
 	// module) (0-based).
-	LineNumber float64 `json:"lineNumber,omitempty"`
+	LineNumber float64 `json:"lineNumber,omitempty,omitzero"`
 	// ColumnNumber Initiator column number, set for Parser type or for Script type (when script is importing
 	// module) (0-based).
-	ColumnNumber float64 `json:"columnNumber,omitempty"`
+	ColumnNumber float64 `json:"columnNumber,omitempty,omitzero"`
 	// RequestID Set if another request triggered this request (e.g. preflight).
-	RequestID RequestID `json:"requestId,omitempty"`
+	RequestID RequestID `json:"requestId,omitempty,omitzero"`
 }
 
 // NetworkCookiePartitionKey cookiePartitionKey object
@@ -1389,7 +1389,7 @@ type NetworkCookie struct {
 	// Session True in case of session cookie.
 	Session bool `json:"session"`
 	// SameSite Cookie SameSite type.
-	SameSite NetworkCookieSameSite `json:"sameSite,omitempty"`
+	SameSite NetworkCookieSameSite `json:"sameSite,omitempty,omitzero"`
 	// Priority Cookie Priority
 	Priority NetworkCookiePriority `json:"priority"`
 	// SourceScheme Cookie source scheme type.
@@ -1399,9 +1399,9 @@ type NetworkCookie struct {
 	// This is a temporary ability and it will be removed in the future.
 	SourcePort int64 `json:"sourcePort"`
 	// PartitionKey Cookie partition key.
-	PartitionKey NetworkCookiePartitionKey `json:"partitionKey,omitempty"`
+	PartitionKey NetworkCookiePartitionKey `json:"partitionKey,omitempty,omitzero"`
 	// PartitionKeyOpaque True if cookie partition key is opaque.
-	PartitionKeyOpaque bool `json:"partitionKeyOpaque,omitempty"`
+	PartitionKeyOpaque bool `json:"partitionKeyOpaque,omitempty,omitzero"`
 }
 
 // NetworkSetCookieBlockedReason Types of reasons why a cookie may not be stored from a response.
@@ -1715,7 +1715,7 @@ type NetworkBlockedSetCookieWithReason struct {
 	// Cookie The cookie object which represents the cookie which was not stored. It is optional because
 	// sometimes complete cookie information is not available, such as in the case of parsing
 	// errors.
-	Cookie NetworkCookie `json:"cookie,omitempty"`
+	Cookie NetworkCookie `json:"cookie,omitempty,omitzero"`
 }
 
 // NetworkExemptedSetCookieWithReason A cookie should have been blocked by 3PCD but is exempted and stored from a response with the
@@ -1738,7 +1738,7 @@ type NetworkAssociatedCookie struct {
 	BlockedReasons []NetworkCookieBlockedReason `json:"blockedReasons"`
 	// ExemptionReason The reason the cookie should have been blocked by 3PCD but is exempted. A cookie could
 	// only have at most one exemption reason.
-	ExemptionReason NetworkCookieExemptionReason `json:"exemptionReason,omitempty"`
+	ExemptionReason NetworkCookieExemptionReason `json:"exemptionReason,omitempty,omitzero"`
 }
 
 // NetworkCookieParam Cookie parameter object
@@ -1749,35 +1749,35 @@ type NetworkCookieParam struct {
 	Value string `json:"value"`
 	// URL The request-URI to associate with the setting of the cookie. This value can affect the
 	// default domain, path, source port, and source scheme values of the created cookie.
-	URL string `json:"url,omitempty"`
+	URL string `json:"url,omitempty,omitzero"`
 	// Domain Cookie domain.
-	Domain string `json:"domain,omitempty"`
+	Domain string `json:"domain,omitempty,omitzero"`
 	// Path Cookie path.
-	Path string `json:"path,omitempty"`
+	Path string `json:"path,omitempty,omitzero"`
 	// Secure True if cookie is secure.
-	Secure bool `json:"secure,omitempty"`
+	Secure bool `json:"secure,omitempty,omitzero"`
 	// HTTPOnly True if cookie is http-only.
-	HTTPOnly bool `json:"httpOnly,omitempty"`
+	HTTPOnly bool `json:"httpOnly,omitempty,omitzero"`
 	// SameSite Cookie SameSite type.
-	SameSite NetworkCookieSameSite `json:"sameSite,omitempty"`
+	SameSite NetworkCookieSameSite `json:"sameSite,omitempty,omitzero"`
 	// Expires Cookie expiration date, session cookie if not set
-	Expires TimeSinceEpoch `json:"expires,omitempty"`
+	Expires TimeSinceEpoch `json:"expires,omitempty,omitzero"`
 	// Priority Cookie Priority.
-	Priority NetworkCookiePriority `json:"priority,omitempty"`
+	Priority NetworkCookiePriority `json:"priority,omitempty,omitzero"`
 	// SourceScheme Cookie source scheme type.
-	SourceScheme NetworkCookieSourceScheme `json:"sourceScheme,omitempty"`
+	SourceScheme NetworkCookieSourceScheme `json:"sourceScheme,omitempty,omitzero"`
 	// SourcePort Cookie source port. Valid values are {-1, [1, 65535]}, -1 indicates an unspecified port.
 	// An unspecified port value allows protocol clients to emulate legacy cookie scope for the port.
 	// This is a temporary ability and it will be removed in the future.
-	SourcePort int64 `json:"sourcePort,omitempty"`
+	SourcePort int64 `json:"sourcePort,omitempty,omitzero"`
 	// PartitionKey Cookie partition key. If not set, the cookie will be set as not partitioned.
-	PartitionKey NetworkCookiePartitionKey `json:"partitionKey,omitempty"`
+	PartitionKey NetworkCookiePartitionKey `json:"partitionKey,omitempty,omitzero"`
 }
 
 // NetworkAuthChallenge Authorization challenge for HTTP status code 401 or 407.
 type NetworkAuthChallenge struct {
 	// Source Source of the authentication challenge.
-	Source NetworkAuthChallengeSource `json:"source,omitempty"`
+	Source NetworkAuthChallengeSource `json:"source,omitempty,omitzero"`
 	// Origin Origin of the challenger.
 	Origin string `json:"origin"`
 	// Scheme The authentication scheme used, such as basic or digest
@@ -1794,10 +1794,10 @@ type NetworkAuthChallengeResponse struct {
 	Response NetworkAuthChallengeResponseResponse `json:"response"`
 	// Username The username to provide, possibly empty. Should only be set if response is
 	// ProvideCredentials.
-	Username string `json:"username,omitempty"`
+	Username string `json:"username,omitempty,omitzero"`
 	// Password The password to provide, possibly empty. Should only be set if response is
 	// ProvideCredentials.
-	Password string `json:"password,omitempty"`
+	Password string `json:"password,omitempty,omitzero"`
 }
 
 // NetworkInterceptionStage Stages of the interception to begin intercepting. Request will intercept before the request is
@@ -1848,11 +1848,11 @@ func (t NetworkInterceptionStage) String() string {
 type NetworkRequestPattern struct {
 	// URLPattern Wildcards (`'*'` -> zero or more, `'?'` -> exactly one) are allowed. Escape character is
 	// backslash. Omitting is equivalent to `"*"`.
-	URLPattern string `json:"urlPattern,omitempty"`
+	URLPattern string `json:"urlPattern,omitempty,omitzero"`
 	// ResourceType If set, only requests for matching resource types will be intercepted.
-	ResourceType NetworkResourceType `json:"resourceType,omitempty"`
+	ResourceType NetworkResourceType `json:"resourceType,omitempty,omitzero"`
 	// InterceptionStage Stage at which to begin intercepting requests. Default is Request.
-	InterceptionStage NetworkInterceptionStage `json:"interceptionStage,omitempty"`
+	InterceptionStage NetworkInterceptionStage `json:"interceptionStage,omitempty,omitzero"`
 }
 
 // NetworkSignedExchangeSignature Information about a signed exchange signature.
@@ -1865,9 +1865,9 @@ type NetworkSignedExchangeSignature struct {
 	// Integrity Signed exchange signature integrity.
 	Integrity string `json:"integrity"`
 	// CertURL Signed exchange signature cert Url.
-	CertURL string `json:"certUrl,omitempty"`
+	CertURL string `json:"certUrl,omitempty,omitzero"`
 	// CertSha256 The hex string of signed exchange signature cert sha256.
-	CertSha256 string `json:"certSha256,omitempty"`
+	CertSha256 string `json:"certSha256,omitempty,omitzero"`
 	// ValidityURL Signed exchange signature validity Url.
 	ValidityURL string `json:"validityUrl"`
 	// Date Signed exchange signature date.
@@ -1875,7 +1875,7 @@ type NetworkSignedExchangeSignature struct {
 	// Expires Signed exchange signature expires.
 	Expires int64 `json:"expires"`
 	// Certificates The encoded certificates.
-	Certificates []string `json:"certificates,omitempty"`
+	Certificates []string `json:"certificates,omitempty,omitzero"`
 }
 
 // NetworkSignedExchangeHeader Information about a signed exchange header.
@@ -1957,9 +1957,9 @@ type NetworkSignedExchangeError struct {
 	// Message Error message.
 	Message string `json:"message"`
 	// SignatureIndex The index of the signature which caused the error.
-	SignatureIndex int64 `json:"signatureIndex,omitempty"`
+	SignatureIndex int64 `json:"signatureIndex,omitempty,omitzero"`
 	// ErrorField The field which caused the error.
-	ErrorField NetworkSignedExchangeErrorField `json:"errorField,omitempty"`
+	ErrorField NetworkSignedExchangeErrorField `json:"errorField,omitempty,omitzero"`
 }
 
 // NetworkSignedExchangeInfo Information about a signed exchange response.
@@ -1970,11 +1970,11 @@ type NetworkSignedExchangeInfo struct {
 	// extra headers.
 	HasExtraInfo bool `json:"hasExtraInfo"`
 	// Header Information about the signed exchange header.
-	Header NetworkSignedExchangeHeader `json:"header,omitempty"`
+	Header NetworkSignedExchangeHeader `json:"header,omitempty,omitzero"`
 	// SecurityDetails Security details for the signed exchange header.
-	SecurityDetails NetworkSecurityDetails `json:"securityDetails,omitempty"`
+	SecurityDetails NetworkSecurityDetails `json:"securityDetails,omitempty,omitzero"`
 	// Errors Errors occurred while handling the signed exchange.
-	Errors []NetworkSignedExchangeError `json:"errors,omitempty"`
+	Errors []NetworkSignedExchangeError `json:"errors,omitempty,omitzero"`
 }
 
 // NetworkContentEncoding List of content encodings supported by the backend.
@@ -2040,13 +2040,13 @@ type NetworkNetworkConditions struct {
 	// UploadThroughput Maximal aggregated upload throughput (bytes/sec).  -1 disables upload throttling.
 	UploadThroughput float64 `json:"uploadThroughput"`
 	// ConnectionType Connection type if known.
-	ConnectionType NetworkConnectionType `json:"connectionType,omitempty"`
+	ConnectionType NetworkConnectionType `json:"connectionType,omitempty,omitzero"`
 	// PacketLoss WebRTC packet loss (percent, 0-100). 0 disables packet loss emulation, 100 drops all the packets.
-	PacketLoss float64 `json:"packetLoss,omitempty"`
+	PacketLoss float64 `json:"packetLoss,omitempty,omitzero"`
 	// PacketQueueLength WebRTC packet queue length (packet). 0 removes any queue length limitations.
-	PacketQueueLength int64 `json:"packetQueueLength,omitempty"`
+	PacketQueueLength int64 `json:"packetQueueLength,omitempty,omitzero"`
 	// PacketReordering WebRTC packetReordering feature.
-	PacketReordering bool `json:"packetReordering,omitempty"`
+	PacketReordering bool `json:"packetReordering,omitempty,omitzero"`
 }
 
 type NetworkBlockPattern struct {
@@ -2104,39 +2104,39 @@ type NetworkDirectTCPSocketOptions struct {
 	// NoDelay TCP_NODELAY option
 	NoDelay bool `json:"noDelay"`
 	// KeepAliveDelay Expected to be unsigned integer.
-	KeepAliveDelay float64 `json:"keepAliveDelay,omitempty"`
+	KeepAliveDelay float64 `json:"keepAliveDelay,omitempty,omitzero"`
 	// SendBufferSize Expected to be unsigned integer.
-	SendBufferSize float64 `json:"sendBufferSize,omitempty"`
+	SendBufferSize float64 `json:"sendBufferSize,omitempty,omitzero"`
 	// ReceiveBufferSize Expected to be unsigned integer.
-	ReceiveBufferSize float64                         `json:"receiveBufferSize,omitempty"`
-	DNSQueryType      NetworkDirectSocketDNSQueryType `json:"dnsQueryType,omitempty"`
+	ReceiveBufferSize float64                         `json:"receiveBufferSize,omitempty,omitzero"`
+	DNSQueryType      NetworkDirectSocketDNSQueryType `json:"dnsQueryType,omitempty,omitzero"`
 }
 
 type NetworkDirectUDPSocketOptions struct {
-	RemoteAddr string `json:"remoteAddr,omitempty"`
+	RemoteAddr string `json:"remoteAddr,omitempty,omitzero"`
 	// RemotePort Unsigned int 16.
-	RemotePort int64  `json:"remotePort,omitempty"`
-	LocalAddr  string `json:"localAddr,omitempty"`
+	RemotePort int64  `json:"remotePort,omitempty,omitzero"`
+	LocalAddr  string `json:"localAddr,omitempty,omitzero"`
 	// LocalPort Unsigned int 16.
-	LocalPort    int64                           `json:"localPort,omitempty"`
-	DNSQueryType NetworkDirectSocketDNSQueryType `json:"dnsQueryType,omitempty"`
+	LocalPort    int64                           `json:"localPort,omitempty,omitzero"`
+	DNSQueryType NetworkDirectSocketDNSQueryType `json:"dnsQueryType,omitempty,omitzero"`
 	// SendBufferSize Expected to be unsigned integer.
-	SendBufferSize float64 `json:"sendBufferSize,omitempty"`
+	SendBufferSize float64 `json:"sendBufferSize,omitempty,omitzero"`
 	// ReceiveBufferSize Expected to be unsigned integer.
-	ReceiveBufferSize float64 `json:"receiveBufferSize,omitempty"`
-	MulticastLoopback bool    `json:"multicastLoopback,omitempty"`
+	ReceiveBufferSize float64 `json:"receiveBufferSize,omitempty,omitzero"`
+	MulticastLoopback bool    `json:"multicastLoopback,omitempty,omitzero"`
 	// MulticastTimeToLive Unsigned int 8.
-	MulticastTimeToLive          int64 `json:"multicastTimeToLive,omitempty"`
-	MulticastAllowAddressSharing bool  `json:"multicastAllowAddressSharing,omitempty"`
+	MulticastTimeToLive          int64 `json:"multicastTimeToLive,omitempty,omitzero"`
+	MulticastAllowAddressSharing bool  `json:"multicastAllowAddressSharing,omitempty,omitzero"`
 }
 
 type NetworkDirectUDPMessage struct {
 	Data []byte `json:"data"`
 	// RemoteAddr Null for connected mode.
-	RemoteAddr string `json:"remoteAddr,omitempty"`
+	RemoteAddr string `json:"remoteAddr,omitempty,omitzero"`
 	// RemotePort Null for connected mode.
 	// Expected to be unsigned integer.
-	RemotePort int64 `json:"remotePort,omitempty"`
+	RemotePort int64 `json:"remotePort,omitempty,omitzero"`
 }
 
 type NetworkLocalNetworkAccessRequestPolicy string
@@ -2279,7 +2279,7 @@ type NetworkAdAncestry struct {
 	AncestryChain []NetworkAdScriptIdentifier `json:"ancestryChain"`
 	// RootScriptFilterlistRule The filter list rule that caused the root (last) script in
 	// `ancestryChain` to be tagged as an ad.
-	RootScriptFilterlistRule string `json:"rootScriptFilterlistRule,omitempty"`
+	RootScriptFilterlistRule string `json:"rootScriptFilterlistRule,omitempty,omitzero"`
 }
 
 // NetworkAdProvenance Represents the provenance of an ad resource or element. Only one of
@@ -2290,9 +2290,9 @@ type NetworkAdAncestry struct {
 // known to be an ad, but provenance tracking information is unavailable.
 type NetworkAdProvenance struct {
 	// FilterlistRule The filterlist rule that matched, if any.
-	FilterlistRule string `json:"filterlistRule,omitempty"`
+	FilterlistRule string `json:"filterlistRule,omitempty,omitzero"`
 	// AdScriptAncestry The script ancestry that created the ad, if any.
-	AdScriptAncestry NetworkAdAncestry `json:"adScriptAncestry,omitempty"`
+	AdScriptAncestry NetworkAdAncestry `json:"adScriptAncestry,omitempty,omitzero"`
 }
 
 type NetworkCrossOriginOpenerPolicyValue string
@@ -2360,8 +2360,8 @@ func (t NetworkCrossOriginOpenerPolicyValue) String() string {
 type NetworkCrossOriginOpenerPolicyStatus struct {
 	Value                       NetworkCrossOriginOpenerPolicyValue `json:"value"`
 	ReportOnlyValue             NetworkCrossOriginOpenerPolicyValue `json:"reportOnlyValue"`
-	ReportingEndpoint           string                              `json:"reportingEndpoint,omitempty"`
-	ReportOnlyReportingEndpoint string                              `json:"reportOnlyReportingEndpoint,omitempty"`
+	ReportingEndpoint           string                              `json:"reportingEndpoint,omitempty,omitzero"`
+	ReportOnlyReportingEndpoint string                              `json:"reportOnlyReportingEndpoint,omitempty,omitzero"`
 }
 
 type NetworkCrossOriginEmbedderPolicyValue string
@@ -2413,8 +2413,8 @@ func (t NetworkCrossOriginEmbedderPolicyValue) String() string {
 type NetworkCrossOriginEmbedderPolicyStatus struct {
 	Value                       NetworkCrossOriginEmbedderPolicyValue `json:"value"`
 	ReportOnlyValue             NetworkCrossOriginEmbedderPolicyValue `json:"reportOnlyValue"`
-	ReportingEndpoint           string                                `json:"reportingEndpoint,omitempty"`
-	ReportOnlyReportingEndpoint string                                `json:"reportOnlyReportingEndpoint,omitempty"`
+	ReportingEndpoint           string                                `json:"reportingEndpoint,omitempty,omitzero"`
+	ReportOnlyReportingEndpoint string                                `json:"reportOnlyReportingEndpoint,omitempty,omitzero"`
 }
 
 type NetworkContentSecurityPolicySource string
@@ -2466,9 +2466,9 @@ type NetworkContentSecurityPolicyStatus struct {
 }
 
 type NetworkSecurityIsolationStatus struct {
-	Coop NetworkCrossOriginOpenerPolicyStatus   `json:"coop,omitempty"`
-	Coep NetworkCrossOriginEmbedderPolicyStatus `json:"coep,omitempty"`
-	Csp  []NetworkContentSecurityPolicyStatus   `json:"csp,omitempty"`
+	Coop NetworkCrossOriginOpenerPolicyStatus   `json:"coop,omitempty,omitzero"`
+	Coep NetworkCrossOriginEmbedderPolicyStatus `json:"coep,omitempty,omitzero"`
+	Csp  []NetworkContentSecurityPolicyStatus   `json:"csp,omitempty,omitzero"`
 }
 
 // NetworkReportStatus The status of a Reporting API report.
@@ -2584,7 +2584,7 @@ type NetworkDeviceBoundSessionCookieCraving struct {
 	// HTTPOnly The `HttpOnly` attribute of the craving attributes.
 	HTTPOnly bool `json:"httpOnly"`
 	// SameSite The `SameSite` attribute of the craving attributes.
-	SameSite NetworkCookieSameSite `json:"sameSite,omitempty"`
+	SameSite NetworkCookieSameSite `json:"sameSite,omitempty,omitzero"`
 }
 
 // NetworkDeviceBoundSessionURLRule A device bound session's inclusion URL rule.
@@ -2622,7 +2622,7 @@ type NetworkDeviceBoundSession struct {
 	// ExpiryDate See comments on `net::device_bound_sessions::Session::expiry_date_`.
 	ExpiryDate TimeSinceEpoch `json:"expiryDate"`
 	// CachedChallenge See comments on `net::device_bound_sessions::Session::cached_challenge__`.
-	CachedChallenge string `json:"cachedChallenge,omitempty"`
+	CachedChallenge string `json:"cachedChallenge,omitempty,omitzero"`
 	// AllowedRefreshInitiators See comments on `net::device_bound_sessions::Session::allowed_refresh_initiators_`.
 	AllowedRefreshInitiators []string `json:"allowedRefreshInitiators"`
 }
@@ -2947,13 +2947,13 @@ type NetworkDeviceBoundSessionFailedRequest struct {
 	// RequestURL The failed request URL.
 	RequestURL string `json:"requestUrl"`
 	// NetError The net error of the response if it was not OK.
-	NetError string `json:"netError,omitempty"`
+	NetError string `json:"netError,omitempty,omitzero"`
 	// ResponseError The response code if the net error was OK and the response code was not
 	// 200.
-	ResponseError int64 `json:"responseError,omitempty"`
+	ResponseError int64 `json:"responseError,omitempty,omitzero"`
 	// ResponseErrorBody The body of the response if the net error was OK, the response code was
 	// not 200, and the response body was not empty.
-	ResponseErrorBody string `json:"responseErrorBody,omitempty"`
+	ResponseErrorBody string `json:"responseErrorBody,omitempty,omitzero"`
 }
 
 // NetworkCreationEventDetails Session event details specific to creation.
@@ -2962,10 +2962,10 @@ type NetworkCreationEventDetails struct {
 	FetchResult NetworkDeviceBoundSessionFetchResult `json:"fetchResult"`
 	// NewSession The session if there was a newly created session. This is populated for
 	// all successful creation events.
-	NewSession NetworkDeviceBoundSession `json:"newSession,omitempty"`
+	NewSession NetworkDeviceBoundSession `json:"newSession,omitempty,omitzero"`
 	// FailedRequest Details about a failed device bound session network request if there was
 	// one.
-	FailedRequest NetworkDeviceBoundSessionFailedRequest `json:"failedRequest,omitempty"`
+	FailedRequest NetworkDeviceBoundSessionFailedRequest `json:"failedRequest,omitempty,omitzero"`
 }
 
 // NetworkRefreshEventDetails Session event details specific to refresh.
@@ -2973,15 +2973,15 @@ type NetworkRefreshEventDetails struct {
 	// RefreshResult The result of a refresh.
 	RefreshResult NetworkRefreshEventDetailsRefreshResult `json:"refreshResult"`
 	// FetchResult If there was a fetch attempt, the result of that.
-	FetchResult NetworkDeviceBoundSessionFetchResult `json:"fetchResult,omitempty"`
+	FetchResult NetworkDeviceBoundSessionFetchResult `json:"fetchResult,omitempty,omitzero"`
 	// NewSession The session display if there was a newly created session. This is populated
 	// for any refresh event that modifies the session config.
-	NewSession NetworkDeviceBoundSession `json:"newSession,omitempty"`
+	NewSession NetworkDeviceBoundSession `json:"newSession,omitempty,omitzero"`
 	// WasFullyProactiveRefresh See comments on `net::device_bound_sessions::RefreshEventResult::was_fully_proactive_refresh`.
 	WasFullyProactiveRefresh bool `json:"wasFullyProactiveRefresh"`
 	// FailedRequest Details about a failed device bound session network request if there was
 	// one.
-	FailedRequest NetworkDeviceBoundSessionFailedRequest `json:"failedRequest,omitempty"`
+	FailedRequest NetworkDeviceBoundSessionFailedRequest `json:"failedRequest,omitempty,omitzero"`
 }
 
 // NetworkTerminationEventDetails Session event details specific to termination.
@@ -3002,13 +3002,13 @@ type NetworkChallengeEventDetails struct {
 type NetworkLoadNetworkResourcePageResult struct {
 	Success bool `json:"success"`
 	// NetError Optional values used for error reporting.
-	NetError       float64 `json:"netError,omitempty"`
-	NetErrorName   string  `json:"netErrorName,omitempty"`
-	HTTPStatusCode float64 `json:"httpStatusCode,omitempty"`
+	NetError       float64 `json:"netError,omitempty,omitzero"`
+	NetErrorName   string  `json:"netErrorName,omitempty,omitzero"`
+	HTTPStatusCode float64 `json:"httpStatusCode,omitempty,omitzero"`
 	// Stream If successful, one of the following two fields holds the result.
-	Stream IOStreamHandle `json:"stream,omitempty"`
+	Stream IOStreamHandle `json:"stream,omitempty,omitzero"`
 	// Headers Response headers.
-	Headers NetworkHeaders `json:"headers,omitempty"`
+	Headers NetworkHeaders `json:"headers,omitempty,omitzero"`
 }
 
 // NetworkLoadNetworkResourceOptions An options object that may be extended later to better support CORS,

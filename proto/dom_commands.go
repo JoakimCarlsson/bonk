@@ -41,7 +41,7 @@ type DOMCopyToParams struct {
 	TargetNodeID NodeID `json:"targetNodeId"`
 	// InsertBeforeNodeID Drop the copy before this node (if absent, the copy becomes the last child of
 	// `targetNodeId`).
-	InsertBeforeNodeID NodeID `json:"insertBeforeNodeId,omitempty"`
+	InsertBeforeNodeID NodeID `json:"insertBeforeNodeId,omitempty,omitzero"`
 }
 
 // DOMCopyToReturns holds the return values for copyTo.
@@ -77,17 +77,17 @@ func (p *DOMCopyToParams) Do(ctx context.Context) (*DOMCopyToReturns, error) {
 // objects, can be used for automation.
 type DOMDescribeNodeParams struct {
 	// NodeID Identifier of the node.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 	// BackendNodeID Identifier of the backend node.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// ObjectID JavaScript object id of the node wrapper.
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 	// Depth The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the
 	// entire subtree or provide an integer larger than 0.
-	Depth int64 `json:"depth,omitempty"`
+	Depth int64 `json:"depth,omitempty,omitzero"`
 	// Pierce Whether or not iframes and shadow roots should be traversed when returning the subtree
 	// (default is false).
-	Pierce bool `json:"pierce,omitempty"`
+	Pierce bool `json:"pierce,omitempty,omitzero"`
 }
 
 // DOMDescribeNodeReturns holds the return values for describeNode.
@@ -145,14 +145,14 @@ func (p *DOMDescribeNodeParams) Do(ctx context.Context) (*DOMDescribeNodeReturns
 // to identify the node.
 type DOMScrollIntoViewIfNeededParams struct {
 	// NodeID Identifier of the node.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 	// BackendNodeID Identifier of the backend node.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// ObjectID JavaScript object id of the node wrapper.
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 	// Rect The rect to be scrolled into view, relative to the node's border box, in CSS pixels.
 	// When omitted, center of the node will be used, similar to Element.scrollIntoView.
-	Rect DOMRect `json:"rect,omitempty"`
+	Rect DOMRect `json:"rect,omitempty,omitzero"`
 }
 
 // DOMScrollIntoViewIfNeeded creates a new DOMScrollIntoViewIfNeededParams.
@@ -224,7 +224,7 @@ func (p *DOMDiscardSearchResultsParams) Do(ctx context.Context) error {
 // DOMEnableParams Enables DOM agent for the given page.
 type DOMEnableParams struct {
 	// IncludeWhitespace Whether to include whitespaces in the children array of returned Nodes.
-	IncludeWhitespace DOMEnableIncludeWhitespace `json:"includeWhitespace,omitempty"`
+	IncludeWhitespace DOMEnableIncludeWhitespace `json:"includeWhitespace,omitempty,omitzero"`
 }
 
 // DOMEnable creates a new DOMEnableParams.
@@ -246,11 +246,11 @@ func (p *DOMEnableParams) Do(ctx context.Context) error {
 // DOMFocusParams Focuses the given element.
 type DOMFocusParams struct {
 	// NodeID Identifier of the node.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 	// BackendNodeID Identifier of the backend node.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// ObjectID JavaScript object id of the node wrapper.
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 }
 
 // DOMFocus creates a new DOMFocusParams.
@@ -312,11 +312,11 @@ func (p *DOMGetAttributesParams) Do(ctx context.Context) (*DOMGetAttributesRetur
 // DOMGetBoxModelParams Returns boxes for the given node.
 type DOMGetBoxModelParams struct {
 	// NodeID Identifier of the node.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 	// BackendNodeID Identifier of the backend node.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// ObjectID JavaScript object id of the node wrapper.
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 }
 
 // DOMGetBoxModelReturns holds the return values for getBoxModel.
@@ -361,11 +361,11 @@ func (p *DOMGetBoxModelParams) Do(ctx context.Context) (*DOMGetBoxModelReturns, 
 // might return multiple quads for inline nodes.
 type DOMGetContentQuadsParams struct {
 	// NodeID Identifier of the node.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 	// BackendNodeID Identifier of the backend node.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// ObjectID JavaScript object id of the node wrapper.
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 }
 
 // DOMGetContentQuadsReturns holds the return values for getContentQuads.
@@ -411,10 +411,10 @@ func (p *DOMGetContentQuadsParams) Do(ctx context.Context) (*DOMGetContentQuadsR
 type DOMGetDocumentParams struct {
 	// Depth The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the
 	// entire subtree or provide an integer larger than 0.
-	Depth int64 `json:"depth,omitempty"`
+	Depth int64 `json:"depth,omitempty,omitzero"`
 	// Pierce Whether or not iframes and shadow roots should be traversed when returning the subtree
 	// (default is false).
-	Pierce bool `json:"pierce,omitempty"`
+	Pierce bool `json:"pierce,omitempty,omitzero"`
 }
 
 // DOMGetDocumentReturns holds the return values for getDocument.
@@ -455,10 +455,10 @@ func (p *DOMGetDocumentParams) Do(ctx context.Context) (*DOMGetDocumentReturns, 
 type DOMGetFlattenedDocumentParams struct {
 	// Depth The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the
 	// entire subtree or provide an integer larger than 0.
-	Depth int64 `json:"depth,omitempty"`
+	Depth int64 `json:"depth,omitempty,omitzero"`
 	// Pierce Whether or not iframes and shadow roots should be traversed when returning the subtree
 	// (default is false).
-	Pierce bool `json:"pierce,omitempty"`
+	Pierce bool `json:"pierce,omitempty,omitzero"`
 }
 
 // DOMGetFlattenedDocumentReturns holds the return values for getFlattenedDocument.
@@ -501,7 +501,7 @@ type DOMGetNodesForSubtreeByStyleParams struct {
 	ComputedStyles []DOMCSSComputedStyleProperty `json:"computedStyles"`
 	// Pierce Whether or not iframes and shadow roots in the same target should be traversed when returning the
 	// results (default is false).
-	Pierce bool `json:"pierce,omitempty"`
+	Pierce bool `json:"pierce,omitempty,omitzero"`
 }
 
 // DOMGetNodesForSubtreeByStyleReturns holds the return values for getNodesForSubtreeByStyle.
@@ -541,9 +541,9 @@ type DOMGetNodeForLocationParams struct {
 	// Y Y coordinate.
 	Y int64 `json:"y"`
 	// IncludeUserAgentShadowDOM False to skip to the nearest non-UA shadow root ancestor (default: false).
-	IncludeUserAgentShadowDOM bool `json:"includeUserAgentShadowDOM,omitempty"`
+	IncludeUserAgentShadowDOM bool `json:"includeUserAgentShadowDOM,omitempty,omitzero"`
 	// IgnorePointerEventsNone Whether to ignore pointer-events: none on elements and hit test them.
-	IgnorePointerEventsNone bool `json:"ignorePointerEventsNone,omitempty"`
+	IgnorePointerEventsNone bool `json:"ignorePointerEventsNone,omitempty,omitzero"`
 }
 
 // DOMGetNodeForLocationReturns holds the return values for getNodeForLocation.
@@ -553,7 +553,7 @@ type DOMGetNodeForLocationReturns struct {
 	// FrameID Frame this node belongs to.
 	FrameID FrameID `json:"frameId"`
 	// NodeID Id of the node at given coordinates, only when enabled and requested document.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 }
 
 // DOMGetNodeForLocation creates a new DOMGetNodeForLocationParams.
@@ -588,13 +588,13 @@ func (p *DOMGetNodeForLocationParams) Do(ctx context.Context) (*DOMGetNodeForLoc
 // DOMGetOuterHTMLParams Returns node's HTML markup.
 type DOMGetOuterHTMLParams struct {
 	// NodeID Identifier of the node.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 	// BackendNodeID Identifier of the backend node.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// ObjectID JavaScript object id of the node wrapper.
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 	// IncludeShadowDOM Include all shadow roots. Equals to false if not specified.
-	IncludeShadowDOM bool `json:"includeShadowDOM,omitempty"`
+	IncludeShadowDOM bool `json:"includeShadowDOM,omitempty,omitzero"`
 }
 
 // DOMGetOuterHTMLReturns holds the return values for getOuterHTML.
@@ -764,7 +764,7 @@ type DOMMoveToParams struct {
 	TargetNodeID NodeID `json:"targetNodeId"`
 	// InsertBeforeNodeID Drop node before this one (if absent, the moved node becomes the last child of
 	// `targetNodeId`).
-	InsertBeforeNodeID NodeID `json:"insertBeforeNodeId,omitempty"`
+	InsertBeforeNodeID NodeID `json:"insertBeforeNodeId,omitempty,omitzero"`
 }
 
 // DOMMoveToReturns holds the return values for moveTo.
@@ -802,7 +802,7 @@ type DOMPerformSearchParams struct {
 	// Query Plain text or query selector or XPath search query.
 	Query string `json:"query"`
 	// IncludeUserAgentShadowDOM True to search in user agent shadow DOM.
-	IncludeUserAgentShadowDOM bool `json:"includeUserAgentShadowDOM,omitempty"`
+	IncludeUserAgentShadowDOM bool `json:"includeUserAgentShadowDOM,omitempty,omitzero"`
 }
 
 // DOMPerformSearchReturns holds the return values for performSearch.
@@ -1070,10 +1070,10 @@ type DOMRequestChildNodesParams struct {
 	NodeID NodeID `json:"nodeId"`
 	// Depth The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the
 	// entire subtree or provide an integer larger than 0.
-	Depth int64 `json:"depth,omitempty"`
+	Depth int64 `json:"depth,omitempty,omitzero"`
 	// Pierce Whether or not iframes and shadow roots should be traversed when returning the sub-tree
 	// (default is false).
-	Pierce bool `json:"pierce,omitempty"`
+	Pierce bool `json:"pierce,omitempty,omitzero"`
 }
 
 // DOMRequestChildNodes creates a new DOMRequestChildNodesParams.
@@ -1133,13 +1133,13 @@ func (p *DOMRequestNodeParams) Do(ctx context.Context) (*DOMRequestNodeReturns, 
 // DOMResolveNodeParams Resolves the JavaScript node object for a given NodeId or BackendNodeId.
 type DOMResolveNodeParams struct {
 	// NodeID Id of the node to resolve.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 	// BackendNodeID Backend identifier of the node to resolve.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// ObjectGroup Symbolic group name that can be used to release multiple objects.
-	ObjectGroup string `json:"objectGroup,omitempty"`
+	ObjectGroup string `json:"objectGroup,omitempty,omitzero"`
 	// ExecutionContextID Execution context in which to resolve the node.
-	ExecutionContextID RuntimeExecutionContextID `json:"executionContextId,omitempty"`
+	ExecutionContextID RuntimeExecutionContextID `json:"executionContextId,omitempty,omitzero"`
 }
 
 // DOMResolveNodeReturns holds the return values for resolveNode.
@@ -1219,7 +1219,7 @@ type DOMSetAttributesAsTextParams struct {
 	Text string `json:"text"`
 	// Name Attribute name to replace with new attributes derived from text in case text parsed
 	// successfully.
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty,omitzero"`
 }
 
 // DOMSetAttributesAsText creates a new DOMSetAttributesAsTextParams.
@@ -1246,11 +1246,11 @@ type DOMSetFileInputFilesParams struct {
 	// Files Array of file paths to set.
 	Files []string `json:"files"`
 	// NodeID Identifier of the node.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 	// BackendNodeID Identifier of the backend node.
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// ObjectID JavaScript object id of the node wrapper.
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 }
 
 // DOMSetFileInputFiles creates a new DOMSetFileInputFilesParams.
@@ -1310,7 +1310,7 @@ type DOMGetNodeStackTracesParams struct {
 // DOMGetNodeStackTracesReturns holds the return values for getNodeStackTraces.
 type DOMGetNodeStackTracesReturns struct {
 	// Creation Creation stack trace, if available.
-	Creation RuntimeStackTrace `json:"creation,omitempty"`
+	Creation RuntimeStackTrace `json:"creation,omitempty,omitzero"`
 }
 
 // DOMGetNodeStackTraces creates a new DOMGetNodeStackTracesParams.
@@ -1495,7 +1495,7 @@ type DOMGetFrameOwnerReturns struct {
 	// BackendNodeID Resulting node.
 	BackendNodeID BackendNodeID `json:"backendNodeId"`
 	// NodeID Id of the node at given coordinates, only when enabled and requested document.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 }
 
 // DOMGetFrameOwner creates a new DOMGetFrameOwnerParams.
@@ -1521,17 +1521,17 @@ func (p *DOMGetFrameOwnerParams) Do(ctx context.Context) (*DOMGetFrameOwnerRetur
 // direct parent or the closest element with a matching container-name.
 type DOMGetContainerForNodeParams struct {
 	NodeID             NodeID          `json:"nodeId"`
-	ContainerName      string          `json:"containerName,omitempty"`
-	PhysicalAxes       DOMPhysicalAxes `json:"physicalAxes,omitempty"`
-	LogicalAxes        DOMLogicalAxes  `json:"logicalAxes,omitempty"`
-	QueriesScrollState bool            `json:"queriesScrollState,omitempty"`
-	QueriesAnchored    bool            `json:"queriesAnchored,omitempty"`
+	ContainerName      string          `json:"containerName,omitempty,omitzero"`
+	PhysicalAxes       DOMPhysicalAxes `json:"physicalAxes,omitempty,omitzero"`
+	LogicalAxes        DOMLogicalAxes  `json:"logicalAxes,omitempty,omitzero"`
+	QueriesScrollState bool            `json:"queriesScrollState,omitempty,omitzero"`
+	QueriesAnchored    bool            `json:"queriesAnchored,omitempty,omitzero"`
 }
 
 // DOMGetContainerForNodeReturns holds the return values for getContainerForNode.
 type DOMGetContainerForNodeReturns struct {
 	// NodeID The container node for the given node, or null if not found.
-	NodeID NodeID `json:"nodeId,omitempty"`
+	NodeID NodeID `json:"nodeId,omitempty,omitzero"`
 }
 
 // DOMGetContainerForNode creates a new DOMGetContainerForNodeParams.
@@ -1618,7 +1618,7 @@ type DOMGetAnchorElementParams struct {
 	// https://www.w3.org/TR/css-anchor-position-1/#anchor-specifier.
 	// If not provided, it will return the implicit anchor element for
 	// the given positioned element.
-	AnchorSpecifier string `json:"anchorSpecifier,omitempty"`
+	AnchorSpecifier string `json:"anchorSpecifier,omitempty,omitzero"`
 }
 
 // DOMGetAnchorElementReturns holds the return values for getAnchorElement.

@@ -328,24 +328,24 @@ func (t SmartCardEmulationConnectionState) String() string {
 
 // SmartCardEmulationReaderStateFlags Maps to the |SCARD_STATE_*| flags.
 type SmartCardEmulationReaderStateFlags struct {
-	Unaware     bool `json:"unaware,omitempty"`
-	Ignore      bool `json:"ignore,omitempty"`
-	Changed     bool `json:"changed,omitempty"`
-	Unknown     bool `json:"unknown,omitempty"`
-	Unavailable bool `json:"unavailable,omitempty"`
-	Empty       bool `json:"empty,omitempty"`
-	Present     bool `json:"present,omitempty"`
-	Exclusive   bool `json:"exclusive,omitempty"`
-	Inuse       bool `json:"inuse,omitempty"`
-	Mute        bool `json:"mute,omitempty"`
-	Unpowered   bool `json:"unpowered,omitempty"`
+	Unaware     bool `json:"unaware,omitempty,omitzero"`
+	Ignore      bool `json:"ignore,omitempty,omitzero"`
+	Changed     bool `json:"changed,omitempty,omitzero"`
+	Unknown     bool `json:"unknown,omitempty,omitzero"`
+	Unavailable bool `json:"unavailable,omitempty,omitzero"`
+	Empty       bool `json:"empty,omitempty,omitzero"`
+	Present     bool `json:"present,omitempty,omitzero"`
+	Exclusive   bool `json:"exclusive,omitempty,omitzero"`
+	Inuse       bool `json:"inuse,omitempty,omitzero"`
+	Mute        bool `json:"mute,omitempty,omitzero"`
+	Unpowered   bool `json:"unpowered,omitempty,omitzero"`
 }
 
 // SmartCardEmulationProtocolSet Maps to the |SCARD_PROTOCOL_*| flags.
 type SmartCardEmulationProtocolSet struct {
-	T0  bool `json:"t0,omitempty"`
-	T1  bool `json:"t1,omitempty"`
-	Raw bool `json:"raw,omitempty"`
+	T0  bool `json:"t0,omitempty,omitzero"`
+	T1  bool `json:"t1,omitempty,omitzero"`
+	Raw bool `json:"raw,omitempty,omitzero"`
 }
 
 // SmartCardEmulationProtocol Maps to the |SCARD_PROTOCOL_*| values.

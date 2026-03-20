@@ -6,7 +6,7 @@ package proto
 // web font.
 type CSSEventFontsUpdated struct {
 	// Font The web font that has loaded.
-	Font CSSFontFace `json:"font,omitempty"`
+	Font CSSFontFace `json:"font,omitempty,omitzero"`
 }
 
 // CSSEventMediaQueryResultChanged Fires whenever a MediaQuery result changes (for example, after a browser window has been

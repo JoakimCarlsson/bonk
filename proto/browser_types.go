@@ -78,15 +78,15 @@ func (t BrowserWindowState) String() string {
 // BrowserBounds Browser window bounds information
 type BrowserBounds struct {
 	// Left The offset from the left edge of the screen to the window in pixels.
-	Left int64 `json:"left,omitempty"`
+	Left int64 `json:"left,omitempty,omitzero"`
 	// Top The offset from the top edge of the screen to the window in pixels.
-	Top int64 `json:"top,omitempty"`
+	Top int64 `json:"top,omitempty,omitzero"`
 	// Width The window width in pixels.
-	Width int64 `json:"width,omitempty"`
+	Width int64 `json:"width,omitempty,omitzero"`
 	// Height The window height in pixels.
-	Height int64 `json:"height,omitempty"`
+	Height int64 `json:"height,omitempty,omitzero"`
 	// WindowState The window state. Default to normal.
-	WindowState BrowserWindowState `json:"windowState,omitempty"`
+	WindowState BrowserWindowState `json:"windowState,omitempty,omitzero"`
 }
 
 type BrowserPermissionType string
@@ -332,16 +332,16 @@ type BrowserPermissionDescriptor struct {
 	// See https://cs.chromium.org/chromium/src/third_party/blink/renderer/modules/permissions/permission_descriptor.idl for valid permission names.
 	Name string `json:"name"`
 	// Sysex For "midi" permission, may also specify sysex control.
-	Sysex bool `json:"sysex,omitempty"`
+	Sysex bool `json:"sysex,omitempty,omitzero"`
 	// UserVisibleOnly For "push" permission, may specify userVisibleOnly.
 	// Note that userVisibleOnly = true is the only currently supported type.
-	UserVisibleOnly bool `json:"userVisibleOnly,omitempty"`
+	UserVisibleOnly bool `json:"userVisibleOnly,omitempty,omitzero"`
 	// AllowWithoutSanitization For "clipboard" permission, may specify allowWithoutSanitization.
-	AllowWithoutSanitization bool `json:"allowWithoutSanitization,omitempty"`
+	AllowWithoutSanitization bool `json:"allowWithoutSanitization,omitempty,omitzero"`
 	// AllowWithoutGesture For "fullscreen" permission, must specify allowWithoutGesture:true.
-	AllowWithoutGesture bool `json:"allowWithoutGesture,omitempty"`
+	AllowWithoutGesture bool `json:"allowWithoutGesture,omitempty,omitzero"`
 	// PanTiltZoom For "camera" permission, may specify panTiltZoom.
-	PanTiltZoom bool `json:"panTiltZoom,omitempty"`
+	PanTiltZoom bool `json:"panTiltZoom,omitempty,omitzero"`
 }
 
 // BrowserBrowserCommandID Browser command ids used by executeBrowserCommand.

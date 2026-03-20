@@ -9,9 +9,9 @@ type RuntimeAwaitPromiseParams struct {
 	// PromiseObjectID Identifier of the promise.
 	PromiseObjectID RemoteObjectID `json:"promiseObjectId"`
 	// ReturnByValue Whether the result is expected to be a JSON object that should be sent by value.
-	ReturnByValue bool `json:"returnByValue,omitempty"`
+	ReturnByValue bool `json:"returnByValue,omitempty,omitzero"`
 	// GeneratePreview Whether preview should be generated for the result.
-	GeneratePreview bool `json:"generatePreview,omitempty"`
+	GeneratePreview bool `json:"generatePreview,omitempty,omitzero"`
 }
 
 // RuntimeAwaitPromiseReturns holds the return values for awaitPromise.
@@ -19,7 +19,7 @@ type RuntimeAwaitPromiseReturns struct {
 	// Result Promise result. Will contain rejected value if promise was rejected.
 	Result RuntimeRemoteObject `json:"result"`
 	// ExceptionDetails Exception details if stack strace is available.
-	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty"`
+	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty,omitzero"`
 }
 
 // RuntimeAwaitPromise creates a new RuntimeAwaitPromiseParams.
@@ -57,41 +57,41 @@ type RuntimeCallFunctionOnParams struct {
 	FunctionDeclaration string `json:"functionDeclaration"`
 	// ObjectID Identifier of the object to call function on. Either objectId or executionContextId should
 	// be specified.
-	ObjectID RemoteObjectID `json:"objectId,omitempty"`
+	ObjectID RemoteObjectID `json:"objectId,omitempty,omitzero"`
 	// Arguments Call arguments. All call arguments must belong to the same JavaScript world as the target
 	// object.
-	Arguments []RuntimeCallArgument `json:"arguments,omitempty"`
+	Arguments []RuntimeCallArgument `json:"arguments,omitempty,omitzero"`
 	// Silent In silent mode exceptions thrown during evaluation are not reported and do not pause
 	// execution. Overrides `setPauseOnException` state.
-	Silent bool `json:"silent,omitempty"`
+	Silent bool `json:"silent,omitempty,omitzero"`
 	// ReturnByValue Whether the result is expected to be a JSON object which should be sent by value.
 	// Can be overriden by `serializationOptions`.
-	ReturnByValue bool `json:"returnByValue,omitempty"`
+	ReturnByValue bool `json:"returnByValue,omitempty,omitzero"`
 	// GeneratePreview Whether preview should be generated for the result.
-	GeneratePreview bool `json:"generatePreview,omitempty"`
+	GeneratePreview bool `json:"generatePreview,omitempty,omitzero"`
 	// UserGesture Whether execution should be treated as initiated by user in the UI.
-	UserGesture bool `json:"userGesture,omitempty"`
+	UserGesture bool `json:"userGesture,omitempty,omitzero"`
 	// AwaitPromise Whether execution should `await` for resulting value and return once awaited promise is
 	// resolved.
-	AwaitPromise bool `json:"awaitPromise,omitempty"`
+	AwaitPromise bool `json:"awaitPromise,omitempty,omitzero"`
 	// ExecutionContextID Specifies execution context which global object will be used to call function on. Either
 	// executionContextId or objectId should be specified.
-	ExecutionContextID RuntimeExecutionContextID `json:"executionContextId,omitempty"`
+	ExecutionContextID RuntimeExecutionContextID `json:"executionContextId,omitempty,omitzero"`
 	// ObjectGroup Symbolic group name that can be used to release multiple objects. If objectGroup is not
 	// specified and objectId is, objectGroup will be inherited from object.
-	ObjectGroup string `json:"objectGroup,omitempty"`
+	ObjectGroup string `json:"objectGroup,omitempty,omitzero"`
 	// ThrowOnSideEffect Whether to throw an exception if side effect cannot be ruled out during evaluation.
-	ThrowOnSideEffect bool `json:"throwOnSideEffect,omitempty"`
+	ThrowOnSideEffect bool `json:"throwOnSideEffect,omitempty,omitzero"`
 	// UniqueContextID An alternative way to specify the execution context to call function on.
 	// Compared to contextId that may be reused across processes, this is guaranteed to be
 	// system-unique, so it can be used to prevent accidental function call
 	// in context different than intended (e.g. as a result of navigation across process
 	// boundaries).
 	// This is mutually exclusive with `executionContextId`.
-	UniqueContextID string `json:"uniqueContextId,omitempty"`
+	UniqueContextID string `json:"uniqueContextId,omitempty,omitzero"`
 	// SerializationOptions Specifies the result serialization. If provided, overrides
 	// `generatePreview` and `returnByValue`.
-	SerializationOptions RuntimeSerializationOptions `json:"serializationOptions,omitempty"`
+	SerializationOptions RuntimeSerializationOptions `json:"serializationOptions,omitempty,omitzero"`
 }
 
 // RuntimeCallFunctionOnReturns holds the return values for callFunctionOn.
@@ -99,7 +99,7 @@ type RuntimeCallFunctionOnReturns struct {
 	// Result Call result.
 	Result RuntimeRemoteObject `json:"result"`
 	// ExceptionDetails Exception details.
-	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty"`
+	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty,omitzero"`
 }
 
 // RuntimeCallFunctionOn creates a new RuntimeCallFunctionOnParams.
@@ -200,15 +200,15 @@ type RuntimeCompileScriptParams struct {
 	PersistScript bool `json:"persistScript"`
 	// ExecutionContextID Specifies in which execution context to perform script run. If the parameter is omitted the
 	// evaluation will be performed in the context of the inspected page.
-	ExecutionContextID RuntimeExecutionContextID `json:"executionContextId,omitempty"`
+	ExecutionContextID RuntimeExecutionContextID `json:"executionContextId,omitempty,omitzero"`
 }
 
 // RuntimeCompileScriptReturns holds the return values for compileScript.
 type RuntimeCompileScriptReturns struct {
 	// ScriptID Id of the script.
-	ScriptID RuntimeScriptID `json:"scriptId,omitempty"`
+	ScriptID RuntimeScriptID `json:"scriptId,omitempty,omitzero"`
 	// ExceptionDetails Exception details.
-	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty"`
+	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty,omitzero"`
 }
 
 // RuntimeCompileScript creates a new RuntimeCompileScriptParams.
@@ -281,53 +281,53 @@ type RuntimeEvaluateParams struct {
 	// Expression Expression to evaluate.
 	Expression string `json:"expression"`
 	// ObjectGroup Symbolic group name that can be used to release multiple objects.
-	ObjectGroup string `json:"objectGroup,omitempty"`
+	ObjectGroup string `json:"objectGroup,omitempty,omitzero"`
 	// IncludeCommandLineAPI Determines whether Command Line API should be available during the evaluation.
-	IncludeCommandLineAPI bool `json:"includeCommandLineAPI,omitempty"`
+	IncludeCommandLineAPI bool `json:"includeCommandLineAPI,omitempty,omitzero"`
 	// Silent In silent mode exceptions thrown during evaluation are not reported and do not pause
 	// execution. Overrides `setPauseOnException` state.
-	Silent bool `json:"silent,omitempty"`
+	Silent bool `json:"silent,omitempty,omitzero"`
 	// ContextID Specifies in which execution context to perform evaluation. If the parameter is omitted the
 	// evaluation will be performed in the context of the inspected page.
 	// This is mutually exclusive with `uniqueContextId`, which offers an
 	// alternative way to identify the execution context that is more reliable
 	// in a multi-process environment.
-	ContextID RuntimeExecutionContextID `json:"contextId,omitempty"`
+	ContextID RuntimeExecutionContextID `json:"contextId,omitempty,omitzero"`
 	// ReturnByValue Whether the result is expected to be a JSON object that should be sent by value.
-	ReturnByValue bool `json:"returnByValue,omitempty"`
+	ReturnByValue bool `json:"returnByValue,omitempty,omitzero"`
 	// GeneratePreview Whether preview should be generated for the result.
-	GeneratePreview bool `json:"generatePreview,omitempty"`
+	GeneratePreview bool `json:"generatePreview,omitempty,omitzero"`
 	// UserGesture Whether execution should be treated as initiated by user in the UI.
-	UserGesture bool `json:"userGesture,omitempty"`
+	UserGesture bool `json:"userGesture,omitempty,omitzero"`
 	// AwaitPromise Whether execution should `await` for resulting value and return once awaited promise is
 	// resolved.
-	AwaitPromise bool `json:"awaitPromise,omitempty"`
+	AwaitPromise bool `json:"awaitPromise,omitempty,omitzero"`
 	// ThrowOnSideEffect Whether to throw an exception if side effect cannot be ruled out during evaluation.
 	// This implies `disableBreaks` below.
-	ThrowOnSideEffect bool `json:"throwOnSideEffect,omitempty"`
+	ThrowOnSideEffect bool `json:"throwOnSideEffect,omitempty,omitzero"`
 	// Timeout Terminate execution after timing out (number of milliseconds).
-	Timeout RuntimeTimeDelta `json:"timeout,omitempty"`
+	Timeout RuntimeTimeDelta `json:"timeout,omitempty,omitzero"`
 	// DisableBreaks Disable breakpoints during execution.
-	DisableBreaks bool `json:"disableBreaks,omitempty"`
+	DisableBreaks bool `json:"disableBreaks,omitempty,omitzero"`
 	// ReplMode Setting this flag to true enables `let` re-declaration and top-level `await`.
 	// Note that `let` variables can only be re-declared if they originate from
 	// `replMode` themselves.
-	ReplMode bool `json:"replMode,omitempty"`
+	ReplMode bool `json:"replMode,omitempty,omitzero"`
 	// AllowUnsafeEvalBlockedByCSP The Content Security Policy (CSP) for the target might block 'unsafe-eval'
 	// which includes eval(), Function(), setTimeout() and setInterval()
 	// when called with non-callable arguments. This flag bypasses CSP for this
 	// evaluation and allows unsafe-eval. Defaults to true.
-	AllowUnsafeEvalBlockedByCSP bool `json:"allowUnsafeEvalBlockedByCSP,omitempty"`
+	AllowUnsafeEvalBlockedByCSP bool `json:"allowUnsafeEvalBlockedByCSP,omitempty,omitzero"`
 	// UniqueContextID An alternative way to specify the execution context to evaluate in.
 	// Compared to contextId that may be reused across processes, this is guaranteed to be
 	// system-unique, so it can be used to prevent accidental evaluation of the expression
 	// in context different than intended (e.g. as a result of navigation across process
 	// boundaries).
 	// This is mutually exclusive with `contextId`.
-	UniqueContextID string `json:"uniqueContextId,omitempty"`
+	UniqueContextID string `json:"uniqueContextId,omitempty,omitzero"`
 	// SerializationOptions Specifies the result serialization. If provided, overrides
 	// `generatePreview` and `returnByValue`.
-	SerializationOptions RuntimeSerializationOptions `json:"serializationOptions,omitempty"`
+	SerializationOptions RuntimeSerializationOptions `json:"serializationOptions,omitempty,omitzero"`
 }
 
 // RuntimeEvaluateReturns holds the return values for evaluate.
@@ -335,7 +335,7 @@ type RuntimeEvaluateReturns struct {
 	// Result Evaluation result.
 	Result RuntimeRemoteObject `json:"result"`
 	// ExceptionDetails Exception details.
-	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty"`
+	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty,omitzero"`
 }
 
 // RuntimeEvaluate creates a new RuntimeEvaluateParams.
@@ -504,14 +504,14 @@ type RuntimeGetPropertiesParams struct {
 	ObjectID RemoteObjectID `json:"objectId"`
 	// OwnProperties If true, returns properties belonging only to the element itself, not to its prototype
 	// chain.
-	OwnProperties bool `json:"ownProperties,omitempty"`
+	OwnProperties bool `json:"ownProperties,omitempty,omitzero"`
 	// AccessorPropertiesOnly If true, returns accessor properties (with getter/setter) only; internal properties are not
 	// returned either.
-	AccessorPropertiesOnly bool `json:"accessorPropertiesOnly,omitempty"`
+	AccessorPropertiesOnly bool `json:"accessorPropertiesOnly,omitempty,omitzero"`
 	// GeneratePreview Whether preview should be generated for the results.
-	GeneratePreview bool `json:"generatePreview,omitempty"`
+	GeneratePreview bool `json:"generatePreview,omitempty,omitzero"`
 	// NonIndexedPropertiesOnly If true, returns non-indexed properties only.
-	NonIndexedPropertiesOnly bool `json:"nonIndexedPropertiesOnly,omitempty"`
+	NonIndexedPropertiesOnly bool `json:"nonIndexedPropertiesOnly,omitempty,omitzero"`
 }
 
 // RuntimeGetPropertiesReturns holds the return values for getProperties.
@@ -519,11 +519,11 @@ type RuntimeGetPropertiesReturns struct {
 	// Result Object properties.
 	Result []RuntimePropertyDescriptor `json:"result"`
 	// InternalProperties Internal object properties (only of the element itself).
-	InternalProperties []RuntimeInternalPropertyDescriptor `json:"internalProperties,omitempty"`
+	InternalProperties []RuntimeInternalPropertyDescriptor `json:"internalProperties,omitempty,omitzero"`
 	// PrivateProperties Object private properties.
-	PrivateProperties []RuntimePrivatePropertyDescriptor `json:"privateProperties,omitempty"`
+	PrivateProperties []RuntimePrivatePropertyDescriptor `json:"privateProperties,omitempty,omitzero"`
 	// ExceptionDetails Exception details.
-	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty"`
+	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty,omitzero"`
 }
 
 // RuntimeGetProperties creates a new RuntimeGetPropertiesParams.
@@ -569,7 +569,7 @@ func (p *RuntimeGetPropertiesParams) Do(ctx context.Context) (*RuntimeGetPropert
 // RuntimeGlobalLexicalScopeNamesParams Returns all let, const and class variables from global scope.
 type RuntimeGlobalLexicalScopeNamesParams struct {
 	// ExecutionContextID Specifies in which execution context to lookup global scope variables.
-	ExecutionContextID RuntimeExecutionContextID `json:"executionContextId,omitempty"`
+	ExecutionContextID RuntimeExecutionContextID `json:"executionContextId,omitempty,omitzero"`
 }
 
 // RuntimeGlobalLexicalScopeNamesReturns holds the return values for globalLexicalScopeNames.
@@ -601,7 +601,7 @@ type RuntimeQueryObjectsParams struct {
 	// PrototypeObjectID Identifier of the prototype to return objects for.
 	PrototypeObjectID RemoteObjectID `json:"prototypeObjectId"`
 	// ObjectGroup Symbolic group name that can be used to release the results.
-	ObjectGroup string `json:"objectGroup,omitempty"`
+	ObjectGroup string `json:"objectGroup,omitempty,omitzero"`
 }
 
 // RuntimeQueryObjectsReturns holds the return values for queryObjects.
@@ -687,21 +687,21 @@ type RuntimeRunScriptParams struct {
 	ScriptID RuntimeScriptID `json:"scriptId"`
 	// ExecutionContextID Specifies in which execution context to perform script run. If the parameter is omitted the
 	// evaluation will be performed in the context of the inspected page.
-	ExecutionContextID RuntimeExecutionContextID `json:"executionContextId,omitempty"`
+	ExecutionContextID RuntimeExecutionContextID `json:"executionContextId,omitempty,omitzero"`
 	// ObjectGroup Symbolic group name that can be used to release multiple objects.
-	ObjectGroup string `json:"objectGroup,omitempty"`
+	ObjectGroup string `json:"objectGroup,omitempty,omitzero"`
 	// Silent In silent mode exceptions thrown during evaluation are not reported and do not pause
 	// execution. Overrides `setPauseOnException` state.
-	Silent bool `json:"silent,omitempty"`
+	Silent bool `json:"silent,omitempty,omitzero"`
 	// IncludeCommandLineAPI Determines whether Command Line API should be available during the evaluation.
-	IncludeCommandLineAPI bool `json:"includeCommandLineAPI,omitempty"`
+	IncludeCommandLineAPI bool `json:"includeCommandLineAPI,omitempty,omitzero"`
 	// ReturnByValue Whether the result is expected to be a JSON object which should be sent by value.
-	ReturnByValue bool `json:"returnByValue,omitempty"`
+	ReturnByValue bool `json:"returnByValue,omitempty,omitzero"`
 	// GeneratePreview Whether preview should be generated for the result.
-	GeneratePreview bool `json:"generatePreview,omitempty"`
+	GeneratePreview bool `json:"generatePreview,omitempty,omitzero"`
 	// AwaitPromise Whether execution should `await` for resulting value and return once awaited promise is
 	// resolved.
-	AwaitPromise bool `json:"awaitPromise,omitempty"`
+	AwaitPromise bool `json:"awaitPromise,omitempty,omitzero"`
 }
 
 // RuntimeRunScriptReturns holds the return values for runScript.
@@ -709,7 +709,7 @@ type RuntimeRunScriptReturns struct {
 	// Result Run result.
 	Result RuntimeRemoteObject `json:"result"`
 	// ExceptionDetails Exception details.
-	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty"`
+	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty,omitzero"`
 }
 
 // RuntimeRunScript creates a new RuntimeRunScriptParams.
@@ -850,13 +850,13 @@ type RuntimeAddBindingParams struct {
 	// Deprecated in favor of `executionContextName` due to an unclear use case
 	// and bugs in implementation (crbug.com/1169639). `executionContextId` will be
 	// removed in the future.
-	ExecutionContextID RuntimeExecutionContextID `json:"executionContextId,omitempty"`
+	ExecutionContextID RuntimeExecutionContextID `json:"executionContextId,omitempty,omitzero"`
 	// ExecutionContextName If specified, the binding is exposed to the executionContext with
 	// matching name, even for contexts created after the binding is added.
 	// See also `ExecutionContext.name` and `worldName` parameter to
 	// `Page.addScriptToEvaluateOnNewDocument`.
 	// This parameter is mutually exclusive with `executionContextId`.
-	ExecutionContextName string `json:"executionContextName,omitempty"`
+	ExecutionContextName string `json:"executionContextName,omitempty,omitzero"`
 }
 
 // RuntimeAddBinding creates a new RuntimeAddBindingParams.
@@ -913,7 +913,7 @@ type RuntimeGetExceptionDetailsParams struct {
 
 // RuntimeGetExceptionDetailsReturns holds the return values for getExceptionDetails.
 type RuntimeGetExceptionDetailsReturns struct {
-	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty"`
+	ExceptionDetails RuntimeExceptionDetails `json:"exceptionDetails,omitempty,omitzero"`
 }
 
 // RuntimeGetExceptionDetails creates a new RuntimeGetExceptionDetailsParams.

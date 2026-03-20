@@ -8,24 +8,24 @@ type TracingMemoryDumpConfig struct {
 
 type TracingTraceConfig struct {
 	// RecordMode Controls how the trace buffer stores data. The default is `recordUntilFull`.
-	RecordMode TracingTraceConfigRecordMode `json:"recordMode,omitempty"`
+	RecordMode TracingTraceConfigRecordMode `json:"recordMode,omitempty,omitzero"`
 	// TraceBufferSizeInKb Size of the trace buffer in kilobytes. If not specified or zero is passed, a default value
 	// of 200 MB would be used.
-	TraceBufferSizeInKb float64 `json:"traceBufferSizeInKb,omitempty"`
+	TraceBufferSizeInKb float64 `json:"traceBufferSizeInKb,omitempty,omitzero"`
 	// EnableSampling Turns on JavaScript stack sampling.
-	EnableSampling bool `json:"enableSampling,omitempty"`
+	EnableSampling bool `json:"enableSampling,omitempty,omitzero"`
 	// EnableSystrace Turns on system tracing.
-	EnableSystrace bool `json:"enableSystrace,omitempty"`
+	EnableSystrace bool `json:"enableSystrace,omitempty,omitzero"`
 	// EnableArgumentFilter Turns on argument filter.
-	EnableArgumentFilter bool `json:"enableArgumentFilter,omitempty"`
+	EnableArgumentFilter bool `json:"enableArgumentFilter,omitempty,omitzero"`
 	// IncludedCategories Included category filters.
-	IncludedCategories []string `json:"includedCategories,omitempty"`
+	IncludedCategories []string `json:"includedCategories,omitempty,omitzero"`
 	// ExcludedCategories Excluded category filters.
-	ExcludedCategories []string `json:"excludedCategories,omitempty"`
+	ExcludedCategories []string `json:"excludedCategories,omitempty,omitzero"`
 	// SyntheticDelays Configuration to synthesize the delays in tracing.
-	SyntheticDelays []string `json:"syntheticDelays,omitempty"`
+	SyntheticDelays []string `json:"syntheticDelays,omitempty,omitzero"`
 	// MemoryDumpConfig Configuration for memory dump triggers. Used only when "memory-infra" category is enabled.
-	MemoryDumpConfig TracingMemoryDumpConfig `json:"memoryDumpConfig,omitempty"`
+	MemoryDumpConfig TracingMemoryDumpConfig `json:"memoryDumpConfig,omitempty,omitzero"`
 }
 
 // TracingStreamFormat Data format of a trace. Can be either the legacy JSON format or the

@@ -13,60 +13,60 @@ type DOMSnapshotDOMNode struct {
 	// NodeValue `Node`'s nodeValue.
 	NodeValue string `json:"nodeValue"`
 	// TextValue Only set for textarea elements, contains the text value.
-	TextValue string `json:"textValue,omitempty"`
+	TextValue string `json:"textValue,omitempty,omitzero"`
 	// InputValue Only set for input elements, contains the input's associated text value.
-	InputValue string `json:"inputValue,omitempty"`
+	InputValue string `json:"inputValue,omitempty,omitzero"`
 	// InputChecked Only set for radio and checkbox input elements, indicates if the element has been checked
-	InputChecked bool `json:"inputChecked,omitempty"`
+	InputChecked bool `json:"inputChecked,omitempty,omitzero"`
 	// OptionSelected Only set for option elements, indicates if the element has been selected
-	OptionSelected bool `json:"optionSelected,omitempty"`
+	OptionSelected bool `json:"optionSelected,omitempty,omitzero"`
 	// BackendNodeID `Node`'s id, corresponds to DOM.Node.backendNodeId.
 	BackendNodeID BackendNodeID `json:"backendNodeId"`
 	// ChildNodeIndexes The indexes of the node's child nodes in the `domNodes` array returned by `getSnapshot`, if
 	// any.
-	ChildNodeIndexes []int64 `json:"childNodeIndexes,omitempty"`
+	ChildNodeIndexes []int64 `json:"childNodeIndexes,omitempty,omitzero"`
 	// Attributes Attributes of an `Element` node.
-	Attributes []DOMSnapshotNameValue `json:"attributes,omitempty"`
+	Attributes []DOMSnapshotNameValue `json:"attributes,omitempty,omitzero"`
 	// PseudoElementIndexes Indexes of pseudo elements associated with this node in the `domNodes` array returned by
 	// `getSnapshot`, if any.
-	PseudoElementIndexes []int64 `json:"pseudoElementIndexes,omitempty"`
+	PseudoElementIndexes []int64 `json:"pseudoElementIndexes,omitempty,omitzero"`
 	// LayoutNodeIndex The index of the node's related layout tree node in the `layoutTreeNodes` array returned by
 	// `getSnapshot`, if any.
-	LayoutNodeIndex int64 `json:"layoutNodeIndex,omitempty"`
+	LayoutNodeIndex int64 `json:"layoutNodeIndex,omitempty,omitzero"`
 	// DocumentURL Document URL that `Document` or `FrameOwner` node points to.
-	DocumentURL string `json:"documentURL,omitempty"`
+	DocumentURL string `json:"documentURL,omitempty,omitzero"`
 	// BaseURL Base URL that `Document` or `FrameOwner` node uses for URL completion.
-	BaseURL string `json:"baseURL,omitempty"`
+	BaseURL string `json:"baseURL,omitempty,omitzero"`
 	// ContentLanguage Only set for documents, contains the document's content language.
-	ContentLanguage string `json:"contentLanguage,omitempty"`
+	ContentLanguage string `json:"contentLanguage,omitempty,omitzero"`
 	// DocumentEncoding Only set for documents, contains the document's character set encoding.
-	DocumentEncoding string `json:"documentEncoding,omitempty"`
+	DocumentEncoding string `json:"documentEncoding,omitempty,omitzero"`
 	// PublicID `DocumentType` node's publicId.
-	PublicID string `json:"publicId,omitempty"`
+	PublicID string `json:"publicId,omitempty,omitzero"`
 	// SystemID `DocumentType` node's systemId.
-	SystemID string `json:"systemId,omitempty"`
+	SystemID string `json:"systemId,omitempty,omitzero"`
 	// FrameID Frame ID for frame owner elements and also for the document node.
-	FrameID FrameID `json:"frameId,omitempty"`
+	FrameID FrameID `json:"frameId,omitempty,omitzero"`
 	// ContentDocumentIndex The index of a frame owner element's content document in the `domNodes` array returned by
 	// `getSnapshot`, if any.
-	ContentDocumentIndex int64 `json:"contentDocumentIndex,omitempty"`
+	ContentDocumentIndex int64 `json:"contentDocumentIndex,omitempty,omitzero"`
 	// PseudoType Type of a pseudo element node.
-	PseudoType DOMPseudoType `json:"pseudoType,omitempty"`
+	PseudoType DOMPseudoType `json:"pseudoType,omitempty,omitzero"`
 	// ShadowRootType Shadow root type.
-	ShadowRootType DOMShadowRootType `json:"shadowRootType,omitempty"`
+	ShadowRootType DOMShadowRootType `json:"shadowRootType,omitempty,omitzero"`
 	// IsClickable Whether this DOM node responds to mouse clicks. This includes nodes that have had click
 	// event listeners attached via JavaScript as well as anchor tags that naturally navigate when
 	// clicked.
-	IsClickable bool `json:"isClickable,omitempty"`
+	IsClickable bool `json:"isClickable,omitempty,omitzero"`
 	// EventListeners Details of the node's event listeners, if any.
-	EventListeners []DOMDebuggerEventListener `json:"eventListeners,omitempty"`
+	EventListeners []DOMDebuggerEventListener `json:"eventListeners,omitempty,omitzero"`
 	// CurrentSourceURL The selected url for nodes with a srcset attribute.
-	CurrentSourceURL string `json:"currentSourceURL,omitempty"`
+	CurrentSourceURL string `json:"currentSourceURL,omitempty,omitzero"`
 	// OriginURL The url of the script (if any) that generates this node.
-	OriginURL string `json:"originURL,omitempty"`
+	OriginURL string `json:"originURL,omitempty,omitzero"`
 	// ScrollOffsetX Scroll offsets, set when this node is a Document.
-	ScrollOffsetX float64 `json:"scrollOffsetX,omitempty"`
-	ScrollOffsetY float64 `json:"scrollOffsetY,omitempty"`
+	ScrollOffsetX float64 `json:"scrollOffsetX,omitempty,omitzero"`
+	ScrollOffsetY float64 `json:"scrollOffsetY,omitempty,omitzero"`
 }
 
 // DOMSnapshotInlineTextBox Details of post layout rendered text positions. The exact layout should not be regarded as
@@ -89,17 +89,17 @@ type DOMSnapshotLayoutTreeNode struct {
 	// BoundingBox The bounding box in document coordinates. Note that scroll offset of the document is ignored.
 	BoundingBox DOMRect `json:"boundingBox"`
 	// LayoutText Contents of the LayoutText, if any.
-	LayoutText string `json:"layoutText,omitempty"`
+	LayoutText string `json:"layoutText,omitempty,omitzero"`
 	// InlineTextNodes The post-layout inline text nodes, if any.
-	InlineTextNodes []DOMSnapshotInlineTextBox `json:"inlineTextNodes,omitempty"`
+	InlineTextNodes []DOMSnapshotInlineTextBox `json:"inlineTextNodes,omitempty,omitzero"`
 	// StyleIndex Index into the `computedStyles` array returned by `getSnapshot`.
-	StyleIndex int64 `json:"styleIndex,omitempty"`
+	StyleIndex int64 `json:"styleIndex,omitempty,omitzero"`
 	// PaintOrder Global paint order index, which is determined by the stacking order of the nodes. Nodes
 	// that are painted together will have the same index. Only provided if includePaintOrder in
 	// getSnapshot was true.
-	PaintOrder int64 `json:"paintOrder,omitempty"`
+	PaintOrder int64 `json:"paintOrder,omitempty,omitzero"`
 	// IsStackingContext Set to true to indicate the element begins a new stacking context.
-	IsStackingContext bool `json:"isStackingContext,omitempty"`
+	IsStackingContext bool `json:"isStackingContext,omitempty,omitzero"`
 }
 
 // DOMSnapshotComputedStyle A subset of the full ComputedStyle as defined by the request whitelist.
@@ -182,54 +182,54 @@ type DOMSnapshotDocumentSnapshot struct {
 	// TextBoxes The post-layout inline text nodes.
 	TextBoxes DOMSnapshotTextBoxSnapshot `json:"textBoxes"`
 	// ScrollOffsetX Horizontal scroll offset.
-	ScrollOffsetX float64 `json:"scrollOffsetX,omitempty"`
+	ScrollOffsetX float64 `json:"scrollOffsetX,omitempty,omitzero"`
 	// ScrollOffsetY Vertical scroll offset.
-	ScrollOffsetY float64 `json:"scrollOffsetY,omitempty"`
+	ScrollOffsetY float64 `json:"scrollOffsetY,omitempty,omitzero"`
 	// ContentWidth Document content width.
-	ContentWidth float64 `json:"contentWidth,omitempty"`
+	ContentWidth float64 `json:"contentWidth,omitempty,omitzero"`
 	// ContentHeight Document content height.
-	ContentHeight float64 `json:"contentHeight,omitempty"`
+	ContentHeight float64 `json:"contentHeight,omitempty,omitzero"`
 }
 
 // DOMSnapshotNodeTreeSnapshot Table containing nodes.
 type DOMSnapshotNodeTreeSnapshot struct {
 	// ParentIndex Parent node index.
-	ParentIndex []int64 `json:"parentIndex,omitempty"`
+	ParentIndex []int64 `json:"parentIndex,omitempty,omitzero"`
 	// NodeType `Node`'s nodeType.
-	NodeType []int64 `json:"nodeType,omitempty"`
+	NodeType []int64 `json:"nodeType,omitempty,omitzero"`
 	// ShadowRootType Type of the shadow root the `Node` is in. String values are equal to the `ShadowRootType` enum.
-	ShadowRootType DOMSnapshotRareStringData `json:"shadowRootType,omitempty"`
+	ShadowRootType DOMSnapshotRareStringData `json:"shadowRootType,omitempty,omitzero"`
 	// NodeName `Node`'s nodeName.
-	NodeName []DOMSnapshotStringIndex `json:"nodeName,omitempty"`
+	NodeName []DOMSnapshotStringIndex `json:"nodeName,omitempty,omitzero"`
 	// NodeValue `Node`'s nodeValue.
-	NodeValue []DOMSnapshotStringIndex `json:"nodeValue,omitempty"`
+	NodeValue []DOMSnapshotStringIndex `json:"nodeValue,omitempty,omitzero"`
 	// BackendNodeID `Node`'s id, corresponds to DOM.Node.backendNodeId.
-	BackendNodeID []BackendNodeID `json:"backendNodeId,omitempty"`
+	BackendNodeID []BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
 	// Attributes Attributes of an `Element` node. Flatten name, value pairs.
-	Attributes []DOMSnapshotArrayOfStrings `json:"attributes,omitempty"`
+	Attributes []DOMSnapshotArrayOfStrings `json:"attributes,omitempty,omitzero"`
 	// TextValue Only set for textarea elements, contains the text value.
-	TextValue DOMSnapshotRareStringData `json:"textValue,omitempty"`
+	TextValue DOMSnapshotRareStringData `json:"textValue,omitempty,omitzero"`
 	// InputValue Only set for input elements, contains the input's associated text value.
-	InputValue DOMSnapshotRareStringData `json:"inputValue,omitempty"`
+	InputValue DOMSnapshotRareStringData `json:"inputValue,omitempty,omitzero"`
 	// InputChecked Only set for radio and checkbox input elements, indicates if the element has been checked
-	InputChecked DOMSnapshotRareBooleanData `json:"inputChecked,omitempty"`
+	InputChecked DOMSnapshotRareBooleanData `json:"inputChecked,omitempty,omitzero"`
 	// OptionSelected Only set for option elements, indicates if the element has been selected
-	OptionSelected DOMSnapshotRareBooleanData `json:"optionSelected,omitempty"`
+	OptionSelected DOMSnapshotRareBooleanData `json:"optionSelected,omitempty,omitzero"`
 	// ContentDocumentIndex The index of the document in the list of the snapshot documents.
-	ContentDocumentIndex DOMSnapshotRareIntegerData `json:"contentDocumentIndex,omitempty"`
+	ContentDocumentIndex DOMSnapshotRareIntegerData `json:"contentDocumentIndex,omitempty,omitzero"`
 	// PseudoType Type of a pseudo element node.
-	PseudoType DOMSnapshotRareStringData `json:"pseudoType,omitempty"`
+	PseudoType DOMSnapshotRareStringData `json:"pseudoType,omitempty,omitzero"`
 	// PseudoIdentifier Pseudo element identifier for this node. Only present if there is a
 	// valid pseudoType.
-	PseudoIdentifier DOMSnapshotRareStringData `json:"pseudoIdentifier,omitempty"`
+	PseudoIdentifier DOMSnapshotRareStringData `json:"pseudoIdentifier,omitempty,omitzero"`
 	// IsClickable Whether this DOM node responds to mouse clicks. This includes nodes that have had click
 	// event listeners attached via JavaScript as well as anchor tags that naturally navigate when
 	// clicked.
-	IsClickable DOMSnapshotRareBooleanData `json:"isClickable,omitempty"`
+	IsClickable DOMSnapshotRareBooleanData `json:"isClickable,omitempty,omitzero"`
 	// CurrentSourceURL The selected url for nodes with a srcset attribute.
-	CurrentSourceURL DOMSnapshotRareStringData `json:"currentSourceURL,omitempty"`
+	CurrentSourceURL DOMSnapshotRareStringData `json:"currentSourceURL,omitempty,omitzero"`
 	// OriginURL The url of the script (if any) that generates this node.
-	OriginURL DOMSnapshotRareStringData `json:"originURL,omitempty"`
+	OriginURL DOMSnapshotRareStringData `json:"originURL,omitempty,omitzero"`
 }
 
 // DOMSnapshotLayoutTreeSnapshot Table of details of an element in the DOM tree with a LayoutObject.
@@ -247,17 +247,17 @@ type DOMSnapshotLayoutTreeSnapshot struct {
 	// PaintOrders Global paint order index, which is determined by the stacking order of the nodes. Nodes
 	// that are painted together will have the same index. Only provided if includePaintOrder in
 	// captureSnapshot was true.
-	PaintOrders []int64 `json:"paintOrders,omitempty"`
+	PaintOrders []int64 `json:"paintOrders,omitempty,omitzero"`
 	// OffsetRects The offset rect of nodes. Only available when includeDOMRects is set to true
-	OffsetRects []DOMSnapshotRectangle `json:"offsetRects,omitempty"`
+	OffsetRects []DOMSnapshotRectangle `json:"offsetRects,omitempty,omitzero"`
 	// ScrollRects The scroll rect of nodes. Only available when includeDOMRects is set to true
-	ScrollRects []DOMSnapshotRectangle `json:"scrollRects,omitempty"`
+	ScrollRects []DOMSnapshotRectangle `json:"scrollRects,omitempty,omitzero"`
 	// ClientRects The client rect of nodes. Only available when includeDOMRects is set to true
-	ClientRects []DOMSnapshotRectangle `json:"clientRects,omitempty"`
+	ClientRects []DOMSnapshotRectangle `json:"clientRects,omitempty,omitzero"`
 	// BlendedBackgroundColors The list of background colors that are blended with colors of overlapping elements.
-	BlendedBackgroundColors []DOMSnapshotStringIndex `json:"blendedBackgroundColors,omitempty"`
+	BlendedBackgroundColors []DOMSnapshotStringIndex `json:"blendedBackgroundColors,omitempty,omitzero"`
 	// TextColorOpacities The list of computed text opacities.
-	TextColorOpacities []float64 `json:"textColorOpacities,omitempty"`
+	TextColorOpacities []float64 `json:"textColorOpacities,omitempty,omitzero"`
 }
 
 // DOMSnapshotTextBoxSnapshot Table of details of the post layout rendered text positions. The exact layout should not be regarded as

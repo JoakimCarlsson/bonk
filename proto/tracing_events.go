@@ -7,12 +7,12 @@ import "encoding/json"
 type TracingEventBufferUsage struct {
 	// PercentFull A number in range [0..1] that indicates the used size of event buffer as a fraction of its
 	// total size.
-	PercentFull float64 `json:"percentFull,omitempty"`
+	PercentFull float64 `json:"percentFull,omitempty,omitzero"`
 	// EventCount An approximate number of events in the trace log.
-	EventCount float64 `json:"eventCount,omitempty"`
+	EventCount float64 `json:"eventCount,omitempty,omitzero"`
 	// Value A number in range [0..1] that indicates the used size of event buffer as a fraction of its
 	// total size.
-	Value float64 `json:"value,omitempty"`
+	Value float64 `json:"value,omitempty,omitzero"`
 }
 
 // TracingEventDataCollected Contains a bucket of collected trace events. When tracing is stopped collected events will be
@@ -28,11 +28,11 @@ type TracingEventTracingComplete struct {
 	// buffer wrapped around.
 	DataLossOccurred bool `json:"dataLossOccurred"`
 	// Stream A handle of the stream that holds resulting trace data.
-	Stream IOStreamHandle `json:"stream,omitempty"`
+	Stream IOStreamHandle `json:"stream,omitempty,omitzero"`
 	// TraceFormat Trace data format of returned stream.
-	TraceFormat TracingStreamFormat `json:"traceFormat,omitempty"`
+	TraceFormat TracingStreamFormat `json:"traceFormat,omitempty,omitzero"`
 	// StreamCompression Compression format of returned stream.
-	StreamCompression TracingStreamCompression `json:"streamCompression,omitempty"`
+	StreamCompression TracingStreamCompression `json:"streamCompression,omitempty,omitzero"`
 }
 
 // Tracing event names.

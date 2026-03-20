@@ -103,7 +103,7 @@ type DOMEventAdRelatedStateUpdated struct {
 	// NodeID The id of the node.
 	NodeID NodeID `json:"nodeId"`
 	// AdProvenance The provenance of the ad related node, if it is ad related.
-	AdProvenance NetworkAdProvenance `json:"adProvenance,omitempty"`
+	AdProvenance NetworkAdProvenance `json:"adProvenance,omitempty,omitzero"`
 }
 
 // DOMEventAffectedByStartingStylesFlagUpdated Fired when a node's starting styles changes.

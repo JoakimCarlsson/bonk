@@ -33,17 +33,17 @@ type PreloadRuleSet struct {
 	// See also:
 	// - https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rules-script
 	// - https://wicg.github.io/nav-speculation/speculation-rules.html#speculation-rules-header
-	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty"`
-	URL           string        `json:"url,omitempty"`
-	RequestID     RequestID     `json:"requestId,omitempty"`
+	BackendNodeID BackendNodeID `json:"backendNodeId,omitempty,omitzero"`
+	URL           string        `json:"url,omitempty,omitzero"`
+	RequestID     RequestID     `json:"requestId,omitempty,omitzero"`
 	// ErrorType Error information
 	// `errorMessage` is null iff `errorType` is null.
-	ErrorType PreloadRuleSetErrorType `json:"errorType,omitempty"`
+	ErrorType PreloadRuleSetErrorType `json:"errorType,omitempty,omitzero"`
 	// ErrorMessage TODO(https://crbug.com/1425354): Replace this property with structured error.
-	ErrorMessage string `json:"errorMessage,omitempty"`
+	ErrorMessage string `json:"errorMessage,omitempty,omitzero"`
 	// Tag For more details, see:
 	// https://github.com/WICG/nav-speculation/blob/main/speculation-rules-tags.md
-	Tag string `json:"tag,omitempty"`
+	Tag string `json:"tag,omitempty,omitzero"`
 }
 
 type PreloadRuleSetErrorType string
@@ -195,7 +195,7 @@ type PreloadPreloadingAttemptKey struct {
 	LoaderID   LoaderID                     `json:"loaderId"`
 	Action     PreloadSpeculationAction     `json:"action"`
 	URL        string                       `json:"url"`
-	TargetHint PreloadSpeculationTargetHint `json:"targetHint,omitempty"`
+	TargetHint PreloadSpeculationTargetHint `json:"targetHint,omitempty,omitzero"`
 }
 
 // PreloadPreloadingAttemptSource Lists sources for a preloading attempt, specifically the ids of rule sets
@@ -789,6 +789,6 @@ func (t PreloadPrefetchStatus) String() string {
 // PreloadPrerenderMismatchedHeaders Information of headers to be displayed when the header mismatch occurred.
 type PreloadPrerenderMismatchedHeaders struct {
 	HeaderName      string `json:"headerName"`
-	InitialValue    string `json:"initialValue,omitempty"`
-	ActivationValue string `json:"activationValue,omitempty"`
+	InitialValue    string `json:"initialValue,omitempty,omitzero"`
+	ActivationValue string `json:"activationValue,omitempty,omitzero"`
 }

@@ -12,7 +12,7 @@ type EmulationEventScreenOrientationLockChanged struct {
 	// Locked Whether the screen orientation is currently locked.
 	Locked bool `json:"locked"`
 	// Orientation The orientation lock type requested by the page. Only set when locked is true.
-	Orientation EmulationScreenOrientation `json:"orientation,omitempty"`
+	Orientation EmulationScreenOrientation `json:"orientation,omitempty,omitzero"`
 }
 
 // Emulation event names.

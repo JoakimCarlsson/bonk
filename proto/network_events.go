@@ -13,7 +13,7 @@ type NetworkEventDataReceived struct {
 	// EncodedDataLength Actual bytes received (might be less than dataLength for compressed encodings).
 	EncodedDataLength int64 `json:"encodedDataLength"`
 	// Data Data that was received.
-	Data []byte `json:"data,omitempty"`
+	Data []byte `json:"data,omitempty,omitzero"`
 }
 
 // NetworkEventEventSourceMessageReceived Fired when EventSource message is received.
@@ -41,11 +41,11 @@ type NetworkEventLoadingFailed struct {
 	// ErrorText Error message. List of network errors: https://cs.chromium.org/chromium/src/net/base/net_error_list.h
 	ErrorText string `json:"errorText"`
 	// Canceled True if loading was canceled.
-	Canceled bool `json:"canceled,omitempty"`
+	Canceled bool `json:"canceled,omitempty,omitzero"`
 	// BlockedReason The reason why loading was blocked, if any.
-	BlockedReason NetworkBlockedReason `json:"blockedReason,omitempty"`
+	BlockedReason NetworkBlockedReason `json:"blockedReason,omitempty,omitzero"`
 	// CorsErrorStatus The reason why loading was blocked by CORS, if any.
-	CorsErrorStatus NetworkCorsErrorStatus `json:"corsErrorStatus,omitempty"`
+	CorsErrorStatus NetworkCorsErrorStatus `json:"corsErrorStatus,omitempty,omitzero"`
 }
 
 // NetworkEventLoadingFinished Fired when HTTP request has finished loading.
@@ -75,24 +75,24 @@ type NetworkEventRequestIntercepted struct {
 	IsNavigationRequest bool `json:"isNavigationRequest"`
 	// IsDownload Set if the request is a navigation that will result in a download.
 	// Only present after response is received from the server (i.e. HeadersReceived stage).
-	IsDownload bool `json:"isDownload,omitempty"`
+	IsDownload bool `json:"isDownload,omitempty,omitzero"`
 	// RedirectURL Redirect location, only sent if a redirect was intercepted.
-	RedirectURL string `json:"redirectUrl,omitempty"`
+	RedirectURL string `json:"redirectUrl,omitempty,omitzero"`
 	// AuthChallenge Details of the Authorization Challenge encountered. If this is set then
 	// continueInterceptedRequest must contain an authChallengeResponse.
-	AuthChallenge NetworkAuthChallenge `json:"authChallenge,omitempty"`
+	AuthChallenge NetworkAuthChallenge `json:"authChallenge,omitempty,omitzero"`
 	// ResponseErrorReason Response error if intercepted at response stage or if redirect occurred while intercepting
 	// request.
-	ResponseErrorReason NetworkErrorReason `json:"responseErrorReason,omitempty"`
+	ResponseErrorReason NetworkErrorReason `json:"responseErrorReason,omitempty,omitzero"`
 	// ResponseStatusCode Response code if intercepted at response stage or if redirect occurred while intercepting
 	// request or auth retry occurred.
-	ResponseStatusCode int64 `json:"responseStatusCode,omitempty"`
+	ResponseStatusCode int64 `json:"responseStatusCode,omitempty,omitzero"`
 	// ResponseHeaders Response headers if intercepted at the response stage or if redirect occurred while
 	// intercepting request or auth retry occurred.
-	ResponseHeaders NetworkHeaders `json:"responseHeaders,omitempty"`
+	ResponseHeaders NetworkHeaders `json:"responseHeaders,omitempty,omitzero"`
 	// RequestID If the intercepted request had a corresponding requestWillBeSent event fired for it, then
 	// this requestId will be the same as the requestId present in the requestWillBeSent event.
-	RequestID RequestID `json:"requestId,omitempty"`
+	RequestID RequestID `json:"requestId,omitempty,omitzero"`
 }
 
 // NetworkEventRequestServedFromCache Fired if request ended up loading from cache.
@@ -122,15 +122,15 @@ type NetworkEventRequestWillBeSent struct {
 	// for the request which was just redirected.
 	RedirectHasExtraInfo bool `json:"redirectHasExtraInfo"`
 	// RedirectResponse Redirect response data.
-	RedirectResponse NetworkResponse `json:"redirectResponse,omitempty"`
+	RedirectResponse NetworkResponse `json:"redirectResponse,omitempty,omitzero"`
 	// Type Type of this resource.
-	Type NetworkResourceType `json:"type,omitempty"`
+	Type NetworkResourceType `json:"type,omitempty,omitzero"`
 	// FrameID Frame identifier.
-	FrameID FrameID `json:"frameId,omitempty"`
+	FrameID FrameID `json:"frameId,omitempty,omitzero"`
 	// HasUserGesture Whether the request is initiated by a user gesture. Defaults to false.
-	HasUserGesture bool `json:"hasUserGesture,omitempty"`
+	HasUserGesture bool `json:"hasUserGesture,omitempty,omitzero"`
 	// RenderBlockingBehavior The render-blocking behavior of the request.
-	RenderBlockingBehavior NetworkRenderBlockingBehavior `json:"renderBlockingBehavior,omitempty"`
+	RenderBlockingBehavior NetworkRenderBlockingBehavior `json:"renderBlockingBehavior,omitempty,omitzero"`
 }
 
 // NetworkEventResourceChangedPriority Fired when resource loading priority is changed
@@ -167,7 +167,7 @@ type NetworkEventResponseReceived struct {
 	// or were emitted for this request.
 	HasExtraInfo bool `json:"hasExtraInfo"`
 	// FrameID Frame identifier.
-	FrameID FrameID `json:"frameId,omitempty"`
+	FrameID FrameID `json:"frameId,omitempty,omitzero"`
 }
 
 // NetworkEventWebSocketClosed Fired when WebSocket is closed.
@@ -185,7 +185,7 @@ type NetworkEventWebSocketCreated struct {
 	// URL WebSocket request URL.
 	URL string `json:"url"`
 	// Initiator Request initiator.
-	Initiator NetworkInitiator `json:"initiator,omitempty"`
+	Initiator NetworkInitiator `json:"initiator,omitempty,omitzero"`
 }
 
 // NetworkEventWebSocketFrameError Fired when WebSocket message error occurs.
@@ -249,7 +249,7 @@ type NetworkEventWebTransportCreated struct {
 	// Timestamp Timestamp.
 	Timestamp MonotonicTime `json:"timestamp"`
 	// Initiator Request initiator.
-	Initiator NetworkInitiator `json:"initiator,omitempty"`
+	Initiator NetworkInitiator `json:"initiator,omitempty,omitzero"`
 }
 
 // NetworkEventWebTransportConnectionEstablished Fired when WebTransport handshake is finished.
@@ -276,7 +276,7 @@ type NetworkEventDirectTCPSocketCreated struct {
 	RemotePort int64                         `json:"remotePort"`
 	Options    NetworkDirectTCPSocketOptions `json:"options"`
 	Timestamp  MonotonicTime                 `json:"timestamp"`
-	Initiator  NetworkInitiator              `json:"initiator,omitempty"`
+	Initiator  NetworkInitiator              `json:"initiator,omitempty,omitzero"`
 }
 
 // NetworkEventDirectTCPSocketOpened Fired when direct_socket.TCPSocket connection is opened.
@@ -286,9 +286,9 @@ type NetworkEventDirectTCPSocketOpened struct {
 	// RemotePort Expected to be unsigned integer.
 	RemotePort int64         `json:"remotePort"`
 	Timestamp  MonotonicTime `json:"timestamp"`
-	LocalAddr  string        `json:"localAddr,omitempty"`
+	LocalAddr  string        `json:"localAddr,omitempty,omitzero"`
 	// LocalPort Expected to be unsigned integer.
-	LocalPort int64 `json:"localPort,omitempty"`
+	LocalPort int64 `json:"localPort,omitempty,omitzero"`
 }
 
 // NetworkEventDirectTCPSocketAborted Fired when direct_socket.TCPSocket is aborted.
@@ -333,7 +333,7 @@ type NetworkEventDirectUDPSocketCreated struct {
 	Identifier RequestID                     `json:"identifier"`
 	Options    NetworkDirectUDPSocketOptions `json:"options"`
 	Timestamp  MonotonicTime                 `json:"timestamp"`
-	Initiator  NetworkInitiator              `json:"initiator,omitempty"`
+	Initiator  NetworkInitiator              `json:"initiator,omitempty,omitzero"`
 }
 
 // NetworkEventDirectUDPSocketOpened Fired when direct_socket.UDPSocket connection is opened.
@@ -343,9 +343,9 @@ type NetworkEventDirectUDPSocketOpened struct {
 	// LocalPort Expected to be unsigned integer.
 	LocalPort  int64         `json:"localPort"`
 	Timestamp  MonotonicTime `json:"timestamp"`
-	RemoteAddr string        `json:"remoteAddr,omitempty"`
+	RemoteAddr string        `json:"remoteAddr,omitempty,omitzero"`
 	// RemotePort Expected to be unsigned integer.
-	RemotePort int64 `json:"remotePort,omitempty"`
+	RemotePort int64 `json:"remotePort,omitempty,omitzero"`
 }
 
 // NetworkEventDirectUDPSocketAborted Fired when direct_socket.UDPSocket is aborted.
@@ -390,14 +390,14 @@ type NetworkEventRequestWillBeSentExtraInfo struct {
 	// ConnectTiming Connection timing information for the request.
 	ConnectTiming NetworkConnectTiming `json:"connectTiming"`
 	// DeviceBoundSessionUsages How the request site's device bound sessions were used during this request.
-	DeviceBoundSessionUsages []NetworkDeviceBoundSessionWithUsage `json:"deviceBoundSessionUsages,omitempty"`
+	DeviceBoundSessionUsages []NetworkDeviceBoundSessionWithUsage `json:"deviceBoundSessionUsages,omitempty,omitzero"`
 	// ClientSecurityState The client security state set for the request.
-	ClientSecurityState NetworkClientSecurityState `json:"clientSecurityState,omitempty"`
+	ClientSecurityState NetworkClientSecurityState `json:"clientSecurityState,omitempty,omitzero"`
 	// SiteHasCookieInOtherPartition Whether the site has partitioned cookies stored in a partition different than the current one.
-	SiteHasCookieInOtherPartition bool `json:"siteHasCookieInOtherPartition,omitempty"`
+	SiteHasCookieInOtherPartition bool `json:"siteHasCookieInOtherPartition,omitempty,omitzero"`
 	// AppliedNetworkConditionsID The network conditions id if this request was affected by network conditions configured via
 	// emulateNetworkConditionsByRule.
-	AppliedNetworkConditionsID string `json:"appliedNetworkConditionsId,omitempty"`
+	AppliedNetworkConditionsID string `json:"appliedNetworkConditionsId,omitempty,omitzero"`
 }
 
 // NetworkEventResponseReceivedExtraInfo Fired when additional information about a responseReceived event is available from the network
@@ -424,15 +424,15 @@ type NetworkEventResponseReceivedExtraInfo struct {
 	StatusCode int64 `json:"statusCode"`
 	// HeadersText Raw response header text as it was received over the wire. The raw text may not always be
 	// available, such as in the case of HTTP/2 or QUIC.
-	HeadersText string `json:"headersText,omitempty"`
+	HeadersText string `json:"headersText,omitempty,omitzero"`
 	// CookiePartitionKey The cookie partition key that will be used to store partitioned cookies set in this response.
 	// Only sent when partitioned cookies are enabled.
-	CookiePartitionKey NetworkCookiePartitionKey `json:"cookiePartitionKey,omitempty"`
+	CookiePartitionKey NetworkCookiePartitionKey `json:"cookiePartitionKey,omitempty,omitzero"`
 	// CookiePartitionKeyOpaque True if partitioned cookies are enabled, but the partition key is not serializable to string.
-	CookiePartitionKeyOpaque bool `json:"cookiePartitionKeyOpaque,omitempty"`
+	CookiePartitionKeyOpaque bool `json:"cookiePartitionKeyOpaque,omitempty,omitzero"`
 	// ExemptedCookies A list of cookies which should have been blocked by 3PCD but are exempted and stored from
 	// the response with the corresponding reason.
-	ExemptedCookies []NetworkExemptedSetCookieWithReason `json:"exemptedCookies,omitempty"`
+	ExemptedCookies []NetworkExemptedSetCookieWithReason `json:"exemptedCookies,omitempty,omitzero"`
 }
 
 // NetworkEventResponseReceivedEarlyHints Fired when 103 Early Hints headers is received in addition to the common response.
@@ -461,11 +461,11 @@ type NetworkEventTrustTokenOperationDone struct {
 	Type      NetworkTrustTokenOperationType       `json:"type"`
 	RequestID RequestID                            `json:"requestId"`
 	// TopLevelOrigin Top level origin. The context in which the operation was attempted.
-	TopLevelOrigin string `json:"topLevelOrigin,omitempty"`
+	TopLevelOrigin string `json:"topLevelOrigin,omitempty,omitzero"`
 	// IssuerOrigin Origin of the issuer in case of a "Issuance" or "Redemption" operation.
-	IssuerOrigin string `json:"issuerOrigin,omitempty"`
+	IssuerOrigin string `json:"issuerOrigin,omitempty,omitzero"`
 	// IssuedTokenCount The number of obtained Trust Tokens on a successful "Issuance" operation.
-	IssuedTokenCount int64 `json:"issuedTokenCount,omitempty"`
+	IssuedTokenCount int64 `json:"issuedTokenCount,omitempty,omitzero"`
 }
 
 // NetworkEventPolicyUpdated Fired once security policy has been updated.
@@ -503,12 +503,12 @@ type NetworkEventDeviceBoundSessionEventOccurred struct {
 	Succeeded bool `json:"succeeded"`
 	// SessionID The session ID this event is associated with. May not be populated for
 	// failed events.
-	SessionID string `json:"sessionId,omitempty"`
+	SessionID string `json:"sessionId,omitempty,omitzero"`
 	// CreationEventDetails The below are the different session event type details. Exactly one is populated.
-	CreationEventDetails    NetworkCreationEventDetails    `json:"creationEventDetails,omitempty"`
-	RefreshEventDetails     NetworkRefreshEventDetails     `json:"refreshEventDetails,omitempty"`
-	TerminationEventDetails NetworkTerminationEventDetails `json:"terminationEventDetails,omitempty"`
-	ChallengeEventDetails   NetworkChallengeEventDetails   `json:"challengeEventDetails,omitempty"`
+	CreationEventDetails    NetworkCreationEventDetails    `json:"creationEventDetails,omitempty,omitzero"`
+	RefreshEventDetails     NetworkRefreshEventDetails     `json:"refreshEventDetails,omitempty,omitzero"`
+	TerminationEventDetails NetworkTerminationEventDetails `json:"terminationEventDetails,omitempty,omitzero"`
+	ChallengeEventDetails   NetworkChallengeEventDetails   `json:"challengeEventDetails,omitempty,omitzero"`
 }
 
 // Network event names.
