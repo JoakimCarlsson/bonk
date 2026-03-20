@@ -97,13 +97,54 @@ func (p *Page) Navigate(url string, opts ...NavigateOption) error {
 	}
 }
 
-// Reload reloads the current page.
-func (p *Page) Reload() error {
-	return proto.PageReload().Do(p.execCtx)
+// Reload reloads the current page and waits for completion.
+func (p *Page) Reload(opts ...NavigateOption) error {
+	cfg := defaultNavigateConfig()
+	for _, o := range opts {
+		o(cfg)
+	}
+
+	done := make(chan struct{}, 1)
+	signal := func(_ json.RawMessage) {
+		select {
+		case done <- struct{}{}:
+		default:
+		}
+	}
+
+	var unsubs []func()
+	switch cfg.waitUntil {
+	case WaitDOMContentLoaded:
+		unsubs = append(unsubs, p.session.Subscribe(
+			proto.PageEventDOMContentEventFiredMethod, signal,
+		))
+	case WaitNetworkIdle:
+		unsubs = append(unsubs, p.subscribeNetworkIdle(done))
+	default:
+		unsubs = append(unsubs, p.session.Subscribe(
+			proto.PageEventLoadEventFiredMethod, signal,
+		))
+	}
+	defer func() {
+		for _, u := range unsubs {
+			u()
+		}
+	}()
+
+	if err := proto.PageReload().Do(p.execCtx); err != nil {
+		return err
+	}
+
+	select {
+	case <-done:
+		return nil
+	case <-time.After(cfg.timeout):
+		return &TimeoutError{Operation: "reload"}
+	}
 }
 
-// GoBack navigates back in history.
-func (p *Page) GoBack() error {
+// GoBack navigates back in history and waits for completion.
+func (p *Page) GoBack(opts ...NavigateOption) error {
 	history, err := proto.PageGetNavigationHistory().Do(p.execCtx)
 	if err != nil {
 		return err
@@ -112,11 +153,11 @@ func (p *Page) GoBack() error {
 		return nil
 	}
 	entry := history.Entries[history.CurrentIndex-1]
-	return proto.PageNavigateToHistoryEntry(entry.ID).Do(p.execCtx)
+	return p.navigateToEntry(entry.ID, opts...)
 }
 
-// GoForward navigates forward in history.
-func (p *Page) GoForward() error {
+// GoForward navigates forward in history and waits for completion.
+func (p *Page) GoForward(opts ...NavigateOption) error {
 	history, err := proto.PageGetNavigationHistory().Do(p.execCtx)
 	if err != nil {
 		return err
@@ -125,7 +166,52 @@ func (p *Page) GoForward() error {
 		return nil
 	}
 	entry := history.Entries[history.CurrentIndex+1]
-	return proto.PageNavigateToHistoryEntry(entry.ID).Do(p.execCtx)
+	return p.navigateToEntry(entry.ID, opts...)
+}
+
+func (p *Page) navigateToEntry(entryID int64, opts ...NavigateOption) error {
+	cfg := defaultNavigateConfig()
+	for _, o := range opts {
+		o(cfg)
+	}
+
+	done := make(chan struct{}, 1)
+	signal := func(_ json.RawMessage) {
+		select {
+		case done <- struct{}{}:
+		default:
+		}
+	}
+
+	var unsubs []func()
+	switch cfg.waitUntil {
+	case WaitDOMContentLoaded:
+		unsubs = append(unsubs, p.session.Subscribe(
+			proto.PageEventDOMContentEventFiredMethod, signal,
+		))
+	case WaitNetworkIdle:
+		unsubs = append(unsubs, p.subscribeNetworkIdle(done))
+	default:
+		unsubs = append(unsubs, p.session.Subscribe(
+			proto.PageEventLoadEventFiredMethod, signal,
+		))
+	}
+	defer func() {
+		for _, u := range unsubs {
+			u()
+		}
+	}()
+
+	if err := proto.PageNavigateToHistoryEntry(entryID).Do(p.execCtx); err != nil {
+		return err
+	}
+
+	select {
+	case <-done:
+		return nil
+	case <-time.After(cfg.timeout):
+		return &TimeoutError{Operation: "history navigation"}
+	}
 }
 
 // WaitNavigation waits for the next navigation to complete.
@@ -168,6 +254,37 @@ func (p *Page) WaitNavigation(opts ...NavigateOption) error {
 	case <-time.After(cfg.timeout):
 		return &TimeoutError{Operation: "navigation"}
 	}
+}
+
+// SetContent replaces the page's document HTML.
+func (p *Page) SetContent(html string) error {
+	return proto.PageSetDocumentContent(p.frameID, html).Do(p.execCtx)
+}
+
+// WaitForURL waits until the page URL matches the given glob pattern.
+func (p *Page) WaitForURL(pattern string, opts ...WaitOption) error {
+	cfg := defaultWaitConfig()
+	for _, o := range opts {
+		o(cfg)
+	}
+
+	result, err := poll(p.execCtx, cfg, func() (any, error) {
+		u, err := p.URL()
+		if err != nil {
+			return nil, err
+		}
+		if globMatch(pattern, u) {
+			return true, nil
+		}
+		return nil, nil
+	})
+	if err != nil {
+		return err
+	}
+	if result == nil {
+		return &TimeoutError{Operation: "waiting for URL " + pattern}
+	}
+	return nil
 }
 
 // URL returns the current page URL.

@@ -180,7 +180,8 @@ func (e *Element) Upload(paths ...string) error {
 type TypeOption func(*typeConfig)
 
 type typeConfig struct {
-	delay time.Duration
+	delay    time.Duration
+	waitOpts []WaitOption
 }
 
 func defaultTypeConfig() *typeConfig {
@@ -194,7 +195,17 @@ func WithDelay(d time.Duration) TypeOption {
 	}
 }
 
+// WaitFor adds wait options that apply when page.Type() waits for the selector.
+func WaitFor(opts ...WaitOption) TypeOption {
+	return func(c *typeConfig) {
+		c.waitOpts = append(c.waitOpts, opts...)
+	}
+}
+
 func (e *Element) prepare() (*Box, error) {
+	if err := e.waitVisible(); err != nil {
+		return nil, err
+	}
 	if err := e.scrollIntoView(); err != nil {
 		return nil, err
 	}
@@ -207,6 +218,30 @@ func (e *Element) prepare() (*Box, error) {
 	}
 	return box, nil
 }
+
+func (e *Element) waitVisible() error {
+	cfg := &waitConfig{
+		timeout:  e.page.defaultTimeout,
+		interval: 50 * time.Millisecond,
+	}
+	_, err := poll(e.page.execCtx, cfg, func() (any, error) {
+		visible, err := e.IsVisible()
+		if err != nil {
+			return nil, err
+		}
+		if !visible {
+			return nil, nil
+		}
+		return true, nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Focus focuses the element.
+func (e *Element) Focus() error { return e.focus() }
 
 func (e *Element) focus() error {
 	_, err := e.callForValue("function(){this.focus()}")

@@ -59,7 +59,11 @@ func (f *Frame) Query(selector string) (*Element, error) {
 	if res.Result.ObjectID == "" {
 		return nil, nil
 	}
-	return &Element{page: f.page, objectID: res.Result.ObjectID}, nil
+	return &Element{
+		page:     f.page,
+		objectID: res.Result.ObjectID,
+		selector: selector,
+	}, nil
 }
 
 // QueryAll finds all elements matching the CSS selector within this frame.
@@ -98,6 +102,7 @@ func (f *Frame) QueryAll(selector string) ([]*Element, error) {
 		elements = append(elements, &Element{
 			page:     f.page,
 			objectID: prop.Value.ObjectID,
+			selector: selector,
 		})
 	}
 	return elements, nil

@@ -5,6 +5,8 @@ import (
 	"os"
 	"os/exec"
 	"sync"
+	"syscall"
+	"time"
 
 	"github.com/joakimcarlsson/bonk/proto"
 	"github.com/joakimcarlsson/bonk/rpc"
@@ -80,16 +82,41 @@ func (b *Browser) Close() error {
 		c.Close()
 	}
 
+	proto.BrowserClose().Do(b.execCtx())
+
 	b.cancel()
 	b.conn.Close()
 
 	if b.process != nil {
-		b.process.Signal(os.Interrupt)
-		b.cmd.Wait()
+		b.waitForExit()
 	}
 
 	cleanupDir(b.tempDir)
 	return nil
+}
+
+func (b *Browser) waitForExit() {
+	done := make(chan struct{})
+	go func() {
+		b.cmd.Wait()
+		close(done)
+	}()
+
+	select {
+	case <-done:
+		return
+	case <-time.After(5 * time.Second):
+	}
+
+	b.process.Signal(syscall.SIGTERM)
+	select {
+	case <-done:
+		return
+	case <-time.After(5 * time.Second):
+	}
+
+	b.process.Kill()
+	<-done
 }
 
 func (b *Browser) execCtx() context.Context {

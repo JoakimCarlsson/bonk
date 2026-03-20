@@ -8,4 +8,5 @@ import (
 type Element struct {
 	page     *Page
 	objectID proto.RemoteObjectID
+	selector string
 }

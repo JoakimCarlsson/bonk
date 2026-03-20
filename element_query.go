@@ -123,12 +123,16 @@ func (e *Element) Screenshot(path string, opts ...ScreenshotOption) error {
 	return os.WriteFile(path, res.Data, 0o644)
 }
 
+// ScrollIntoView scrolls the element into view.
+func (e *Element) ScrollIntoView() error { return e.scrollIntoView() }
+
+// InnerText returns the rendered text content of the element.
+func (e *Element) InnerText() (string, error) {
+	return e.callForString("function(){return this.innerText}")
+}
+
 func (e *Element) scrollIntoView() error {
-	_, err := proto.RuntimeCallFunctionOn(
-		"function(){this.scrollIntoViewIfNeeded(true)}",
-	).WithObjectID(e.objectID).
-		WithReturnByValue(true).
-		Do(e.page.execCtx)
+	_, err := e.callForValue("function(){this.scrollIntoViewIfNeeded(true)}")
 	return err
 }
 
@@ -142,6 +146,17 @@ func (e *Element) callForString(fn string) (string, error) {
 }
 
 func (e *Element) callForValue(fn string, args ...any) (any, error) {
+	val, err := e.doCallForValue(fn, args...)
+	if err != nil && isStaleError(err) && e.selector != "" {
+		if rerr := e.reResolve(); rerr != nil {
+			return nil, ErrStaleElement
+		}
+		return e.doCallForValue(fn, args...)
+	}
+	return val, err
+}
+
+func (e *Element) doCallForValue(fn string, args ...any) (any, error) {
 	params := proto.RuntimeCallFunctionOn(fn).
 		WithObjectID(e.objectID).
 		WithReturnByValue(true)
@@ -175,6 +190,25 @@ func (e *Element) callForValue(fn string, args ...any) (any, error) {
 		return nil, err
 	}
 	return val, nil
+}
+
+func (e *Element) reResolve() error {
+	el, err := e.page.Query(e.selector)
+	if err != nil {
+		return err
+	}
+	if el == nil {
+		return ErrStaleElement
+	}
+	e.objectID = el.objectID
+	return nil
+}
+
+func isStaleError(err error) bool {
+	msg := err.Error()
+	return strings.Contains(msg, "Could not find object") ||
+		strings.Contains(msg, "Cannot find context") ||
+		strings.Contains(msg, "Object reference chain")
 }
 
 func toFloat(v any) float64 {

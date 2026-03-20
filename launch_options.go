@@ -1,5 +1,7 @@
 package bonk
 
+import "log/slog"
+
 // LaunchOption configures browser launch behavior.
 type LaunchOption func(*launchConfig)
 
@@ -10,6 +12,7 @@ type launchConfig struct {
 	userDataDir string
 	extraArgs   []string
 	extraEnv    []string
+	logger      *slog.Logger
 }
 
 func defaultLaunchConfig() *launchConfig {
@@ -63,5 +66,12 @@ func Args(args ...string) LaunchOption {
 func Env(env ...string) LaunchOption {
 	return func(c *launchConfig) {
 		c.extraEnv = append(c.extraEnv, env...)
+	}
+}
+
+// WithLogger enables debug logging of all CDP messages using the given logger.
+func WithLogger(l *slog.Logger) LaunchOption {
+	return func(c *launchConfig) {
+		c.logger = l
 	}
 }

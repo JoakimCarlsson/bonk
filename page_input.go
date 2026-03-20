@@ -23,7 +23,11 @@ func (p *Page) Type(
 	selector, text string,
 	opts ...TypeOption,
 ) error {
-	el, err := p.WaitSelector(selector)
+	cfg := defaultTypeConfig()
+	for _, o := range opts {
+		o(cfg)
+	}
+	el, err := p.WaitSelector(selector, cfg.waitOpts...)
 	if err != nil {
 		return err
 	}

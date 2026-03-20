@@ -3,6 +3,7 @@ package bonk
 import (
 	"context"
 	"sync"
+	"time"
 
 	"github.com/joakimcarlsson/bonk/proto"
 	"github.com/joakimcarlsson/bonk/rpc"
@@ -10,14 +11,16 @@ import (
 
 // Page represents a single browser tab/page.
 type Page struct {
-	browserCtx *BrowserContext
-	targetID   proto.TargetTargetID
-	sessionID  proto.SessionID
-	session    *rpc.Session
-	execCtx    context.Context
-	frameID    proto.FrameID
-	fetch      *fetchManager
-	stealth    bool
+	browserCtx     *BrowserContext
+	targetID       proto.TargetTargetID
+	sessionID      proto.SessionID
+	session        *rpc.Session
+	execCtx        context.Context
+	frameID        proto.FrameID
+	fetch          *fetchManager
+	stealth        bool
+	defaultTimeout time.Duration
+	cancelTimeout  context.CancelFunc
 
 	mu     sync.Mutex
 	closed bool
@@ -68,13 +71,14 @@ func newPage(c *BrowserContext) (*Page, error) {
 	}
 
 	p := &Page{
-		browserCtx: c,
-		targetID:   createRes.TargetID,
-		sessionID:  sessionID,
-		session:    session,
-		execCtx:    execCtx,
-		frameID:    frameID,
-		stealth:    stealth,
+		browserCtx:     c,
+		targetID:       createRes.TargetID,
+		sessionID:      sessionID,
+		session:        session,
+		execCtx:        execCtx,
+		frameID:        frameID,
+		stealth:        stealth,
+		defaultTimeout: 30 * time.Second,
 	}
 	p.fetch = newFetchManager(p)
 
@@ -146,6 +150,33 @@ func (p *Page) Close() error {
 	_, err := proto.TargetCloseTarget(p.targetID).
 		Do(p.browserCtx.browser.execCtx())
 	return err
+}
+
+// WithContext returns a shallow copy of the Page with the given context.
+// All CDP calls made on the returned Page will respect the context's
+// deadline and cancellation. The copy shares the underlying session,
+// fetch manager, and mutex with the original.
+func (p *Page) WithContext(ctx context.Context) *Page {
+	return &Page{
+		browserCtx:     p.browserCtx,
+		targetID:       p.targetID,
+		sessionID:      p.sessionID,
+		session:        p.session,
+		execCtx:        proto.WithExecutor(ctx, p.session),
+		frameID:        p.frameID,
+		fetch:          p.fetch,
+		stealth:        p.stealth,
+		defaultTimeout: p.defaultTimeout,
+	}
+}
+
+// Timeout returns a shallow copy of the Page with a context deadline
+// set to the given duration from now.
+func (p *Page) Timeout(d time.Duration) *Page {
+	ctx, cancel := context.WithTimeout(p.execCtx, d)
+	page := p.WithContext(ctx)
+	page.cancelTimeout = cancel
+	return page
 }
 
 // Context returns the parent browser context.

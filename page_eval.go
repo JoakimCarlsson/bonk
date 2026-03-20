@@ -32,6 +32,58 @@ func (p *Page) Evaluate(expression string) (any, error) {
 	return val, nil
 }
 
+// Content returns the full HTML content of the page.
+func (p *Page) Content() (string, error) {
+	val, err := p.Evaluate("document.documentElement.outerHTML")
+	if err != nil {
+		return "", err
+	}
+	s, _ := val.(string)
+	return s, nil
+}
+
+// WaitForFunction waits until the given JavaScript expression evaluates to a truthy value.
+func (p *Page) WaitForFunction(expression string, opts ...WaitOption) error {
+	cfg := defaultWaitConfig()
+	for _, o := range opts {
+		o(cfg)
+	}
+
+	result, err := poll(p.execCtx, cfg, func() (any, error) {
+		val, err := p.Evaluate(expression)
+		if err != nil {
+			return nil, err
+		}
+		if isTruthy(val) {
+			return val, nil
+		}
+		return nil, nil
+	})
+	if err != nil {
+		return err
+	}
+	if result == nil {
+		return &TimeoutError{Operation: "waiting for function"}
+	}
+	return nil
+}
+
+func isTruthy(v any) bool {
+	if v == nil {
+		return false
+	}
+	switch val := v.(type) {
+	case bool:
+		return val
+	case float64:
+		return val != 0
+	case string:
+		return val != ""
+	default:
+		return true
+	}
+}
+
 // EvaluateHandle executes a JavaScript expression and returns the result
 // as an Element handle (for non-primitive return values like DOM nodes).
 func (p *Page) EvaluateHandle(expression string) (*Element, error) {

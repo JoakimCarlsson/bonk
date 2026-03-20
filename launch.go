@@ -96,7 +96,12 @@ func Launch(opts ...LaunchOption) (*Browser, error) {
 		return nil, err
 	}
 
-	conn := rpc.New(ws)
+	var t transport.Transport = ws
+	if cfg.logger != nil {
+		t = &transport.Debug{Inner: ws, Logger: cfg.logger}
+	}
+
+	conn := rpc.New(t)
 	go conn.Listen(ctx)
 
 	return &Browser{

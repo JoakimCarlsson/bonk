@@ -1,6 +1,7 @@
 package bonk
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -73,8 +74,19 @@ func (d *Download) SuggestedFilename() string {
 }
 
 // SaveAs copies the downloaded file to the given path.
+// Blocks until the download completes.
 func (d *Download) SaveAs(path string) error {
-	<-d.done
+	return d.SaveAsContext(context.Background(), path)
+}
+
+// SaveAsContext copies the downloaded file to the given path,
+// respecting the context for cancellation and deadlines.
+func (d *Download) SaveAsContext(ctx context.Context, path string) error {
+	select {
+	case <-d.done:
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 
 	d.mu.Lock()
 	src := d.savedPath

@@ -12,6 +12,7 @@ var (
 	ErrSessionClosed  = errors.New("bonk: session closed")
 	ErrChromeNotFound = errors.New("bonk: chrome binary not found")
 	ErrChromeStartup  = errors.New("bonk: chrome failed to start")
+	ErrStaleElement   = errors.New("bonk: stale element reference")
 )
 
 // TimeoutError is returned when an operation exceeds its deadline.
