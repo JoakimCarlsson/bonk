@@ -63,6 +63,9 @@ func (p *Page) QueryAll(selector string) ([]*Element, error) {
 }
 
 // WaitSelector waits for an element matching the selector to appear.
+// By default waits for the element to be attached to the DOM.
+// Use WaitVisibleOption() to also require visibility,
+// or WaitHiddenOption() to wait until the element is hidden or removed.
 func (p *Page) WaitSelector(
 	selector string,
 	opts ...WaitOption,
@@ -72,20 +75,75 @@ func (p *Page) WaitSelector(
 		o(cfg)
 	}
 
-	result, err := poll(p.execCtx, cfg, func() (any, error) {
-		el, err := p.Query(selector)
-		if el == nil {
+	switch cfg.visibility {
+	case WaitUntilHidden:
+		result, err := poll(p.execCtx, cfg, func() (any, error) {
+			el, err := p.Query(selector)
+			if err != nil {
+				return nil, err
+			}
+			if el == nil {
+				return true, nil
+			}
+			visible, err := el.IsVisible()
+			if err != nil {
+				return nil, err
+			}
+			if !visible {
+				return true, nil
+			}
+			return nil, nil
+		})
+		if err != nil {
 			return nil, err
 		}
-		return el, err
-	})
-	if err != nil {
-		return nil, err
+		if result == nil {
+			return nil, &TimeoutError{Selector: selector}
+		}
+		return nil, nil
+
+	case WaitUntilVisible:
+		result, err := poll(p.execCtx, cfg, func() (any, error) {
+			el, err := p.Query(selector)
+			if err != nil {
+				return nil, err
+			}
+			if el == nil {
+				return nil, nil
+			}
+			visible, err := el.IsVisible()
+			if err != nil {
+				return nil, err
+			}
+			if !visible {
+				return nil, nil
+			}
+			return el, nil
+		})
+		if err != nil {
+			return nil, err
+		}
+		if result == nil {
+			return nil, &TimeoutError{Selector: selector}
+		}
+		return result.(*Element), nil
+
+	default:
+		result, err := poll(p.execCtx, cfg, func() (any, error) {
+			el, err := p.Query(selector)
+			if el == nil {
+				return nil, err
+			}
+			return el, err
+		})
+		if err != nil {
+			return nil, err
+		}
+		if result == nil {
+			return nil, &TimeoutError{Selector: selector}
+		}
+		return result.(*Element), nil
 	}
-	if result == nil {
-		return nil, &TimeoutError{Selector: selector}
-	}
-	return result.(*Element), nil
 }
 
 func queryJS(selector string) string {

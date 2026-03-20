@@ -219,10 +219,14 @@ func (e *Element) prepare() (*Box, error) {
 	return box, nil
 }
 
-func (e *Element) waitVisible() error {
+// WaitForVisible waits until the element becomes visible.
+func (e *Element) WaitForVisible(opts ...WaitOption) error {
 	cfg := &waitConfig{
 		timeout:  e.page.defaultTimeout,
 		interval: 50 * time.Millisecond,
+	}
+	for _, o := range opts {
+		o(cfg)
 	}
 	_, err := poll(e.page.execCtx, cfg, func() (any, error) {
 		visible, err := e.IsVisible()
@@ -234,10 +238,33 @@ func (e *Element) waitVisible() error {
 		}
 		return true, nil
 	})
-	if err != nil {
-		return err
+	return err
+}
+
+// WaitForHidden waits until the element becomes hidden.
+func (e *Element) WaitForHidden(opts ...WaitOption) error {
+	cfg := &waitConfig{
+		timeout:  e.page.defaultTimeout,
+		interval: 50 * time.Millisecond,
 	}
-	return nil
+	for _, o := range opts {
+		o(cfg)
+	}
+	_, err := poll(e.page.execCtx, cfg, func() (any, error) {
+		visible, err := e.IsVisible()
+		if err != nil {
+			return nil, err
+		}
+		if visible {
+			return nil, nil
+		}
+		return true, nil
+	})
+	return err
+}
+
+func (e *Element) waitVisible() error {
+	return e.WaitForVisible()
 }
 
 // Focus focuses the element.

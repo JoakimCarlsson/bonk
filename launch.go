@@ -104,7 +104,7 @@ func Launch(opts ...LaunchOption) (*Browser, error) {
 	conn := rpc.New(t)
 	go conn.Listen(ctx)
 
-	return &Browser{
+	b := &Browser{
 		conn:    conn,
 		process: cmd.Process,
 		cmd:     cmd,
@@ -112,13 +112,21 @@ func Launch(opts ...LaunchOption) (*Browser, error) {
 		tempDir: tempDir,
 		wsURL:   wsURL,
 		stealth: cfg.stealth,
+		cfg:     cfg,
 		ctx:     ctx,
 		cancel:  cancel,
-	}, nil
+	}
+	b.setupOnClose(conn)
+	return b, nil
 }
 
 // Connect attaches to an already-running Chrome instance.
-func Connect(wsURL string) (*Browser, error) {
+func Connect(wsURL string, opts ...LaunchOption) (*Browser, error) {
+	cfg := defaultLaunchConfig()
+	for _, o := range opts {
+		o(cfg)
+	}
+
 	ctx, cancel := context.WithCancel(context.Background())
 
 	ws, err := transport.Dial(ctx, wsURL)
@@ -127,15 +135,23 @@ func Connect(wsURL string) (*Browser, error) {
 		return nil, err
 	}
 
-	conn := rpc.New(ws)
+	var t transport.Transport = ws
+	if cfg.logger != nil {
+		t = &transport.Debug{Inner: ws, Logger: cfg.logger}
+	}
+
+	conn := rpc.New(t)
 	go conn.Listen(ctx)
 
-	return &Browser{
+	b := &Browser{
 		conn:   conn,
 		wsURL:  wsURL,
+		cfg:    cfg,
 		ctx:    ctx,
 		cancel: cancel,
-	}, nil
+	}
+	b.setupOnClose(conn)
+	return b, nil
 }
 
 func buildArgs(cfg *launchConfig, dataDir string) []string {

@@ -18,6 +18,7 @@ type Conn struct {
 	pending   *pendingMap
 	subs      *subscriptions
 	sessions  *sessionMap
+	onClose   func(error)
 
 	mu     sync.Mutex
 	closed bool
@@ -187,6 +188,13 @@ func (c *Conn) Close() error {
 	return c.transport.Close()
 }
 
+// OnClose registers a callback invoked when the connection closes unexpectedly.
+func (c *Conn) OnClose(fn func(error)) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.onClose = fn
+}
+
 // Err returns the first error that caused the connection to close.
 func (c *Conn) Err() error {
 	c.mu.Lock()
@@ -196,17 +204,22 @@ func (c *Conn) Err() error {
 
 func (c *Conn) closeWithError(err error) {
 	c.mu.Lock()
-	defer c.mu.Unlock()
-
 	if c.closed {
+		c.mu.Unlock()
 		return
 	}
 	c.closed = true
 	c.err = err
+	fn := c.onClose
 	close(c.done)
 
 	c.pending.RejectAll(ErrConnectionClosed)
 	c.sessions.rejectAll(ErrConnectionClosed)
+	c.mu.Unlock()
+
+	if fn != nil && err != nil {
+		fn(err)
+	}
 }
 
 func (c *Conn) routeSession(msg *proto.Message) {

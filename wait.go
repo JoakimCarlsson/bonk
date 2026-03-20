@@ -8,9 +8,19 @@ import (
 // WaitOption configures wait behavior.
 type WaitOption func(*waitConfig)
 
+// WaitVisibility specifies what state to wait for.
+type WaitVisibility int
+
+const (
+	WaitAttached WaitVisibility = iota
+	WaitUntilVisible
+	WaitUntilHidden
+)
+
 type waitConfig struct {
-	timeout  time.Duration
-	interval time.Duration
+	timeout    time.Duration
+	interval   time.Duration
+	visibility WaitVisibility
 }
 
 // WaitTimeout sets the maximum time to wait.
@@ -24,6 +34,20 @@ func WaitTimeout(d time.Duration) WaitOption {
 func WaitInterval(d time.Duration) WaitOption {
 	return func(c *waitConfig) {
 		c.interval = d
+	}
+}
+
+// WaitVisibleOption sets the visibility condition for WaitSelector.
+func WaitVisibleOption() WaitOption {
+	return func(c *waitConfig) {
+		c.visibility = WaitUntilVisible
+	}
+}
+
+// WaitHiddenOption sets WaitSelector to wait until the element is hidden or removed.
+func WaitHiddenOption() WaitOption {
+	return func(c *waitConfig) {
+		c.visibility = WaitUntilHidden
 	}
 }
 

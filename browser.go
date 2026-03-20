@@ -10,6 +10,7 @@ import (
 
 	"github.com/joakimcarlsson/bonk/proto"
 	"github.com/joakimcarlsson/bonk/rpc"
+	"github.com/joakimcarlsson/bonk/transport"
 )
 
 // Browser represents a running Chrome instance.
@@ -21,12 +22,14 @@ type Browser struct {
 	tempDir string
 	wsURL   string
 	stealth bool
+	cfg     *launchConfig
 	ctx     context.Context
 	cancel  context.CancelFunc
 
-	mu       sync.Mutex
-	contexts []*BrowserContext
-	closed   bool
+	mu           sync.Mutex
+	contexts     []*BrowserContext
+	closed       bool
+	onDisconnect func()
 }
 
 // NewContext creates a new isolated browser context.
@@ -117,6 +120,55 @@ func (b *Browser) waitForExit() {
 
 	b.process.Kill()
 	<-done
+}
+
+// OnDisconnect registers a callback invoked when the WebSocket connection drops.
+func (b *Browser) OnDisconnect(fn func()) {
+	b.mu.Lock()
+	b.onDisconnect = fn
+	b.mu.Unlock()
+}
+
+// Reconnect re-establishes the WebSocket connection to the browser.
+// Useful after the connection drops unexpectedly.
+func (b *Browser) Reconnect() error {
+	b.mu.Lock()
+	if b.closed {
+		b.mu.Unlock()
+		return ErrBrowserClosed
+	}
+	b.mu.Unlock()
+
+	ws, err := transport.Dial(b.ctx, b.wsURL)
+	if err != nil {
+		return err
+	}
+
+	var t transport.Transport = ws
+	if b.cfg != nil && b.cfg.logger != nil {
+		t = &transport.Debug{Inner: ws, Logger: b.cfg.logger}
+	}
+
+	conn := rpc.New(t)
+	b.setupOnClose(conn)
+	go conn.Listen(b.ctx)
+
+	b.mu.Lock()
+	b.conn = conn
+	b.mu.Unlock()
+
+	return nil
+}
+
+func (b *Browser) setupOnClose(conn *rpc.Conn) {
+	conn.OnClose(func(err error) {
+		b.mu.Lock()
+		fn := b.onDisconnect
+		b.mu.Unlock()
+		if fn != nil {
+			fn()
+		}
+	})
 }
 
 func (b *Browser) execCtx() context.Context {
