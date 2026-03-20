@@ -53,6 +53,7 @@ nav:
       - Locators: automation/locators.md
       - Input: automation/input.md
       - Frames: automation/frames.md
+      - Mouse & Keyboard: automation/mouse-keyboard.md
       - Device Emulation: automation/device-emulation.md
   - Network:
       - Interception: network/interception.md

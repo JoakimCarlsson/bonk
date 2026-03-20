@@ -111,3 +111,79 @@ func (p *Page) EvaluateHandle(expression string) (*Element, error) {
 func (p *Page) EvaluateOn(el *Element, fn string, args ...any) (any, error) {
 	return el.callForValue(fn, args...)
 }
+
+// ExposeFunction exposes a Go function to page JavaScript under the given name.
+// The function receives a slice of arguments and returns a value or error.
+// Page scripts can call the function as `window.<name>(args...)`.
+func (p *Page) ExposeFunction(
+	name string,
+	fn func(args []json.RawMessage) (any, error),
+) (func(), error) {
+	params := struct {
+		Name string `json:"name"`
+	}{Name: name}
+	if err := proto.Execute(
+		p.execCtx,
+		proto.RuntimeCommandAddBinding,
+		&params,
+		nil,
+	); err != nil {
+		return nil, err
+	}
+
+	wrapper := fmt.Sprintf(
+		`window.%s = async function() {
+			const args = Array.from(arguments);
+			const seq = window._bonk_seq = (window._bonk_seq || 0) + 1;
+			window._bonk_resolve = window._bonk_resolve || {};
+			return new Promise(resolve => {
+				window._bonk_resolve[seq] = resolve;
+				window.%s(JSON.stringify({seq, args}));
+			});
+		}`, name, name)
+	p.AddInitScript(wrapper)
+	p.Evaluate(wrapper)
+
+	unsub := p.session.Subscribe(
+		proto.RuntimeEventBindingCalledMethod,
+		func(data json.RawMessage) {
+			var event struct {
+				Name    string `json:"name"`
+				Payload string `json:"payload"`
+			}
+			if err := json.Unmarshal(data, &event); err != nil {
+				return
+			}
+			if event.Name != name {
+				return
+			}
+
+			var call struct {
+				Seq  int64             `json:"seq"`
+				Args []json.RawMessage `json:"args"`
+			}
+			if err := json.Unmarshal([]byte(event.Payload), &call); err != nil {
+				return
+			}
+
+			result, err := fn(call.Args)
+			var js string
+			if err != nil {
+				js = fmt.Sprintf(
+					"window._bonk_resolve[%d](undefined); delete window._bonk_resolve[%d]",
+					call.Seq,
+					call.Seq,
+				)
+			} else {
+				val, _ := json.Marshal(result)
+				js = fmt.Sprintf(
+					"window._bonk_resolve[%d](%s); delete window._bonk_resolve[%d]",
+					call.Seq, string(val), call.Seq,
+				)
+			}
+			p.Evaluate(js)
+		},
+	)
+
+	return unsub, nil
+}

@@ -183,3 +183,23 @@ func (p *Page) Timeout(d time.Duration) *Page {
 func (p *Page) Context() *BrowserContext {
 	return p.browserCtx
 }
+
+// AddInitScript adds a script that will be evaluated on every new document
+// created in the page, including iframes. Useful for injecting polyfills
+// or overriding APIs before page scripts run.
+func (p *Page) AddInitScript(script string) error {
+	_, err := proto.PageAddScriptToEvaluateOnNewDocument(script).Do(p.execCtx)
+	return err
+}
+
+// BringToFront activates this page (tab).
+func (p *Page) BringToFront() error {
+	return proto.PageBringToFront().Do(p.execCtx)
+}
+
+// IsClosed reports whether the page has been closed.
+func (p *Page) IsClosed() bool {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	return p.closed
+}

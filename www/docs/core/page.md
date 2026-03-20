@@ -134,3 +134,54 @@ p = page.WithContext(ctx)
 ```
 
 See [Context Control](../advanced/context-control.md) for details.
+
+## Init Scripts
+
+Run JavaScript before any page scripts on every navigation:
+
+```go
+page.AddInitScript(`window.MY_FLAG = true`)
+```
+
+## Offline Mode
+
+```go
+page.SetOffline(true)   // simulate offline
+page.SetOffline(false)  // back online
+```
+
+## Tab Management
+
+```go
+page.BringToFront()     // activate this tab
+closed := page.IsClosed()
+```
+
+## Expose Go Functions
+
+Make a Go function callable from page JavaScript:
+
+```go
+unsub, err := page.ExposeFunction("greet", func(args []json.RawMessage) (any, error) {
+    var name string
+    json.Unmarshal(args[0], &name)
+    return "Hello, " + name, nil
+})
+defer unsub()
+
+result, _ := page.Evaluate(`window.greet("World")`)
+fmt.Println(result) // "Hello, World"
+```
+
+## Mouse & Keyboard
+
+Low-level input controllers:
+
+```go
+page.Mouse().Click(100, 200)
+page.Mouse().DragTo(100, 100, 300, 300)
+page.Keyboard().Press("Enter")
+page.Keyboard().Type("text")
+```
+
+See [Mouse & Keyboard](../automation/mouse-keyboard.md) for details.

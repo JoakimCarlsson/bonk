@@ -368,3 +368,9 @@ func (p *Page) subscribeNetworkIdle(done chan struct{}) func() {
 		cancelTimer()
 	}
 }
+
+// SetOffline enables or disables offline emulation.
+func (p *Page) SetOffline(offline bool) error {
+	return proto.NetworkEmulateNetworkConditions(offline, 0, -1, -1).
+		Do(p.execCtx)
+}

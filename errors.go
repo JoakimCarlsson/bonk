@@ -19,6 +19,7 @@ var (
 type TimeoutError struct {
 	Operation string
 	Selector  string
+	Cause     error
 }
 
 func (e *TimeoutError) Error() string {
@@ -27,6 +28,9 @@ func (e *TimeoutError) Error() string {
 	}
 	return fmt.Sprintf("bonk: timeout during %s", e.Operation)
 }
+
+// Unwrap returns the underlying cause.
+func (e *TimeoutError) Unwrap() error { return e.Cause }
 
 // ElementNotFoundError is returned when a selector matches no elements.
 type ElementNotFoundError struct {
@@ -41,8 +45,12 @@ func (e *ElementNotFoundError) Error() string {
 type NavigationError struct {
 	URL     string
 	Message string
+	Cause   error
 }
 
 func (e *NavigationError) Error() string {
 	return fmt.Sprintf("bonk: navigation to %s failed: %s", e.URL, e.Message)
 }
+
+// Unwrap returns the underlying cause.
+func (e *NavigationError) Unwrap() error { return e.Cause }
