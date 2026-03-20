@@ -16,6 +16,7 @@ type Page struct {
 	session    *rpc.Session
 	execCtx    context.Context
 	frameID    proto.FrameID
+	fetch      *fetchManager
 
 	mu     sync.Mutex
 	closed bool
@@ -69,6 +70,7 @@ func newPage(c *BrowserContext) (*Page, error) {
 		execCtx:    execCtx,
 		frameID:    frameID,
 	}
+	p.fetch = newFetchManager(p)
 
 	if c.cfg.viewportWidth > 0 && c.cfg.viewportHeight > 0 {
 		if err := p.SetViewport(c.cfg.viewportWidth, c.cfg.viewportHeight); err != nil {

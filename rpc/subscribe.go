@@ -59,6 +59,6 @@ func (s *subscriptions) Dispatch(method proto.Method, params json.RawMessage) {
 	s.mu.RUnlock()
 
 	for _, sub := range subs {
-		sub.handler(params)
+		go sub.handler(params)
 	}
 }
