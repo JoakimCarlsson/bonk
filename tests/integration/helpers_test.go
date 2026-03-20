@@ -16,6 +16,16 @@ func launchBrowser(t *testing.T) *bonk.Browser {
 	return b
 }
 
+func launchBrowserNoStealth(t *testing.T) *bonk.Browser {
+	t.Helper()
+	b, err := bonk.Launch(bonk.Stealth(false))
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { b.Close() })
+	return b
+}
+
 func newPage(t *testing.T, b *bonk.Browser) *bonk.Page {
 	t.Helper()
 	ctx, err := b.NewContext()

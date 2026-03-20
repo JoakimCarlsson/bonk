@@ -106,6 +106,7 @@ func Launch(opts ...LaunchOption) (*Browser, error) {
 		dataDir: dataDir,
 		tempDir: tempDir,
 		wsURL:   wsURL,
+		stealth: cfg.stealth,
 		ctx:     ctx,
 		cancel:  cancel,
 	}, nil
@@ -140,6 +141,19 @@ func buildArgs(cfg *launchConfig, dataDir string) []string {
 
 	if cfg.headless {
 		args = append(args, "--headless=new")
+	}
+
+	if cfg.stealth {
+		args = append(args,
+			"--disable-blink-features=AutomationControlled",
+			"--disable-features=IsolateOrigins,site-per-process",
+			"--disable-infobars",
+			"--disable-session-crashed-bubble",
+			"--disable-search-engine-choice-screen",
+		)
+		if cfg.headless {
+			args = append(args, "--window-size=1920,1080")
+		}
 	}
 
 	args = append(args, cfg.extraArgs...)

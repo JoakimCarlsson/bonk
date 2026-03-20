@@ -61,6 +61,8 @@ func TestReload(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	time.Sleep(500 * time.Millisecond)
+
 	title, _ := page.Title()
 	if title != "Example Domain" {
 		t.Errorf("title = %q after reload", title)

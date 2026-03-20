@@ -8,7 +8,7 @@ import (
 )
 
 func TestOnConsole(t *testing.T) {
-	b := launchBrowser(t)
+	b := launchBrowserNoStealth(t)
 	page := newPage(t, b)
 
 	page.Navigate("https://example.com")
@@ -73,7 +73,7 @@ func TestOnDialog(t *testing.T) {
 }
 
 func TestOnConsoleConvenience(t *testing.T) {
-	b := launchBrowser(t)
+	b := launchBrowserNoStealth(t)
 	page := newPage(t, b)
 
 	page.Navigate("https://example.com")

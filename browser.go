@@ -18,6 +18,7 @@ type Browser struct {
 	dataDir string
 	tempDir string
 	wsURL   string
+	stealth bool
 	ctx     context.Context
 	cancel  context.CancelFunc
 

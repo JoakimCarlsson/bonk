@@ -5,6 +5,7 @@ type LaunchOption func(*launchConfig)
 
 type launchConfig struct {
 	headless    bool
+	stealth     bool
 	chromePath  string
 	userDataDir string
 	extraArgs   []string
@@ -14,6 +15,18 @@ type launchConfig struct {
 func defaultLaunchConfig() *launchConfig {
 	return &launchConfig{
 		headless: true,
+		stealth:  true,
+	}
+}
+
+// Stealth enables anti-detection measures. Default is true.
+// When enabled: disables automation-revealing Chrome flags, skips Runtime.enable
+// (which is the primary CDP detection signal), injects JS patches to spoof
+// navigator properties, and ensures Client Hints headers are consistent.
+// Trade-off: OnConsole event handler won't work in stealth mode.
+func Stealth(v bool) LaunchOption {
+	return func(c *launchConfig) {
+		c.stealth = v
 	}
 }
 

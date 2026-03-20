@@ -17,6 +17,7 @@ type Page struct {
 	execCtx    context.Context
 	frameID    proto.FrameID
 	fetch      *fetchManager
+	stealth    bool
 
 	mu     sync.Mutex
 	closed bool
@@ -43,14 +44,18 @@ func newPage(c *BrowserContext) (*Page, error) {
 	session := c.browser.conn.Session(sessionID)
 	execCtx := proto.WithExecutor(c.browser.ctx, session)
 
+	stealth := c.browser.stealth
+
 	if err := proto.PageEnable().Do(execCtx); err != nil {
 		return nil, err
 	}
 	if err := proto.PageSetLifecycleEventsEnabled(true).Do(execCtx); err != nil {
 		return nil, err
 	}
-	if err := proto.RuntimeEnable().Do(execCtx); err != nil {
-		return nil, err
+	if !stealth {
+		if err := proto.RuntimeEnable().Do(execCtx); err != nil {
+			return nil, err
+		}
 	}
 	if err := proto.NetworkEnable().Do(execCtx); err != nil {
 		return nil, err
@@ -69,8 +74,15 @@ func newPage(c *BrowserContext) (*Page, error) {
 		session:    session,
 		execCtx:    execCtx,
 		frameID:    frameID,
+		stealth:    stealth,
 	}
 	p.fetch = newFetchManager(p)
+
+	if stealth {
+		if err := applyStealth(p); err != nil {
+			return nil, err
+		}
+	}
 
 	if c.cfg.viewportWidth > 0 && c.cfg.viewportHeight > 0 {
 		if err := p.SetViewport(c.cfg.viewportWidth, c.cfg.viewportHeight); err != nil {
