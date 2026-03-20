@@ -301,7 +301,8 @@ func (p *parser) parseField(line string, indent int, description string) error {
 	}
 
 	if p.section == "inline-enum" {
-		if !strings.Contains(line, " ") && !strings.HasPrefix(line, "optional ") &&
+		if !strings.Contains(line, " ") &&
+			!strings.HasPrefix(line, "optional ") &&
 			!strings.HasPrefix(line, "experimental ") &&
 			!strings.HasPrefix(line, "deprecated ") {
 			p.inlineEnumProp.Enum = append(p.inlineEnumProp.Enum, line)

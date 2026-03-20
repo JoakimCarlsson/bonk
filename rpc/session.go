@@ -1,6 +1,7 @@
 package rpc
 
 import (
+	"context"
 	"encoding/json"
 	"sync"
 
@@ -74,6 +75,15 @@ func (sm *sessionMap) rejectAll(err error) {
 	for _, s := range sessions {
 		s.pending.RejectAll(err)
 	}
+}
+
+// Execute sends a CDP command through this session.
+func (s *Session) Execute(
+	ctx context.Context,
+	method proto.Method,
+	params, result any,
+) error {
+	return s.conn.CallOn(ctx, s.id, method, params, result)
 }
 
 // Subscribe registers a handler for events on this session.

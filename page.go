@@ -1,0 +1,123 @@
+package bonk
+
+import (
+	"context"
+	"sync"
+
+	"github.com/joakimcarlsson/bonk/proto"
+	"github.com/joakimcarlsson/bonk/rpc"
+)
+
+// Page represents a single browser tab/page.
+type Page struct {
+	browserCtx *BrowserContext
+	targetID   proto.TargetTargetID
+	sessionID  proto.SessionID
+	session    *rpc.Session
+	execCtx    context.Context
+	frameID    proto.FrameID
+
+	mu     sync.Mutex
+	closed bool
+}
+
+func newPage(c *BrowserContext) (*Page, error) {
+	browserExecCtx := c.browser.execCtx()
+
+	createRes, err := proto.TargetCreateTarget("about:blank").
+		WithBrowserContextID(c.id).
+		Do(browserExecCtx)
+	if err != nil {
+		return nil, err
+	}
+
+	attachRes, err := proto.TargetAttachToTarget(createRes.TargetID).
+		WithFlatten(true).
+		Do(browserExecCtx)
+	if err != nil {
+		return nil, err
+	}
+
+	sessionID := proto.SessionID(attachRes.SessionID)
+	session := c.browser.conn.Session(sessionID)
+	execCtx := proto.WithExecutor(c.browser.ctx, session)
+
+	if err := proto.PageEnable().Do(execCtx); err != nil {
+		return nil, err
+	}
+	if err := proto.PageSetLifecycleEventsEnabled(true).Do(execCtx); err != nil {
+		return nil, err
+	}
+	if err := proto.RuntimeEnable().Do(execCtx); err != nil {
+		return nil, err
+	}
+	if err := proto.NetworkEnable().Do(execCtx); err != nil {
+		return nil, err
+	}
+
+	var frameID proto.FrameID
+	tree, err := proto.PageGetFrameTree().Do(execCtx)
+	if err == nil && tree != nil {
+		frameID = tree.FrameTree.Frame.ID
+	}
+
+	p := &Page{
+		browserCtx: c,
+		targetID:   createRes.TargetID,
+		sessionID:  sessionID,
+		session:    session,
+		execCtx:    execCtx,
+		frameID:    frameID,
+	}
+
+	if c.cfg.viewportWidth > 0 && c.cfg.viewportHeight > 0 {
+		p.SetViewport(c.cfg.viewportWidth, c.cfg.viewportHeight)
+	}
+	if c.cfg.userAgent != "" {
+		proto.EmulationSetUserAgentOverride(c.cfg.userAgent).Do(execCtx)
+	}
+	if c.cfg.timezone != "" {
+		proto.EmulationSetTimezoneOverride(c.cfg.timezone).Do(execCtx)
+	}
+	if c.cfg.locale != "" {
+		proto.EmulationSetLocaleOverride().WithLocale(c.cfg.locale).Do(execCtx)
+	}
+	if c.cfg.hasGeo {
+		proto.EmulationSetGeolocationOverride().
+			WithLatitude(c.cfg.geoLatitude).
+			WithLongitude(c.cfg.geoLongitude).
+			WithAccuracy(c.cfg.geoAccuracy).
+			Do(execCtx)
+	}
+
+	c.addPage(p)
+	return p, nil
+}
+
+// SetViewport sets the page viewport dimensions.
+func (p *Page) SetViewport(width, height int) error {
+	return proto.EmulationSetDeviceMetricsOverride(
+		int64(width), int64(height), 1, false,
+	).Do(p.execCtx)
+}
+
+// Close closes the page.
+func (p *Page) Close() error {
+	p.mu.Lock()
+	if p.closed {
+		p.mu.Unlock()
+		return nil
+	}
+	p.closed = true
+	p.mu.Unlock()
+
+	p.browserCtx.removePage(p)
+	_, err := proto.TargetCloseTarget(p.targetID).
+		Do(p.browserCtx.browser.execCtx())
+	return err
+}
+
+// Context returns the parent browser context.
+func (p *Page) Context() *BrowserContext {
+	return p.browserCtx
+}
