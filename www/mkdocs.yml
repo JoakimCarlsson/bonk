@@ -1,0 +1,69 @@
+site_name: bonk
+site_url: https://joakimcarlsson.github.io/bonk
+repo_url: https://github.com/joakimcarlsson/bonk
+repo_name: joakimcarlsson/bonk
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to light mode
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to dark mode
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - content.code.copy
+    - content.code.annotate
+    - search.highlight
+    - search.suggest
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - tables
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Quick Start: getting-started/quick-start.md
+  - Core:
+      - Browser: core/browser.md
+      - Context: core/context.md
+      - Page: core/page.md
+      - Element: core/element.md
+  - Automation:
+      - Selectors: automation/selectors.md
+      - Input: automation/input.md
+      - Frames: automation/frames.md
+      - Device Emulation: automation/device-emulation.md
+  - Network:
+      - Interception: network/interception.md
+      - Routing: network/routing.md
+      - Headers: network/headers.md
+  - Events:
+      - Console: events/console.md
+      - Dialogs: events/dialogs.md
+      - Downloads: events/downloads.md
+  - Stealth:
+      - Overview: stealth/overview.md
+  - Advanced:
+      - Context Control: advanced/context-control.md
+      - Session Persistence: advanced/session-persistence.md
+      - Debugging: advanced/debugging.md
