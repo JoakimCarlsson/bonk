@@ -26,7 +26,7 @@ func main() {
 	}
 
 	page.OnResponse(func(r *bonk.Response) {
-		fmt.Printf("[%d] %s\n", r.Status, r.URL)
+		fmt.Printf("[%d] %s headers=%d\n", r.Status, r.URL, len(r.Headers))
 	})
 
 	if err := page.Navigate("https://example.com"); err != nil {

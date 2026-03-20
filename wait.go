@@ -13,6 +13,20 @@ type waitConfig struct {
 	interval time.Duration
 }
 
+// WaitTimeout sets the maximum time to wait.
+func WaitTimeout(d time.Duration) WaitOption {
+	return func(c *waitConfig) {
+		c.timeout = d
+	}
+}
+
+// WaitInterval sets the initial polling interval.
+func WaitInterval(d time.Duration) WaitOption {
+	return func(c *waitConfig) {
+		c.interval = d
+	}
+}
+
 func defaultWaitConfig() *waitConfig {
 	return &waitConfig{
 		timeout:  30 * time.Second,

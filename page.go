@@ -71,26 +71,43 @@ func newPage(c *BrowserContext) (*Page, error) {
 	}
 
 	if c.cfg.viewportWidth > 0 && c.cfg.viewportHeight > 0 {
-		p.SetViewport(c.cfg.viewportWidth, c.cfg.viewportHeight)
+		if err := p.SetViewport(c.cfg.viewportWidth, c.cfg.viewportHeight); err != nil {
+			return nil, err
+		}
 	}
 	if c.cfg.userAgent != "" {
-		proto.EmulationSetUserAgentOverride(c.cfg.userAgent).Do(execCtx)
+		if err := proto.EmulationSetUserAgentOverride(c.cfg.userAgent).Do(execCtx); err != nil {
+			return nil, err
+		}
 	}
 	if c.cfg.timezone != "" {
-		proto.EmulationSetTimezoneOverride(c.cfg.timezone).Do(execCtx)
+		if err := proto.EmulationSetTimezoneOverride(c.cfg.timezone).Do(execCtx); err != nil {
+			return nil, err
+		}
 	}
 	if c.cfg.locale != "" {
-		proto.EmulationSetLocaleOverride().WithLocale(c.cfg.locale).Do(execCtx)
+		if err := proto.EmulationSetLocaleOverride().WithLocale(c.cfg.locale).Do(execCtx); err != nil {
+			return nil, err
+		}
 	}
 	if c.cfg.hasGeo {
-		proto.EmulationSetGeolocationOverride().
+		if err := proto.EmulationSetGeolocationOverride().
 			WithLatitude(c.cfg.geoLatitude).
 			WithLongitude(c.cfg.geoLongitude).
 			WithAccuracy(c.cfg.geoAccuracy).
-			Do(execCtx)
+			Do(execCtx); err != nil {
+			return nil, err
+		}
 	}
 
 	c.addPage(p)
+
+	if c.cfg.statePath != "" {
+		if err := c.LoadState(c.cfg.statePath); err != nil {
+			return nil, err
+		}
+	}
+
 	return p, nil
 }
 

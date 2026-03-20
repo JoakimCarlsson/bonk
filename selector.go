@@ -68,7 +68,11 @@ func (p *Page) WaitSelector(
 	}
 
 	result, err := poll(p.execCtx, cfg, func() (any, error) {
-		return p.Query(selector)
+		el, err := p.Query(selector)
+		if el == nil {
+			return nil, err
+		}
+		return el, err
 	})
 	if err != nil {
 		return nil, err

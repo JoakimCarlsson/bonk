@@ -38,10 +38,18 @@ func (e *Element) DoubleClick() error {
 	cx := box.X + box.Width/2
 	cy := box.Y + box.Height/2
 
-	e.mouseEvent(proto.InputDispatchMouseEventTypeMouseMoved, cx, cy, 0)
-	e.mouseEvent(proto.InputDispatchMouseEventTypeMousePressed, cx, cy, 1)
-	e.mouseEvent(proto.InputDispatchMouseEventTypeMouseReleased, cx, cy, 1)
-	e.mouseEvent(proto.InputDispatchMouseEventTypeMousePressed, cx, cy, 2)
+	if err := e.mouseEvent(proto.InputDispatchMouseEventTypeMouseMoved, cx, cy, 0); err != nil {
+		return err
+	}
+	if err := e.mouseEvent(proto.InputDispatchMouseEventTypeMousePressed, cx, cy, 1); err != nil {
+		return err
+	}
+	if err := e.mouseEvent(proto.InputDispatchMouseEventTypeMouseReleased, cx, cy, 1); err != nil {
+		return err
+	}
+	if err := e.mouseEvent(proto.InputDispatchMouseEventTypeMousePressed, cx, cy, 2); err != nil {
+		return err
+	}
 	return e.mouseEvent(
 		proto.InputDispatchMouseEventTypeMouseReleased,
 		cx,
@@ -85,13 +93,17 @@ func (e *Element) Type(text string, opts ...TypeOption) error {
 
 	for _, ch := range text {
 		s := string(ch)
-		proto.InputDispatchKeyEvent(proto.InputDispatchKeyEventTypeKeyDown).
+		if err := proto.InputDispatchKeyEvent(proto.InputDispatchKeyEventTypeKeyDown).
 			WithText(s).
 			WithKey(s).
-			Do(e.page.execCtx)
-		proto.InputDispatchKeyEvent(proto.InputDispatchKeyEventTypeKeyUp).
+			Do(e.page.execCtx); err != nil {
+			return err
+		}
+		if err := proto.InputDispatchKeyEvent(proto.InputDispatchKeyEventTypeKeyUp).
 			WithKey(s).
-			Do(e.page.execCtx)
+			Do(e.page.execCtx); err != nil {
+			return err
+		}
 		if cfg.delay > 0 {
 			time.Sleep(cfg.delay)
 		}
@@ -104,9 +116,11 @@ func (e *Element) Press(key string) error {
 	if err := e.focus(); err != nil {
 		return err
 	}
-	proto.InputDispatchKeyEvent(proto.InputDispatchKeyEventTypeKeyDown).
+	if err := proto.InputDispatchKeyEvent(proto.InputDispatchKeyEventTypeKeyDown).
 		WithKey(key).
-		Do(e.page.execCtx)
+		Do(e.page.execCtx); err != nil {
+		return err
+	}
 	return proto.InputDispatchKeyEvent(proto.InputDispatchKeyEventTypeKeyUp).
 		WithKey(key).
 		Do(e.page.execCtx)
@@ -115,13 +129,13 @@ func (e *Element) Press(key string) error {
 // SelectOption selects an option in a <select> element by value.
 func (e *Element) SelectOption(value string) error {
 	_, err := e.callForValue(
-		`function(v){` +
-			`this.value=v;` +
-			`this.dispatchEvent(new Event('input',{bubbles:true}));` +
-			`this.dispatchEvent(new Event('change',{bubbles:true}))` +
+		`function(v){`+
+			`this.value=v;`+
+			`this.dispatchEvent(new Event('input',{bubbles:true}));`+
+			`this.dispatchEvent(new Event('change',{bubbles:true}))`+
 			`}`,
+		value,
 	)
-	_ = value
 	return err
 }
 

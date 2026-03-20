@@ -3,6 +3,9 @@ package bonk
 import (
 	"encoding/json"
 	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/joakimcarlsson/bonk/proto"
 )
@@ -68,6 +71,58 @@ func (e *Element) BoundingBox() (*Box, error) {
 	}, nil
 }
 
+// Screenshot captures a screenshot of the element and saves it to the given path.
+func (e *Element) Screenshot(path string, opts ...ScreenshotOption) error {
+	if err := e.scrollIntoView(); err != nil {
+		return err
+	}
+	box, err := e.BoundingBox()
+	if err != nil {
+		return err
+	}
+	if box == nil {
+		return &ElementNotFoundError{Selector: "(detached element)"}
+	}
+
+	cfg := &screenshotConfig{}
+	for _, o := range opts {
+		o(cfg)
+	}
+
+	clip := proto.PageViewport{
+		X:      box.X,
+		Y:      box.Y,
+		Width:  box.Width,
+		Height: box.Height,
+		Scale:  1,
+	}
+
+	params := proto.PageCaptureScreenshot().WithClip(clip)
+
+	ext := strings.ToLower(filepath.Ext(path))
+	switch ext {
+	case ".jpg", ".jpeg":
+		params = params.WithFormat(proto.PageCaptureScreenshotFormatJpeg)
+		if cfg.quality > 0 {
+			params = params.WithQuality(cfg.quality)
+		}
+	case ".webp":
+		params = params.WithFormat(proto.PageCaptureScreenshotFormatWebp)
+		if cfg.quality > 0 {
+			params = params.WithQuality(cfg.quality)
+		}
+	default:
+		params = params.WithFormat(proto.PageCaptureScreenshotFormatPng)
+	}
+
+	res, err := params.Do(e.page.execCtx)
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(path, res.Data, 0o644)
+}
+
 func (e *Element) scrollIntoView() error {
 	_, err := proto.RuntimeCallFunctionOn(
 		"function(){this.scrollIntoViewIfNeeded(true)}",
@@ -86,11 +141,26 @@ func (e *Element) callForString(fn string) (string, error) {
 	return s, nil
 }
 
-func (e *Element) callForValue(fn string) (any, error) {
-	res, err := proto.RuntimeCallFunctionOn(fn).
+func (e *Element) callForValue(fn string, args ...any) (any, error) {
+	params := proto.RuntimeCallFunctionOn(fn).
 		WithObjectID(e.objectID).
-		WithReturnByValue(true).
-		Do(e.page.execCtx)
+		WithReturnByValue(true)
+
+	if len(args) > 0 {
+		var callArgs []proto.RuntimeCallArgument
+		for _, arg := range args {
+			raw, err := json.Marshal(arg)
+			if err != nil {
+				return nil, fmt.Errorf("bonk: marshal arg: %w", err)
+			}
+			callArgs = append(callArgs, proto.RuntimeCallArgument{
+				Value: json.RawMessage(raw),
+			})
+		}
+		params = params.WithArguments(callArgs)
+	}
+
+	res, err := params.Do(e.page.execCtx)
 	if err != nil {
 		return nil, err
 	}

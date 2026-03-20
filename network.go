@@ -17,8 +17,10 @@ func (p *Page) OnRequest(fn func(*Request)) func() {
 				return
 			}
 			fn(&Request{
-				URL:    ev.Request.URL,
-				Method: ev.Request.Method,
+				URL:      ev.Request.URL,
+				Method:   ev.Request.Method,
+				Headers:  extractHeaders(params, "request", "headers"),
+				PostData: ev.Request.PostData,
 			})
 		},
 	)
@@ -39,6 +41,7 @@ func (p *Page) OnResponse(fn func(*Response)) func() {
 				requestID: ev.RequestID,
 				URL:       ev.Response.URL,
 				Status:    int64(ev.Response.Status),
+				Headers:   extractHeaders(params, "response", "headers"),
 			})
 		},
 	)
@@ -65,11 +68,40 @@ func (p *Page) Route(pattern string, handler func(*Route)) func() {
 				page:      p,
 				requestID: ev.RequestID,
 				Request: &Request{
-					URL:    ev.Request.URL,
-					Method: ev.Request.Method,
+					URL:     ev.Request.URL,
+					Method:  ev.Request.Method,
+					Headers: extractHeaders(params, "request", "headers"),
 				},
 			}
 			handler(route)
 		},
 	)
+}
+
+func extractHeaders(raw json.RawMessage, path ...string) map[string]string {
+	var obj map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &obj); err != nil {
+		return nil
+	}
+
+	current := obj
+	for _, key := range path[:len(path)-1] {
+		var nested map[string]json.RawMessage
+		if err := json.Unmarshal(current[key], &nested); err != nil {
+			return nil
+		}
+		current = nested
+	}
+
+	lastKey := path[len(path)-1]
+	headerRaw, ok := current[lastKey]
+	if !ok {
+		return nil
+	}
+
+	var headers map[string]string
+	if err := json.Unmarshal(headerRaw, &headers); err != nil {
+		return nil
+	}
+	return headers
 }

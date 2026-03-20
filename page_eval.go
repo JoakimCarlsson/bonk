@@ -53,3 +53,9 @@ func (p *Page) EvaluateHandle(expression string) (*Element, error) {
 	}
 	return &Element{page: p, objectID: res.Result.ObjectID}, nil
 }
+
+// EvaluateOn executes a JavaScript function with the element as `this`.
+// The function should be in the form "function(arg1, arg2) { ... }".
+func (p *Page) EvaluateOn(el *Element, fn string, args ...any) (any, error) {
+	return el.callForValue(fn, args...)
+}
