@@ -11,6 +11,14 @@ loc := page.Locator("#submit")
 loc := frame.Locator(".button")
 ```
 
+[Accessibility selectors](accessibility.md) also return Locators:
+
+```go
+loc := page.GetByRole("button", bonk.WithName("Submit"))
+loc := page.GetByLabel("Email")
+loc := page.GetByText("Welcome")
+```
+
 ## Actions
 
 All actions wait for the element to appear before acting:
@@ -70,10 +78,10 @@ text, err := third.Text()
 
 | | Locator | Element |
 |---|---------|---------|
-| Stores | CSS selector | DOM object ID |
+| Stores | Selector or JS expression | DOM object ID |
 | Goes stale | Never | Yes (auto-retries once) |
 | Re-queries | Every action | Only on stale error |
-| Created via | `page.Locator()` | `page.Query()`, `page.WaitSelector()` |
+| Created via | `page.Locator()`, `page.GetByRole()`, etc. | `page.Query()`, `page.WaitSelector()` |
 
 Use `Locator` when the DOM is dynamic and elements may be re-rendered. Use `Element` for performance when the DOM is stable.
 
