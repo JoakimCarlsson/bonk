@@ -36,7 +36,27 @@ func newPage(c *BrowserContext) (*Page, error) {
 		return nil, err
 	}
 
-	attachRes, err := proto.TargetAttachToTarget(createRes.TargetID).
+	p, err := attachToTarget(c, createRes.TargetID)
+	if err != nil {
+		return nil, err
+	}
+
+	if c.cfg.statePath != "" {
+		if err := c.LoadState(c.cfg.statePath); err != nil {
+			return nil, err
+		}
+	}
+
+	return p, nil
+}
+
+func attachToTarget(
+	c *BrowserContext,
+	targetID proto.TargetTargetID,
+) (*Page, error) {
+	browserExecCtx := c.browser.execCtx()
+
+	attachRes, err := proto.TargetAttachToTarget(targetID).
 		WithFlatten(true).
 		Do(browserExecCtx)
 	if err != nil {
@@ -72,7 +92,7 @@ func newPage(c *BrowserContext) (*Page, error) {
 
 	p := &Page{
 		browserCtx:     c,
-		targetID:       createRes.TargetID,
+		targetID:       targetID,
 		sessionID:      sessionID,
 		session:        session,
 		execCtx:        execCtx,
@@ -119,12 +139,6 @@ func newPage(c *BrowserContext) (*Page, error) {
 	}
 
 	c.addPage(p)
-
-	if c.cfg.statePath != "" {
-		if err := c.LoadState(c.cfg.statePath); err != nil {
-			return nil, err
-		}
-	}
 
 	return p, nil
 }
