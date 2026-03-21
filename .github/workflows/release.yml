@@ -1,8 +1,8 @@
-name: ci
+name: release
 
 on:
-  pull_request:
-    branches: [main]
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -35,3 +35,14 @@ jobs:
 
       - name: Integration tests
         run: go test ./tests/integration/ -v -timeout 120s
+
+  goproxy:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v6
+        with:
+          go-version: stable
+
+      - name: Warm Go module proxy
+        run: GOPROXY=proxy.golang.org go list -m github.com/joakimcarlsson/bonk@${{ github.event.release.tag_name }}
