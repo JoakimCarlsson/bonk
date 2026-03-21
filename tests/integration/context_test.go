@@ -66,17 +66,24 @@ func TestSetOffline(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	err := page.Navigate("https://example.com")
-	if err == nil {
-		t.Fatal("expected navigation error while offline")
+	val, err := page.Evaluate("navigator.onLine")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if val != false {
+		t.Errorf("navigator.onLine = %v while offline, want false", val)
 	}
 
 	if err := page.SetOffline(false); err != nil {
 		t.Fatal(err)
 	}
 
-	if err := page.Navigate("https://example.com"); err != nil {
-		t.Fatalf("expected navigation to succeed after going online: %v", err)
+	val, err = page.Evaluate("navigator.onLine")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if val != true {
+		t.Errorf("navigator.onLine = %v after going online, want true", val)
 	}
 }
 

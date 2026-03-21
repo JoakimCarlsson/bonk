@@ -117,22 +117,30 @@ func TestStaleElementRetry(t *testing.T) {
 	page := newPage(t, b)
 
 	page.Navigate("about:blank")
-	page.SetContent(`<html><body><div id="target">original</div></body></html>`)
+	page.SetContent(
+		`<html><body><div id="target">before</div></body></html>`,
+	)
 
 	el, err := page.Query("#target")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	page.Evaluate(`
-		document.body.innerHTML = '<div id="target">replaced</div>';
-	`)
+	text1, _ := el.Text()
+	if text1 != "before" {
+		t.Fatalf("initial text = %q, want before", text1)
+	}
 
-	text, err := el.Text()
+	page.Navigate("about:blank")
+	page.SetContent(
+		`<html><body><div id="target">after</div></body></html>`,
+	)
+
+	text2, err := el.Text()
 	if err != nil {
 		t.Fatal(err)
 	}
-	if text != "replaced" {
-		t.Errorf("text = %q, want replaced", text)
+	if text2 != "after" {
+		t.Errorf("text after navigation = %q, want after", text2)
 	}
 }

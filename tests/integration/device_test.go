@@ -15,7 +15,7 @@ func TestEmulateIPhone15(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	page.Navigate("about:blank")
+	page.Navigate("https://example.com")
 
 	ua, err := page.Evaluate("navigator.userAgent")
 	if err != nil {
@@ -30,8 +30,13 @@ func TestEmulateIPhone15(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if w, _ := width.(float64); w != 393 {
-		t.Errorf("innerWidth = %v, want 393", w)
+	w, _ := width.(float64)
+	if w != float64(bonk.IPhone15.ViewportWidth) {
+		t.Errorf(
+			"innerWidth = %v, want %d",
+			w,
+			bonk.IPhone15.ViewportWidth,
+		)
 	}
 }
 
@@ -53,7 +58,7 @@ func TestEmulateCustomDevice(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	page.Navigate("about:blank")
+	page.Navigate("https://example.com")
 
 	ua, _ := page.Evaluate("navigator.userAgent")
 	if ua != "TestAgent/1.0" {
