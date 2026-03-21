@@ -211,6 +211,68 @@ func (f *Frame) ensureContext() (proto.RuntimeExecutionContextID, error) {
 	return f.contextID, nil
 }
 
+func (f *Frame) queryJSHandle(expr string) (*Element, error) {
+	ctx, err := f.ensureContext()
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := proto.RuntimeEvaluate(expr).
+		WithContextID(ctx).
+		WithReturnByValue(false).
+		Do(f.page.execCtx)
+	if err != nil {
+		return nil, err
+	}
+	if res.Result.ObjectID == "" {
+		return nil, nil
+	}
+	return &Element{
+		page:     f.page,
+		objectID: res.Result.ObjectID,
+	}, nil
+}
+
+func (f *Frame) queryAllJSHandles(expr string) ([]*Element, error) {
+	ctx, err := f.ensureContext()
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := proto.RuntimeEvaluate(expr).
+		WithContextID(ctx).
+		WithReturnByValue(false).
+		Do(f.page.execCtx)
+	if err != nil {
+		return nil, err
+	}
+	if res.Result.ObjectID == "" {
+		return nil, nil
+	}
+
+	props, err := proto.RuntimeGetProperties(res.Result.ObjectID).
+		WithOwnProperties(true).
+		Do(f.page.execCtx)
+	if err != nil {
+		return nil, err
+	}
+
+	var elements []*Element
+	for _, prop := range props.Result {
+		if prop.Value.ObjectID == "" {
+			continue
+		}
+		if prop.Name == "length" || prop.Name == "__proto__" {
+			continue
+		}
+		elements = append(elements, &Element{
+			page:     f.page,
+			objectID: prop.Value.ObjectID,
+		})
+	}
+	return elements, nil
+}
+
 func walkFrameTree(
 	tree *proto.PageFrameTree,
 	page *Page,
