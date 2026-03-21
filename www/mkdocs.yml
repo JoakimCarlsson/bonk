@@ -50,6 +50,7 @@ nav:
       - Element: core/element.md
   - Automation:
       - Selectors: automation/selectors.md
+      - Accessibility Selectors: automation/accessibility.md
       - Locators: automation/locators.md
       - Input: automation/input.md
       - Frames: automation/frames.md

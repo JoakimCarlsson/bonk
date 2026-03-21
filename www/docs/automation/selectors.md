@@ -2,6 +2,8 @@
 
 bonk uses CSS selectors to find elements on a page. All selector methods work on both `Page` and `Frame`.
 
+For semantic selectors based on ARIA roles, labels, and text content, see [Accessibility Selectors](accessibility.md).
+
 ## Query
 
 Find the first matching element. Returns `nil` if not found:

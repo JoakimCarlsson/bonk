@@ -160,3 +160,53 @@ func jsString(s string) string {
 	s = strings.ReplaceAll(s, "\n", `\n`)
 	return "'" + s + "'"
 }
+
+func (p *Page) queryJSHandle(expr string) (*Element, error) {
+	res, err := proto.RuntimeEvaluate(expr).
+		WithReturnByValue(false).
+		Do(p.execCtx)
+	if err != nil {
+		return nil, err
+	}
+	if res.Result.ObjectID == "" {
+		return nil, nil
+	}
+	return &Element{
+		page:     p,
+		objectID: res.Result.ObjectID,
+	}, nil
+}
+
+func (p *Page) queryAllJSHandles(expr string) ([]*Element, error) {
+	res, err := proto.RuntimeEvaluate(expr).
+		WithReturnByValue(false).
+		Do(p.execCtx)
+	if err != nil {
+		return nil, err
+	}
+	if res.Result.ObjectID == "" {
+		return nil, nil
+	}
+
+	props, err := proto.RuntimeGetProperties(res.Result.ObjectID).
+		WithOwnProperties(true).
+		Do(p.execCtx)
+	if err != nil {
+		return nil, err
+	}
+
+	var elements []*Element
+	for _, prop := range props.Result {
+		if prop.Value.ObjectID == "" {
+			continue
+		}
+		if prop.Name == "length" || prop.Name == "__proto__" {
+			continue
+		}
+		elements = append(elements, &Element{
+			page:     p,
+			objectID: prop.Value.ObjectID,
+		})
+	}
+	return elements, nil
+}
