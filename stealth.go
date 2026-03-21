@@ -14,7 +14,8 @@ func applyStealth(p *Page) error {
 	if err := patchUserAgent(p); err != nil {
 		return err
 	}
-	if err := injectPatches(p); err != nil {
+	if err := proto.EmulationSetHardwareConcurrencyOverride(8).
+		Do(p.execCtx); err != nil {
 		return err
 	}
 	return nil

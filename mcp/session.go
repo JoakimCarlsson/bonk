@@ -77,7 +77,15 @@ func (s *Session) ensureBrowser() error {
 		return fmt.Errorf("launch browser: %w", err)
 	}
 
-	ctx, err := b.NewContext()
+	var ctxOpts []bonk.ContextOption
+	if s.cfg.headless && s.cfg.stealth {
+		ctxOpts = append(
+			ctxOpts,
+			bonk.WithViewport(1920, 1080),
+		)
+	}
+
+	ctx, err := b.NewContext(ctxOpts...)
 	if err != nil {
 		b.Close()
 		return fmt.Errorf("create context: %w", err)
