@@ -9,6 +9,60 @@ import (
 	"github.com/joakimcarlsson/bonk/proto"
 )
 
+// ScreenshotBytes captures a screenshot and returns it as PNG bytes.
+func (p *Page) ScreenshotBytes(
+	opts ...ScreenshotOption,
+) ([]byte, error) {
+	cfg := &screenshotConfig{}
+	for _, o := range opts {
+		o(cfg)
+	}
+
+	params := proto.PageCaptureScreenshot().
+		WithFormat(proto.PageCaptureScreenshotFormatPng)
+
+	if cfg.fullPage {
+		params = params.WithCaptureBeyondViewport(true)
+	}
+
+	res, err := params.Do(p.execCtx)
+	if err != nil {
+		return nil, err
+	}
+
+	data := res.Data
+	if isBase64(data) {
+		decoded, err := base64.StdEncoding.DecodeString(
+			string(data),
+		)
+		if err == nil {
+			data = decoded
+		}
+	}
+
+	return data, nil
+}
+
+// PDFBytes renders the page as a PDF and returns the raw bytes.
+func (p *Page) PDFBytes() ([]byte, error) {
+	res, err := proto.PagePrintToPDF().Do(p.execCtx)
+	if err != nil {
+		return nil, err
+	}
+
+	data := res.Data
+	if isBase64(data) {
+		decoded, err := base64.StdEncoding.DecodeString(
+			string(data),
+		)
+		if err == nil {
+			data = decoded
+		}
+	}
+
+	return data, nil
+}
+
 // ScreenshotOption configures screenshot behavior.
 type ScreenshotOption func(*screenshotConfig)
 
