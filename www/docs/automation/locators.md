@@ -74,6 +74,85 @@ third := loc.Nth(2)           // zero-based
 text, err := third.Text()
 ```
 
+## Filter
+
+Narrow matches by text content or sub-locator containment. All criteria are AND'd together.
+
+### HasText / HasNotText
+
+```go
+rows := page.Locator("tr")
+activeRows := rows.Filter(bonk.LocatorFilter{HasText: "Active"})
+withoutDraft := rows.Filter(bonk.LocatorFilter{HasNotText: "Draft"})
+```
+
+### Has / HasNot
+
+Keep or exclude elements that contain a descendant matching a sub-locator:
+
+```go
+cards := page.Locator(".card")
+
+// only cards that contain an <h2>
+withHeading := cards.Filter(bonk.LocatorFilter{
+    Has: page.Locator("h2"),
+})
+
+// cards without a .badge element
+withoutBadge := cards.Filter(bonk.LocatorFilter{
+    HasNot: page.Locator(".badge"),
+})
+```
+
+Sub-locators can be CSS or accessibility selectors:
+
+```go
+// cards containing the text "Total"
+cards.Filter(bonk.LocatorFilter{
+    Has: page.GetByText("Total"),
+})
+```
+
+### Combining criteria
+
+```go
+// active cards with a heading
+cards.Filter(bonk.LocatorFilter{
+    HasText: "Active",
+    Has:     page.Locator("h2"),
+})
+```
+
+### Chaining filters
+
+```go
+page.Locator(".card").
+    Filter(bonk.LocatorFilter{HasText: "Active"}).
+    Filter(bonk.LocatorFilter{Has: page.Locator(".price")})
+```
+
+## And
+
+Match elements that satisfy **both** locators (intersection):
+
+```go
+loc := page.Locator(".highlight").And(page.Locator(".visible"))
+
+// combine CSS with accessibility selectors
+submitBtn := page.Locator("button").And(page.GetByText("Submit"))
+```
+
+## Or
+
+Match elements that satisfy **either** locator (union). Results are in document order:
+
+```go
+alerts := page.Locator(".error").Or(page.Locator(".warning"))
+
+count, _ := alerts.Count()
+fmt.Printf("Found %d alerts\n", count)
+```
+
 ## Locator vs Element
 
 | | Locator | Element |
