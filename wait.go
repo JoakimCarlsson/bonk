@@ -51,9 +51,9 @@ func WaitHiddenOption() WaitOption {
 	}
 }
 
-func defaultWaitConfig() *waitConfig {
+func defaultWaitConfigFor(p *Page) *waitConfig {
 	return &waitConfig{
-		timeout:  30 * time.Second,
+		timeout:  p.resolveTimeout(),
 		interval: 50 * time.Millisecond,
 	}
 }

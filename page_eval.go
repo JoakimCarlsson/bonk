@@ -44,7 +44,7 @@ func (p *Page) Content() (string, error) {
 
 // WaitForFunction waits until the given JavaScript expression evaluates to a truthy value.
 func (p *Page) WaitForFunction(expression string, opts ...WaitOption) error {
-	cfg := defaultWaitConfig()
+	cfg := defaultWaitConfigFor(p)
 	for _, o := range opts {
 		o(cfg)
 	}

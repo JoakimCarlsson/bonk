@@ -70,7 +70,7 @@ func (p *Page) WaitSelector(
 	selector string,
 	opts ...WaitOption,
 ) (*Element, error) {
-	cfg := defaultWaitConfig()
+	cfg := defaultWaitConfigFor(p)
 	for _, o := range opts {
 		o(cfg)
 	}

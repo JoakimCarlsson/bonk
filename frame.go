@@ -113,7 +113,7 @@ func (f *Frame) WaitSelector(
 	selector string,
 	opts ...WaitOption,
 ) (*Element, error) {
-	cfg := defaultWaitConfig()
+	cfg := defaultWaitConfigFor(f.page)
 	for _, o := range opts {
 		o(cfg)
 	}

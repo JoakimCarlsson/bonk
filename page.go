@@ -11,16 +11,17 @@ import (
 
 // Page represents a single browser tab/page.
 type Page struct {
-	browserCtx     *BrowserContext
-	targetID       proto.TargetTargetID
-	sessionID      proto.SessionID
-	session        *rpc.Session
-	execCtx        context.Context
-	frameID        proto.FrameID
-	fetch          *fetchManager
-	stealth        bool
-	defaultTimeout time.Duration
-	cancelTimeout  context.CancelFunc
+	browserCtx               *BrowserContext
+	targetID                 proto.TargetTargetID
+	sessionID                proto.SessionID
+	session                  *rpc.Session
+	execCtx                  context.Context
+	frameID                  proto.FrameID
+	fetch                    *fetchManager
+	stealth                  bool
+	defaultTimeout           time.Duration
+	defaultNavigationTimeout time.Duration
+	cancelTimeout            context.CancelFunc
 
 	mu     sync.Mutex
 	closed bool
@@ -98,7 +99,7 @@ func attachToTarget(
 		execCtx:        execCtx,
 		frameID:        frameID,
 		stealth:        stealth,
-		defaultTimeout: 30 * time.Second,
+		defaultTimeout: 0,
 	}
 	p.fetch = newFetchManager(p)
 
@@ -172,15 +173,16 @@ func (p *Page) Close() error {
 // fetch manager, and mutex with the original.
 func (p *Page) WithContext(ctx context.Context) *Page {
 	return &Page{
-		browserCtx:     p.browserCtx,
-		targetID:       p.targetID,
-		sessionID:      p.sessionID,
-		session:        p.session,
-		execCtx:        proto.WithExecutor(ctx, p.session),
-		frameID:        p.frameID,
-		fetch:          p.fetch,
-		stealth:        p.stealth,
-		defaultTimeout: p.defaultTimeout,
+		browserCtx:               p.browserCtx,
+		targetID:                 p.targetID,
+		sessionID:                p.sessionID,
+		session:                  p.session,
+		execCtx:                  proto.WithExecutor(ctx, p.session),
+		frameID:                  p.frameID,
+		fetch:                    p.fetch,
+		stealth:                  p.stealth,
+		defaultTimeout:           p.defaultTimeout,
+		defaultNavigationTimeout: p.defaultNavigationTimeout,
 	}
 }
 
@@ -216,4 +218,48 @@ func (p *Page) IsClosed() bool {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 	return p.closed
+}
+
+// SetDefaultTimeout sets the default timeout for wait/query operations on
+// this page. Zero clears the page-level override (inherits from context).
+func (p *Page) SetDefaultTimeout(d time.Duration) {
+	p.mu.Lock()
+	p.defaultTimeout = d
+	p.mu.Unlock()
+}
+
+// SetDefaultNavigationTimeout sets the default timeout for navigation
+// operations on this page. Zero clears the page-level override.
+func (p *Page) SetDefaultNavigationTimeout(d time.Duration) {
+	p.mu.Lock()
+	p.defaultNavigationTimeout = d
+	p.mu.Unlock()
+}
+
+const fallbackTimeout = 30 * time.Second
+
+func (p *Page) resolveTimeout() time.Duration {
+	if p.defaultTimeout > 0 {
+		return p.defaultTimeout
+	}
+	if d := p.browserCtx.getDefaultTimeout(); d > 0 {
+		return d
+	}
+	return fallbackTimeout
+}
+
+func (p *Page) resolveNavigationTimeout() time.Duration {
+	if p.defaultNavigationTimeout > 0 {
+		return p.defaultNavigationTimeout
+	}
+	if d := p.browserCtx.getDefaultNavigationTimeout(); d > 0 {
+		return d
+	}
+	if p.defaultTimeout > 0 {
+		return p.defaultTimeout
+	}
+	if d := p.browserCtx.getDefaultTimeout(); d > 0 {
+		return d
+	}
+	return fallbackTimeout
 }

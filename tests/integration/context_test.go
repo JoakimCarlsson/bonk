@@ -169,3 +169,138 @@ func TestWaitForURL(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestSetDefaultTimeout(t *testing.T) {
+	b := launchBrowser(t)
+	ctx, err := b.NewContext()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { ctx.Close() })
+
+	ctx.SetDefaultTimeout(1 * time.Millisecond)
+
+	page, err := ctx.NewPage()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	page.Navigate("about:blank")
+	page.SetContent("<div id='exists'>hello</div>")
+
+	_, err = page.WaitSelector("#nonexistent")
+	if err == nil {
+		t.Fatal("expected timeout error, got nil")
+	}
+}
+
+func TestSetDefaultNavigationTimeout(t *testing.T) {
+	b := launchBrowser(t)
+	ctx, err := b.NewContext()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { ctx.Close() })
+
+	ctx.SetDefaultNavigationTimeout(1 * time.Millisecond)
+
+	page, err := ctx.NewPage()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = page.Navigate("https://httpbin.org/delay/10")
+	if err == nil {
+		t.Fatal("expected timeout error, got nil")
+	}
+}
+
+func TestPageOverridesContextTimeout(t *testing.T) {
+	b := launchBrowser(t)
+	ctx, err := b.NewContext()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { ctx.Close() })
+
+	ctx.SetDefaultTimeout(30 * time.Second)
+
+	page, err := ctx.NewPage()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	page.SetDefaultTimeout(1 * time.Millisecond)
+
+	page.Navigate("about:blank")
+	page.SetContent("<div id='exists'>hello</div>")
+
+	_, err = page.WaitSelector("#nonexistent")
+	if err == nil {
+		t.Fatal("expected timeout error from page override, got nil")
+	}
+}
+
+func TestGrantPermissions(t *testing.T) {
+	b := launchBrowser(t)
+	ctx, err := b.NewContext()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { ctx.Close() })
+
+	page, err := ctx.NewPage()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	page.Navigate("https://example.com")
+
+	if err := ctx.GrantPermissions([]string{"geolocation"}); err != nil {
+		t.Fatal(err)
+	}
+
+	val, err := page.Evaluate(
+		`navigator.permissions.query({name: 'geolocation'}).then(r => r.state)`,
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if val != "granted" {
+		t.Errorf("geolocation permission = %v, want granted", val)
+	}
+}
+
+func TestClearPermissions(t *testing.T) {
+	b := launchBrowser(t)
+	ctx, err := b.NewContext()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { ctx.Close() })
+
+	page, err := ctx.NewPage()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	page.Navigate("https://example.com")
+
+	if err := ctx.GrantPermissions([]string{"geolocation"}); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := ctx.ClearPermissions(); err != nil {
+		t.Fatal(err)
+	}
+
+	val, err := page.Evaluate(
+		`navigator.permissions.query({name: 'geolocation'}).then(r => r.state)`,
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if val == "granted" {
+		t.Error("geolocation permission should not be granted after clear")
+	}
+}
