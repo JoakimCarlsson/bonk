@@ -123,6 +123,43 @@ func (e *Element) Screenshot(path string, opts ...ScreenshotOption) error {
 	return os.WriteFile(path, res.Data, 0o644)
 }
 
+// ScreenshotBytes captures a screenshot of the element and returns PNG bytes.
+func (e *Element) ScreenshotBytes(
+	opts ...ScreenshotOption,
+) ([]byte, error) {
+	if err := e.scrollIntoView(); err != nil {
+		return nil, err
+	}
+	box, err := e.BoundingBox()
+	if err != nil {
+		return nil, err
+	}
+	if box == nil {
+		return nil, &ElementNotFoundError{
+			Selector: "(detached element)",
+		}
+	}
+
+	clip := proto.PageViewport{
+		X:      box.X,
+		Y:      box.Y,
+		Width:  box.Width,
+		Height: box.Height,
+		Scale:  1,
+	}
+
+	params := proto.PageCaptureScreenshot().
+		WithClip(clip).
+		WithFormat(proto.PageCaptureScreenshotFormatPng)
+
+	res, err := params.Do(e.page.execCtx)
+	if err != nil {
+		return nil, err
+	}
+
+	return res.Data, nil
+}
+
 // ScrollIntoView scrolls the element into view.
 func (e *Element) ScrollIntoView() error { return e.scrollIntoView() }
 

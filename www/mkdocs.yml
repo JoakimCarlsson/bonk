@@ -72,3 +72,6 @@ nav:
       - Session Persistence: advanced/session-persistence.md
       - Page Pool: advanced/pool.md
       - Debugging: advanced/debugging.md
+  - MCP Server:
+      - Overview: mcp/overview.md
+      - Tools Reference: mcp/tools-reference.md
