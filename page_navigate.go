@@ -26,9 +26,9 @@ type navigateConfig struct {
 	waitUntil NavigateWait
 }
 
-func defaultNavigateConfig() *navigateConfig {
+func defaultNavigateConfig(p *Page) *navigateConfig {
 	return &navigateConfig{
-		timeout:   30 * time.Second,
+		timeout:   p.resolveNavigationTimeout(),
 		waitUntil: WaitLoad,
 	}
 }
@@ -49,7 +49,7 @@ func WithWaitUntil(w NavigateWait) NavigateOption {
 
 // Navigate navigates the page to the given URL and waits for completion.
 func (p *Page) Navigate(url string, opts ...NavigateOption) error {
-	cfg := defaultNavigateConfig()
+	cfg := defaultNavigateConfig(p)
 	for _, o := range opts {
 		o(cfg)
 	}
@@ -99,7 +99,7 @@ func (p *Page) Navigate(url string, opts ...NavigateOption) error {
 
 // Reload reloads the current page and waits for completion.
 func (p *Page) Reload(opts ...NavigateOption) error {
-	cfg := defaultNavigateConfig()
+	cfg := defaultNavigateConfig(p)
 	for _, o := range opts {
 		o(cfg)
 	}
@@ -170,7 +170,7 @@ func (p *Page) GoForward(opts ...NavigateOption) error {
 }
 
 func (p *Page) navigateToEntry(entryID int64, opts ...NavigateOption) error {
-	cfg := defaultNavigateConfig()
+	cfg := defaultNavigateConfig(p)
 	for _, o := range opts {
 		o(cfg)
 	}
@@ -216,7 +216,7 @@ func (p *Page) navigateToEntry(entryID int64, opts ...NavigateOption) error {
 
 // WaitNavigation waits for the next navigation to complete.
 func (p *Page) WaitNavigation(opts ...NavigateOption) error {
-	cfg := defaultNavigateConfig()
+	cfg := defaultNavigateConfig(p)
 	for _, o := range opts {
 		o(cfg)
 	}
@@ -263,7 +263,7 @@ func (p *Page) SetContent(html string) error {
 
 // WaitForURL waits until the page URL matches the given glob pattern.
 func (p *Page) WaitForURL(pattern string, opts ...WaitOption) error {
-	cfg := defaultWaitConfig()
+	cfg := defaultWaitConfigFor(p)
 	for _, o := range opts {
 		o(cfg)
 	}

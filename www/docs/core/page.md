@@ -122,6 +122,17 @@ err = page.Emulate(bonk.IPhone15)
 
 See [Device Emulation](../automation/device-emulation.md) for all presets.
 
+## Default Timeouts
+
+Set page-level defaults that apply to all operations on this page:
+
+```go
+page.SetDefaultTimeout(5 * time.Second)            // wait/query operations
+page.SetDefaultNavigationTimeout(15 * time.Second)  // navigate, reload, etc.
+```
+
+Page-level timeouts override context-level timeouts. If neither is set, the default is 30s.
+
 ## Context Control
 
 ```go

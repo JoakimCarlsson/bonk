@@ -38,6 +38,41 @@ ctx, err := b.NewContext(
 | `WithGeolocation(lat, lon float64)` | Geolocation override |
 | `WithState(string)` | Load saved cookies from file |
 
+## Default Timeouts
+
+Set context-wide default timeouts so you don't have to pass them on every call:
+
+```go
+ctx.SetDefaultTimeout(10 * time.Second)           // wait/query operations
+ctx.SetDefaultNavigationTimeout(30 * time.Second)  // navigate, reload, go back/forward
+```
+
+Resolution order: page-level override > context-level override > 30s default.
+
+Pages can override the context default:
+
+```go
+page.SetDefaultTimeout(5 * time.Second)
+page.SetDefaultNavigationTimeout(15 * time.Second)
+```
+
+## Permissions
+
+Grant browser permissions (geolocation, notifications, camera, etc.) for the context:
+
+```go
+err = ctx.GrantPermissions([]string{"geolocation", "notifications"})
+
+// scope to a specific origin
+err = ctx.GrantPermissions(
+    []string{"geolocation"},
+    bonk.PermissionOrigin("https://example.com"),
+)
+
+// reset all permission overrides
+err = ctx.ClearPermissions()
+```
+
 ## Pages
 
 ```go

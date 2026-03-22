@@ -429,3 +429,61 @@ func TestWaitForSelector(t *testing.T) {
 		t.Errorf("should contain element text: %s", text)
 	}
 }
+
+func TestSetDefaultTimeoutTool(t *testing.T) {
+	c, _ := setupServer(t)
+
+	result := callTool(t, c, "set_default_timeout", map[string]any{
+		"timeout_ms": float64(5000),
+	})
+	text := resultText(t, result)
+	if !strings.Contains(text, "5s") {
+		t.Errorf("should confirm timeout set: %s", text)
+	}
+}
+
+func TestSetDefaultNavigationTimeoutTool(t *testing.T) {
+	c, _ := setupServer(t)
+
+	result := callTool(t, c, "set_default_navigation_timeout", map[string]any{
+		"timeout_ms": float64(10000),
+	})
+	text := resultText(t, result)
+	if !strings.Contains(text, "10s") {
+		t.Errorf("should confirm navigation timeout set: %s", text)
+	}
+}
+
+func TestGrantPermissionsTool(t *testing.T) {
+	c, _ := setupServer(t)
+
+	callTool(t, c, "navigate", map[string]any{
+		"url": "https://example.com",
+	})
+
+	result := callTool(t, c, "grant_permissions", map[string]any{
+		"permissions": []any{"geolocation", "notifications"},
+	})
+	text := resultText(t, result)
+	if !strings.Contains(text, "Granted") {
+		t.Errorf("should confirm permissions granted: %s", text)
+	}
+}
+
+func TestClearPermissionsTool(t *testing.T) {
+	c, _ := setupServer(t)
+
+	callTool(t, c, "navigate", map[string]any{
+		"url": "https://example.com",
+	})
+
+	callTool(t, c, "grant_permissions", map[string]any{
+		"permissions": []any{"geolocation"},
+	})
+
+	result := callTool(t, c, "clear_permissions", nil)
+	text := resultText(t, result)
+	if !strings.Contains(text, "cleared") {
+		t.Errorf("should confirm permissions cleared: %s", text)
+	}
+}

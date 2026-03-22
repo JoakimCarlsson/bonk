@@ -24,7 +24,7 @@ func PopupTimeout(d time.Duration) PopupOption {
 // WaitForPopup waits for a new page (tab/popup) to be opened by this page
 // and returns it. The caller should trigger the popup after calling this method.
 func (p *Page) WaitForPopup(opts ...PopupOption) (*Page, error) {
-	cfg := &popupConfig{timeout: p.defaultTimeout}
+	cfg := &popupConfig{timeout: p.resolveTimeout()}
 	for _, o := range opts {
 		o(cfg)
 	}

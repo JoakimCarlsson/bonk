@@ -194,7 +194,7 @@ func (l *Locator) resolve(opts ...WaitOption) (*Element, error) {
 }
 
 func (l *Locator) resolveJS(opts ...WaitOption) (*Element, error) {
-	cfg := defaultWaitConfig()
+	cfg := defaultWaitConfigFor(l.page)
 	for _, o := range opts {
 		o(cfg)
 	}
@@ -222,7 +222,7 @@ func (l *Locator) resolveJS(opts ...WaitOption) (*Element, error) {
 }
 
 func (l *Locator) resolveNth(opts ...WaitOption) (*Element, error) {
-	cfg := defaultWaitConfig()
+	cfg := defaultWaitConfigFor(l.page)
 	for _, o := range opts {
 		o(cfg)
 	}

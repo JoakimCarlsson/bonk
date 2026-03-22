@@ -222,7 +222,7 @@ func (e *Element) prepare() (*Box, error) {
 // WaitForVisible waits until the element becomes visible.
 func (e *Element) WaitForVisible(opts ...WaitOption) error {
 	cfg := &waitConfig{
-		timeout:  e.page.defaultTimeout,
+		timeout:  e.page.resolveTimeout(),
 		interval: 50 * time.Millisecond,
 	}
 	for _, o := range opts {
@@ -244,7 +244,7 @@ func (e *Element) WaitForVisible(opts ...WaitOption) error {
 // WaitForHidden waits until the element becomes hidden.
 func (e *Element) WaitForHidden(opts ...WaitOption) error {
 	cfg := &waitConfig{
-		timeout:  e.page.defaultTimeout,
+		timeout:  e.page.resolveTimeout(),
 		interval: 50 * time.Millisecond,
 	}
 	for _, o := range opts {

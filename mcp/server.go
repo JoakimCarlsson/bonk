@@ -14,6 +14,7 @@ func NewServer(sess *Session) *server.MCPServer {
 	)
 
 	registerBrowserTools(s, sess)
+	registerContextTools(s, sess)
 	registerNavigateTools(s, sess)
 	registerPageTools(s, sess)
 	registerElementTools(s, sess)

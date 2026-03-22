@@ -40,6 +40,39 @@ Close a specific browser tab.
 |-----------|------|----------|-------------|
 | `page_id` | string | yes | ID of the page to close |
 
+## Context Configuration
+
+### set_default_timeout
+
+Set the default timeout for all wait/query operations.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `timeout_ms` | number | yes | Timeout in milliseconds |
+
+### set_default_navigation_timeout
+
+Set the default timeout for navigation operations (navigate, reload, go_back, go_forward).
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `timeout_ms` | number | yes | Timeout in milliseconds |
+
+### grant_permissions
+
+Grant browser permissions such as geolocation, notifications, camera, microphone.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `permissions` | string[] | yes | List of permissions (e.g. `geolocation`, `notifications`, `audioCapture`, `videoCapture`) |
+| `origin` | string | no | Origin to scope permissions to |
+
+### clear_permissions
+
+Reset all permission overrides for the browser context.
+
+*No parameters.*
+
 ## Navigation
 
 ### navigate
