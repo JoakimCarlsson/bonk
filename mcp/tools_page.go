@@ -16,7 +16,8 @@ func registerPageTools(s *server.MCPServer, sess *Session) {
 		mcp.NewTool("screenshot",
 			mcp.WithDescription(
 				"Take a screenshot of the page or a specific "+
-					"element. Returns a PNG image.",
+					"element. Defaults to JPEG at max 1280px "+
+					"width for compact responses.",
 			),
 			mcp.WithString("page_id",
 				mcp.Description(
@@ -34,6 +35,19 @@ func registerPageTools(s *server.MCPServer, sess *Session) {
 					"CSS selector of a specific element "+
 						"to screenshot",
 				),
+			),
+			mcp.WithNumber("max_width",
+				mcp.Description(
+					"Maximum image width in pixels. "+
+						"Defaults to 1280.",
+				),
+			),
+			mcp.WithString("format",
+				mcp.Description(
+					"Image format: jpeg or png. "+
+						"Defaults to jpeg.",
+				),
+				mcp.Enum("jpeg", "png"),
 			),
 		),
 		sess.handleScreenshot,
@@ -89,6 +103,25 @@ func registerPageTools(s *server.MCPServer, sess *Session) {
 		),
 		sess.handleEvaluate,
 	)
+
+	s.AddTool(
+		mcp.NewTool("snapshot",
+			mcp.WithDescription(
+				"Get the accessibility tree of the page. "+
+					"Returns an indexed, structured view of "+
+					"all elements. Interactive elements get "+
+					"numbered indices. Use this to understand "+
+					"page structure before clicking or filling.",
+			),
+			mcp.WithString("page_id",
+				mcp.Description(
+					"ID of the page. "+
+						"Omit to use the default page.",
+				),
+			),
+		),
+		sess.handleSnapshot,
+	)
 }
 
 func (s *Session) handleScreenshot(
@@ -103,6 +136,20 @@ func (s *Session) handleScreenshot(
 		return mcp.NewToolResultError(err.Error()), nil
 	}
 
+	format := req.GetString("format", "jpeg")
+	maxWidth := req.GetInt("max_width", 1280)
+	mime := "image/jpeg"
+
+	var opts []bonk.ScreenshotOption
+	if format != "png" {
+		opts = append(opts, bonk.AsJPEG())
+	} else {
+		mime = "image/png"
+	}
+	if maxWidth > 0 {
+		opts = append(opts, bonk.MaxWidth(maxWidth))
+	}
+
 	selector := req.GetString("selector", "")
 	if selector != "" {
 		el, err := page.Query(selector)
@@ -111,20 +158,21 @@ func (s *Session) handleScreenshot(
 		}
 		if el == nil {
 			return mcp.NewToolResultError(
-				fmt.Sprintf("element %q not found", selector),
+				fmt.Sprintf(
+					"element %q not found", selector,
+				),
 			), nil
 		}
-		data, err := el.ScreenshotBytes()
+		data, err := el.ScreenshotBytes(opts...)
 		if err != nil {
 			return mcp.NewToolResultError(err.Error()), nil
 		}
 		encoded := base64.StdEncoding.EncodeToString(data)
 		return mcp.NewToolResultImage(
-			"", encoded, "image/png",
+			"", encoded, mime,
 		), nil
 	}
 
-	var opts []bonk.ScreenshotOption
 	if req.GetBool("full_page", false) {
 		opts = append(opts, bonk.FullPage())
 	}
@@ -135,9 +183,7 @@ func (s *Session) handleScreenshot(
 	}
 
 	encoded := base64.StdEncoding.EncodeToString(data)
-	return mcp.NewToolResultImage(
-		"", encoded, "image/png",
-	), nil
+	return mcp.NewToolResultImage("", encoded, mime), nil
 }
 
 func (s *Session) handlePDF(
@@ -207,4 +253,28 @@ func (s *Session) handleEvaluate(
 
 	data, _ := json.MarshalIndent(result, "", "  ")
 	return mcp.NewToolResultText(string(data)), nil
+}
+
+func (s *Session) handleSnapshot(
+	_ context.Context,
+	req mcp.CallToolRequest,
+) (*mcp.CallToolResult, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	page, _, err := s.pageFromRequest(req)
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	nodes, err := page.AccessibilityTree()
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	text := bonk.FormatAccessibilityTree(nodes)
+	if text == "" {
+		text = "(empty accessibility tree)"
+	}
+	return mcp.NewToolResultText(text), nil
 }

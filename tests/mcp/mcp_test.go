@@ -144,9 +144,9 @@ func TestScreenshot(t *testing.T) {
 	for _, content := range result.Content {
 		if img, ok := content.(mcp.ImageContent); ok {
 			hasImage = true
-			if img.MIMEType != "image/png" {
+			if img.MIMEType != "image/jpeg" {
 				t.Errorf(
-					"mime = %q, want image/png",
+					"mime = %q, want image/jpeg",
 					img.MIMEType,
 				)
 			}

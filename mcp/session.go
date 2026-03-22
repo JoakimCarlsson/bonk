@@ -15,6 +15,7 @@ type sessionConfig struct {
 	headless   bool
 	stealth    bool
 	chromePath string
+	maxPages   int
 }
 
 // WithHeadless sets whether the browser runs headless.
@@ -32,21 +33,29 @@ func WithChromePath(path string) SessionOption {
 	return func(c *sessionConfig) { c.chromePath = path }
 }
 
+// WithMaxPages sets the maximum number of concurrent pages.
+// When the limit is reached, the least recently used page is
+// automatically closed to make room. Defaults to 10.
+func WithMaxPages(n int) SessionOption {
+	return func(c *sessionConfig) { c.maxPages = n }
+}
+
 // Session manages a single browser instance and its pages
 // across MCP tool calls.
 type Session struct {
-	mu      sync.Mutex
-	browser *bonk.Browser
-	ctx     *bonk.BrowserContext
-	pages   map[string]*bonk.Page
-	nextID  int
-	cfg     sessionConfig
-	routes  map[string]func()
+	mu        sync.Mutex
+	browser   *bonk.Browser
+	ctx       *bonk.BrowserContext
+	pages     map[string]*bonk.Page
+	pageOrder []string
+	nextID    int
+	cfg       sessionConfig
+	routes    map[string]func()
 }
 
 // NewSession creates a new session with the given options.
 func NewSession(opts ...SessionOption) *Session {
-	cfg := sessionConfig{headless: true, stealth: true}
+	cfg := sessionConfig{headless: true, stealth: true, maxPages: 10}
 	for _, o := range opts {
 		o(&cfg)
 	}
@@ -103,6 +112,7 @@ func (s *Session) ensurePage() (*bonk.Page, string, error) {
 
 	for id, p := range s.pages {
 		if !p.IsClosed() {
+			s.touchPage(id)
 			return p, id, nil
 		}
 	}
@@ -115,6 +125,10 @@ func (s *Session) newPage() (*bonk.Page, string, error) {
 		return nil, "", err
 	}
 
+	if s.cfg.maxPages > 0 && len(s.pages) >= s.cfg.maxPages {
+		s.evictLRU()
+	}
+
 	p, err := s.ctx.NewPage()
 	if err != nil {
 		return nil, "", fmt.Errorf("create page: %w", err)
@@ -123,7 +137,33 @@ func (s *Session) newPage() (*bonk.Page, string, error) {
 	s.nextID++
 	id := fmt.Sprintf("page_%d", s.nextID)
 	s.pages[id] = p
+	s.pageOrder = append(s.pageOrder, id)
 	return p, id, nil
+}
+
+func (s *Session) touchPage(id string) {
+	for i, v := range s.pageOrder {
+		if v == id {
+			s.pageOrder = append(
+				s.pageOrder[:i],
+				s.pageOrder[i+1:]...,
+			)
+			break
+		}
+	}
+	s.pageOrder = append(s.pageOrder, id)
+}
+
+func (s *Session) evictLRU() {
+	for len(s.pageOrder) > 0 {
+		victim := s.pageOrder[0]
+		s.pageOrder = s.pageOrder[1:]
+		if p, ok := s.pages[victim]; ok {
+			p.Close()
+			delete(s.pages, victim)
+			return
+		}
+	}
 }
 
 func (s *Session) getPage(
@@ -148,6 +188,9 @@ func (s *Session) pageFromRequest(
 		return s.ensurePage()
 	}
 	p, err := s.getPage(id)
+	if err == nil {
+		s.touchPage(id)
+	}
 	return p, id, err
 }
 
@@ -170,6 +213,15 @@ func (s *Session) closePage(id string) error {
 		return fmt.Errorf("page %q not found", id)
 	}
 	delete(s.pages, id)
+	for i, v := range s.pageOrder {
+		if v == id {
+			s.pageOrder = append(
+				s.pageOrder[:i],
+				s.pageOrder[i+1:]...,
+			)
+			break
+		}
+	}
 	return p.Close()
 }
 

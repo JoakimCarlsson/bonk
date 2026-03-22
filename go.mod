@@ -4,6 +4,8 @@ go 1.26.0
 
 require github.com/coder/websocket v1.8.14
 
+require golang.org/x/image v0.37.0
+
 require (
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
