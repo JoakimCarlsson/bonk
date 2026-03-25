@@ -35,7 +35,7 @@ jobs:
 
       - name: Integration tests
         run: go test ./tests/integration/ -v -timeout 120s
-fmt:
+  fmt:
     name: Format
     runs-on: ubuntu-latest
     steps:
