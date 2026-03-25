@@ -1,6 +1,6 @@
 # Stealth
 
-Stealth mode is enabled by default. It makes Chrome automation undetectable by modern anti-bot systems (Cloudflare, DataDome, Kasada) through four layers of protection.
+Stealth mode is enabled by default. It makes Chrome automation undetectable by modern anti-bot systems (Cloudflare, DataDome, Kasada) through five layers of protection.
 
 ## Enable/Disable
 
@@ -25,17 +25,23 @@ Launch arguments that prevent detection at the browser level:
 
 ## Layer 2: CDP Domain Control
 
-The primary detection signal in 2025 is `Runtime.enable`. When called, Chrome dispatches console events — detectors use `Error.prepareStackTrace` to check if something is listening.
+Advanced bot detection (Cloudflare Turnstile, DataDome) can fingerprint which CDP domains are active. In stealth mode, bonk defers all domain activation until a feature actually needs it:
 
-In stealth mode, bonk skips `Runtime.enable` entirely. This means:
+- **`Runtime.enable`** — never called. Detectors use `Error.prepareStackTrace` to check if something is listening to console events.
+- **`Page.enable`** + **`Page.setLifecycleEventsEnabled`** — deferred until first `Navigate()`, `Reload()`, `GoBack()`, `GoForward()`, `WaitNavigation()`, `OnDialog()`, or download handler call.
+- **`Network.enable`** — deferred until first `SetExtraHTTPHeaders()`, `SetOffline()`, or `WaitNetworkIdle` navigation.
 
-| Works | Doesn't Work |
-|-------|--------------|
-| `Runtime.evaluate` | `Runtime.consoleAPICalled` events |
-| `Runtime.callFunctionOn` | `Runtime.executionContextCreated` events |
-| All element interaction | `OnConsole` handler |
-| Navigation | `Runtime.exceptionThrown` events |
-| Screenshots, PDF | — |
+A page that only uses `Evaluate()` and `QuerySelector()` never activates any domain, keeping the CDP footprint at zero — matching the behavior of [nodriver](https://github.com/ultrafunkamsterdam/nodriver).
+
+CDP **commands** (`Page.navigate`, `Page.captureScreenshot`, `Runtime.evaluate`, etc.) work without their domain being enabled. Only **event subscriptions** require it.
+
+| Works without domain enabling | Requires lazy activation |
+|-------------------------------|--------------------------|
+| `Evaluate`, `QuerySelector` | `Navigate`, `Reload` (Page events) |
+| `Screenshot`, `PDF` | `OnDialog`, download handler (Page events) |
+| `AddInitScript`, `BringToFront` | `WaitNetworkIdle` (Network events) |
+| `SetViewport`, `SetContent` | `SetExtraHTTPHeaders`, `SetOffline` |
+| `OnRequest`, `OnResponse`, `Route` (Fetch domain) | `OnConsole` (Runtime — never enabled) |
 
 ## Layer 3: JavaScript Patches
 

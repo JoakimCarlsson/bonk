@@ -230,6 +230,9 @@ func (p *Page) Route(pattern string, handler func(*Route)) func() {
 
 // SetExtraHTTPHeaders sets headers that will be sent with every request.
 func (p *Page) SetExtraHTTPHeaders(headers map[string]string) error {
+	if err := p.ensureNetworkDomain(); err != nil {
+		return err
+	}
 	params := map[string]any{"headers": headers}
 	return proto.Execute(
 		p.execCtx,
