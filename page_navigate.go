@@ -49,6 +49,10 @@ func WithWaitUntil(w NavigateWait) NavigateOption {
 
 // Navigate navigates the page to the given URL and waits for completion.
 func (p *Page) Navigate(url string, opts ...NavigateOption) error {
+	if err := p.ensurePageDomain(); err != nil {
+		return err
+	}
+
 	cfg := defaultNavigateConfig(p)
 	for _, o := range opts {
 		o(cfg)
@@ -69,6 +73,9 @@ func (p *Page) Navigate(url string, opts ...NavigateOption) error {
 			proto.PageEventDOMContentEventFiredMethod, signal,
 		))
 	case WaitNetworkIdle:
+		if err := p.ensureNetworkDomain(); err != nil {
+			return err
+		}
 		unsubs = append(unsubs, p.subscribeNetworkIdle(done))
 	default:
 		unsubs = append(unsubs, p.session.Subscribe(
@@ -99,6 +106,10 @@ func (p *Page) Navigate(url string, opts ...NavigateOption) error {
 
 // Reload reloads the current page and waits for completion.
 func (p *Page) Reload(opts ...NavigateOption) error {
+	if err := p.ensurePageDomain(); err != nil {
+		return err
+	}
+
 	cfg := defaultNavigateConfig(p)
 	for _, o := range opts {
 		o(cfg)
@@ -119,6 +130,9 @@ func (p *Page) Reload(opts ...NavigateOption) error {
 			proto.PageEventDOMContentEventFiredMethod, signal,
 		))
 	case WaitNetworkIdle:
+		if err := p.ensureNetworkDomain(); err != nil {
+			return err
+		}
 		unsubs = append(unsubs, p.subscribeNetworkIdle(done))
 	default:
 		unsubs = append(unsubs, p.session.Subscribe(
@@ -170,6 +184,10 @@ func (p *Page) GoForward(opts ...NavigateOption) error {
 }
 
 func (p *Page) navigateToEntry(entryID int64, opts ...NavigateOption) error {
+	if err := p.ensurePageDomain(); err != nil {
+		return err
+	}
+
 	cfg := defaultNavigateConfig(p)
 	for _, o := range opts {
 		o(cfg)
@@ -190,6 +208,9 @@ func (p *Page) navigateToEntry(entryID int64, opts ...NavigateOption) error {
 			proto.PageEventDOMContentEventFiredMethod, signal,
 		))
 	case WaitNetworkIdle:
+		if err := p.ensureNetworkDomain(); err != nil {
+			return err
+		}
 		unsubs = append(unsubs, p.subscribeNetworkIdle(done))
 	default:
 		unsubs = append(unsubs, p.session.Subscribe(
@@ -216,6 +237,10 @@ func (p *Page) navigateToEntry(entryID int64, opts ...NavigateOption) error {
 
 // WaitNavigation waits for the next navigation to complete.
 func (p *Page) WaitNavigation(opts ...NavigateOption) error {
+	if err := p.ensurePageDomain(); err != nil {
+		return err
+	}
+
 	cfg := defaultNavigateConfig(p)
 	for _, o := range opts {
 		o(cfg)
@@ -236,6 +261,9 @@ func (p *Page) WaitNavigation(opts ...NavigateOption) error {
 			proto.PageEventDOMContentEventFiredMethod, signal,
 		))
 	case WaitNetworkIdle:
+		if err := p.ensureNetworkDomain(); err != nil {
+			return err
+		}
 		unsubs = append(unsubs, p.subscribeNetworkIdle(done))
 	default:
 		unsubs = append(unsubs, p.session.Subscribe(
@@ -371,6 +399,9 @@ func (p *Page) subscribeNetworkIdle(done chan struct{}) func() {
 
 // SetOffline enables or disables offline emulation.
 func (p *Page) SetOffline(offline bool) error {
+	if err := p.ensureNetworkDomain(); err != nil {
+		return err
+	}
 	return proto.NetworkEmulateNetworkConditions(offline, 0, -1, -1).
 		Do(p.execCtx)
 }

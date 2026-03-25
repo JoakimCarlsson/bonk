@@ -191,6 +191,9 @@ func (p *Page) onConsole(fn func(*ConsoleMessage)) func() {
 }
 
 func (p *Page) onDialog(fn func(*Dialog)) func() {
+	if err := p.ensurePageDomain(); err != nil {
+		return func() {}
+	}
 	return p.session.Subscribe(
 		proto.PageEventJavascriptDialogOpeningMethod,
 		func(params json.RawMessage) {
@@ -209,6 +212,9 @@ func (p *Page) onDialog(fn func(*Dialog)) func() {
 }
 
 func (p *Page) onDownload(fn func(*Download)) func() {
+	if err := p.ensurePageDomain(); err != nil {
+		return func() {}
+	}
 	downloadDir, _ := os.MkdirTemp("", "bonk-downloads-*")
 
 	proto.PageSetDownloadBehavior(proto.PageSetDownloadBehaviorBehaviorAllow).

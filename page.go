@@ -3,11 +3,17 @@ package bonk
 import (
 	"context"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/joakimcarlsson/bonk/proto"
 	"github.com/joakimcarlsson/bonk/rpc"
 )
+
+type domainState struct {
+	pageEnabled    atomic.Bool
+	networkEnabled atomic.Bool
+}
 
 // Page represents a single browser tab/page.
 type Page struct {
@@ -18,6 +24,7 @@ type Page struct {
 	execCtx                  context.Context
 	frameID                  proto.FrameID
 	fetch                    *fetchManager
+	domains                  *domainState
 	stealth                  bool
 	defaultTimeout           time.Duration
 	defaultNavigationTimeout time.Duration
@@ -69,20 +76,23 @@ func attachToTarget(
 	execCtx := proto.WithExecutor(c.browser.ctx, session)
 
 	stealth := c.browser.stealth
+	domains := &domainState{}
 
-	if err := proto.PageEnable().Do(execCtx); err != nil {
-		return nil, err
-	}
-	if err := proto.PageSetLifecycleEventsEnabled(true).Do(execCtx); err != nil {
-		return nil, err
-	}
 	if !stealth {
+		if err := proto.PageEnable().Do(execCtx); err != nil {
+			return nil, err
+		}
+		if err := proto.PageSetLifecycleEventsEnabled(true).Do(execCtx); err != nil {
+			return nil, err
+		}
 		if err := proto.RuntimeEnable().Do(execCtx); err != nil {
 			return nil, err
 		}
-	}
-	if err := proto.NetworkEnable().Do(execCtx); err != nil {
-		return nil, err
+		if err := proto.NetworkEnable().Do(execCtx); err != nil {
+			return nil, err
+		}
+		domains.pageEnabled.Store(true)
+		domains.networkEnabled.Store(true)
 	}
 
 	var frameID proto.FrameID
@@ -98,6 +108,7 @@ func attachToTarget(
 		session:        session,
 		execCtx:        execCtx,
 		frameID:        frameID,
+		domains:        domains,
 		stealth:        stealth,
 		defaultTimeout: 0,
 	}
@@ -167,6 +178,31 @@ func (p *Page) Close() error {
 	return err
 }
 
+func (p *Page) ensurePageDomain() error {
+	if p.domains.pageEnabled.Load() {
+		return nil
+	}
+	if err := proto.PageEnable().Do(p.execCtx); err != nil {
+		return err
+	}
+	if err := proto.PageSetLifecycleEventsEnabled(true).Do(p.execCtx); err != nil {
+		return err
+	}
+	p.domains.pageEnabled.Store(true)
+	return nil
+}
+
+func (p *Page) ensureNetworkDomain() error {
+	if p.domains.networkEnabled.Load() {
+		return nil
+	}
+	if err := proto.NetworkEnable().Do(p.execCtx); err != nil {
+		return err
+	}
+	p.domains.networkEnabled.Store(true)
+	return nil
+}
+
 // WithContext returns a shallow copy of the Page with the given context.
 // All CDP calls made on the returned Page will respect the context's
 // deadline and cancellation. The copy shares the underlying session,
@@ -180,6 +216,7 @@ func (p *Page) WithContext(ctx context.Context) *Page {
 		execCtx:                  proto.WithExecutor(ctx, p.session),
 		frameID:                  p.frameID,
 		fetch:                    p.fetch,
+		domains:                  p.domains,
 		stealth:                  p.stealth,
 		defaultTimeout:           p.defaultTimeout,
 		defaultNavigationTimeout: p.defaultNavigationTimeout,
