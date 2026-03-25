@@ -1,6 +1,8 @@
 name: ci
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -27,7 +29,15 @@ jobs:
           go-version-file: go.mod
 
       - name: Unit tests
-        run: go test -short ./...
+        run: go test -short -coverprofile=coverage.out ./...
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.out
+          flags: unit
+          fail_ci_if_error: false
 
   integration-test:
     runs-on: ubuntu-latest
@@ -43,7 +53,15 @@ jobs:
           chrome-version: stable
 
       - name: Integration tests
-        run: go test ./tests/... -v -timeout 180s
+        run: go test ./tests/... -v -timeout 180s -coverprofile=coverage-integration.out
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage-integration.out
+          flags: integration
+          fail_ci_if_error: false
 
   fmt:
     name: Format

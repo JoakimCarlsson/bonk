@@ -2,6 +2,7 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/joakimcarlsson/bonk.svg)](https://pkg.go.dev/github.com/joakimcarlsson/bonk)
 [![Go Report Card](https://goreportcard.com/badge/github.com/joakimcarlsson/bonk)](https://goreportcard.com/report/github.com/joakimcarlsson/bonk)
+[![codecov](https://codecov.io/gh/joakimcarlsson/bonk/graph/badge.svg)](https://codecov.io/gh/joakimcarlsson/bonk)
 
 A fast, stealth-first browser automation library for Go. Direct Chrome DevTools Protocol over WebSocket — no WebDriver, no relay, no detection.
 
