@@ -50,7 +50,7 @@ func (p *Page) runLocatorHandlers() {
 		return
 	}
 
-	for round := 0; round < maxOverlayRounds; round++ {
+	for range maxOverlayRounds {
 		fired := false
 		for _, h := range handlers {
 			visible, err := h.locator.IsVisible()

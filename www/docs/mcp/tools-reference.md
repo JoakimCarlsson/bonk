@@ -111,6 +111,15 @@ Reload the current page.
 |-----------|------|----------|-------------|
 | `page_id` | string | no | Target page |
 
+### wait_for_load_state
+
+Wait for the page to reach a specific load state. Useful after actions that trigger navigation without using `navigate` (e.g. form submissions, SPA route changes).
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `state` | string | yes | Load state: `load`, `domcontentloaded`, or `networkidle` |
+| `page_id` | string | no | Target page |
+
 ## Page Content
 
 ### screenshot
@@ -153,6 +162,47 @@ Execute JavaScript in the page.
 | `page_id` | string | no | Target page |
 
 Returns the JSON-serialized result.
+
+### pause
+
+Pause execution for manual inspection in headed mode. Resumes when the user presses Enter on stdin.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `page_id` | string | no | Target page |
+
+### add_script_tag
+
+Inject a `<script>` tag into the page. Provide either `url` or `content`.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `url` | string | no | URL of the script to load |
+| `content` | string | no | Inline script content |
+| `type` | string | no | Script type attribute (e.g. `module`) |
+| `page_id` | string | no | Target page |
+
+### add_style_tag
+
+Inject a `<style>` or `<link>` stylesheet tag into the page. Provide either `url` or `content`.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `url` | string | no | URL of the stylesheet to load |
+| `content` | string | no | Inline CSS content |
+| `page_id` | string | no | Target page |
+
+### wait_for_event
+
+Wait for the next occurrence of a page event and return the event payload.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `event` | string | yes | Event type: `console`, `dialog`, or `download` |
+| `timeout_ms` | number | no | Timeout in milliseconds (default 30000) |
+| `page_id` | string | no | Target page |
+
+Returns the JSON-serialized event payload.
 
 ## Element Interaction
 
@@ -231,6 +281,17 @@ Upload files to a file input element.
 |-----------|------|----------|-------------|
 | `selector` | string | yes | CSS selector of the file input |
 | `paths` | string[] | yes | File paths to upload |
+| `page_id` | string | no | Target page |
+
+### dispatch_event
+
+Fire a DOM event on an element programmatically. Useful when simulated clicks don't trigger framework-level handlers.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `selector` | string | yes | CSS selector of the element |
+| `event_type` | string | yes | DOM event type (e.g. `click`, `input`, `change`, `submit`) |
+| `event_init` | object | no | Event init options (e.g. `{"bubbles": true}`). Defaults to `{bubbles: true}` |
 | `page_id` | string | no | Target page |
 
 ## Element Inspection
@@ -334,4 +395,25 @@ Block requests matching URL patterns.
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `patterns` | string[] | yes | URL patterns to block (supports `*` wildcards) |
+| `page_id` | string | no | Target page |
+
+## Overlay Handlers
+
+### add_locator_handler
+
+Register an auto-dismiss handler. When the locator selector is visible before an action, the `click_selector` is clicked to dismiss it. Useful for cookie banners, notification popups, and overlay dialogs.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `locator` | string | yes | CSS selector that detects the overlay |
+| `click_selector` | string | yes | CSS selector of the element to click to dismiss |
+| `page_id` | string | no | Target page |
+
+### remove_locator_handler
+
+Remove a previously registered overlay auto-dismiss handler.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `locator` | string | yes | CSS selector used when registering the handler |
 | `page_id` | string | no | Target page |
