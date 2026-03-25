@@ -67,12 +67,12 @@ func (p *Page) GetByPlaceholder(text string, opts ...TextMatchOption) *Locator {
 	}
 }
 
-// GetByTestId returns a Locator matching elements by their data-testid attribute.
-func (p *Page) GetByTestId(id string) *Locator {
+// GetByTestID returns a Locator matching elements by their data-testid attribute.
+func (p *Page) GetByTestID(id string) *Locator {
 	sel := fmt.Sprintf("[data-testid=%s]", jsString(id))
 	return &Locator{
 		page: p, selector: sel,
-		desc: fmt.Sprintf("getByTestId(%s)", jsString(id)), nth: -1,
+		desc: fmt.Sprintf("getByTestID(%s)", jsString(id)), nth: -1,
 	}
 }
 
@@ -169,12 +169,12 @@ func (f *Frame) GetByPlaceholder(
 	}
 }
 
-// GetByTestId returns a Locator matching elements by their data-testid attribute within the frame.
-func (f *Frame) GetByTestId(id string) *Locator {
+// GetByTestID returns a Locator matching elements by their data-testid attribute within the frame.
+func (f *Frame) GetByTestID(id string) *Locator {
 	sel := fmt.Sprintf("[data-testid=%s]", jsString(id))
 	return &Locator{
 		page: f.page, frame: f, selector: sel,
-		desc: fmt.Sprintf("getByTestId(%s)", jsString(id)), nth: -1,
+		desc: fmt.Sprintf("getByTestID(%s)", jsString(id)), nth: -1,
 	}
 }
 

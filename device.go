@@ -13,6 +13,7 @@ type Device struct {
 	HasTouch          bool
 }
 
+// IPhone15, IPhone15ProMax, Pixel7, Pixel8, IPadPro11, IPadAir, and GalaxyS23 are preset device profiles for Emulate.
 var (
 	IPhone15 = Device{
 		Name:              "iPhone 15",

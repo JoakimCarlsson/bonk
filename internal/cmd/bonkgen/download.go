@@ -1,3 +1,4 @@
+// Package main implements the bonkgen code generator.
 package main
 
 import (

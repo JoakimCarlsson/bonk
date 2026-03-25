@@ -1,3 +1,4 @@
+// Package transport provides WebSocket transport for Chrome DevTools Protocol.
 package transport
 
 import (

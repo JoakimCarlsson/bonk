@@ -24,7 +24,7 @@ func TestOnConsole(t *testing.T) {
 	page.Evaluate("console.error('error')")
 
 	types := map[string]bool{}
-	for i := 0; i < 3; i++ {
+	for i := range 3 {
 		select {
 		case msg := <-ch:
 			types[msg.Type] = true

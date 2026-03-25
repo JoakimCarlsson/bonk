@@ -69,7 +69,7 @@ func expandInlineEnums(domain *pdl.Domain) {
 
 	processProps := func(parentName string, props []*pdl.Property) {
 		for _, p := range props {
-			if p.Enum == nil || len(p.Enum) == 0 {
+			if len(p.Enum) == 0 {
 				continue
 			}
 			typeName := parentName + pdl.ExportedName(p.Name)
@@ -193,100 +193,4 @@ func (g *Generator) writeTemplate(
 	}
 
 	return runGoimports(path)
-}
-
-func (g *Generator) computeImports(
-	domain *pdl.Domain,
-	tmplName string,
-) []string {
-	imports := make(map[string]bool)
-
-	needsJSON := false
-	needsStrconv := false
-	needsContext := false
-
-	if strings.Contains(tmplName, "domain") {
-		needsContext = true
-	}
-
-	allProps := collectProperties(domain, tmplName)
-
-	for _, p := range allProps {
-		checkRefForJSON(p.Ref, &needsJSON)
-	}
-
-	if strings.Contains(tmplName, "types") {
-		for _, t := range domain.Types {
-			if t.BaseType == "integer" {
-				needsStrconv = true
-			}
-			for _, p := range t.Properties {
-				checkRefForJSON(p.Ref, &needsJSON)
-			}
-		}
-	}
-
-	if needsJSON {
-		imports["encoding/json"] = true
-	}
-	if needsStrconv {
-		imports["strconv"] = true
-	}
-	if needsContext {
-		imports["context"] = true
-	}
-
-	var result []string
-	for imp := range imports {
-		result = append(result, imp)
-	}
-
-	sortImports(result)
-	return result
-}
-
-func sortImports(imports []string) {
-	for i := 1; i < len(imports); i++ {
-		for j := i; j > 0 && imports[j] < imports[j-1]; j-- {
-			imports[j], imports[j-1] = imports[j-1], imports[j]
-		}
-	}
-}
-
-func checkRefForJSON(ref *pdl.TypeRef, needsJSON *bool) {
-	if ref == nil {
-		return
-	}
-	if ref.RawType == "any" || ref.RawType == "object" ||
-		ref.RawType == "binary" {
-		*needsJSON = true
-	}
-	if ref.Items != nil {
-		checkRefForJSON(ref.Items, needsJSON)
-	}
-}
-
-func collectProperties(domain *pdl.Domain, tmplName string) []*pdl.Property {
-	var props []*pdl.Property
-
-	if strings.Contains(tmplName, "types") {
-		for _, t := range domain.Types {
-			props = append(props, t.Properties...)
-		}
-	}
-
-	if strings.Contains(tmplName, "domain") {
-		for _, c := range domain.Commands {
-			props = append(props, c.Parameters...)
-			props = append(props, c.Returns...)
-		}
-	}
-
-	if strings.Contains(tmplName, "events") {
-		for _, e := range domain.Events {
-			props = append(props, e.Parameters...)
-		}
-	}
-
-	return props
 }

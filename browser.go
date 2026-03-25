@@ -1,3 +1,4 @@
+// Package bonk provides a high-level API for controlling Chromium-based browsers.
 package bonk
 
 import (
@@ -161,7 +162,7 @@ func (b *Browser) Reconnect() error {
 }
 
 func (b *Browser) setupOnClose(conn *rpc.Conn) {
-	conn.OnClose(func(err error) {
+	conn.OnClose(func(_ error) {
 		b.mu.Lock()
 		fn := b.onDisconnect
 		b.mu.Unlock()

@@ -1,3 +1,4 @@
+// Package pdl provides parsing for the Protocol Description Language.
 package pdl
 
 // Protocol is the root of a parsed PDL file.

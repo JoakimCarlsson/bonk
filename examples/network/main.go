@@ -1,3 +1,4 @@
+// Package main demonstrates network interception with bonk.
 package main
 
 import (
@@ -17,13 +18,15 @@ func main() {
 
 	ctx, err := b.NewContext()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	defer ctx.Close()
 
 	page, err := ctx.NewPage()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	fmt.Println("=== OnRequest: observe + modify ===")
@@ -44,7 +47,8 @@ func main() {
 	})
 
 	if err := page.Navigate("https://example.com"); err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	title, _ := page.Title()

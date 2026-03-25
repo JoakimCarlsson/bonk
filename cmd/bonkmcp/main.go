@@ -1,3 +1,4 @@
+// Package main implements the bonkmcp CLI tool.
 package main
 
 import (

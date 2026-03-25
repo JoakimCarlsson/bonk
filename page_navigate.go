@@ -12,6 +12,7 @@ import (
 // NavigateWait specifies when navigation is considered complete.
 type NavigateWait int
 
+// WaitLoad, WaitDOMContentLoaded, and WaitNetworkIdle select when navigation is considered complete.
 const (
 	WaitLoad NavigateWait = iota
 	WaitDOMContentLoaded
