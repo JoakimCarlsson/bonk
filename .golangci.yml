@@ -1,16 +1,19 @@
 version: "2"
 
 linters:
-  enable:
+  disable:
     - errcheck
+  enable:
     - govet
-    - ineffassign
     - staticcheck
+    - ineffassign
     - unused
     - misspell
-    - godot
-    - noctx
     - bodyclose
+    - revive
+    - gocritic
+    - copyloopvar
+    - intrange
 
 formatters:
   enable:
