@@ -73,25 +73,31 @@ func TestGoBackForward(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
-	page.Click("a")
-	time.Sleep(500 * time.Millisecond)
+	if err := page.Navigate("https://example.com"); err != nil {
+		t.Fatal(err)
+	}
+	if err := page.Click("a"); err != nil {
+		t.Fatal(err)
+	}
+	time.Sleep(1 * time.Second)
 
 	url1, _ := page.URL()
 	if !strings.Contains(url1, "iana.org") {
 		t.Fatalf("after click url = %q, want iana.org", url1)
 	}
 
-	page.GoBack()
-	time.Sleep(500 * time.Millisecond)
+	if err := page.GoBack(); err != nil {
+		t.Fatal(err)
+	}
 
 	url2, _ := page.URL()
 	if !strings.Contains(url2, "example.com") {
 		t.Errorf("after GoBack url = %q, want example.com", url2)
 	}
 
-	page.GoForward()
-	time.Sleep(500 * time.Millisecond)
+	if err := page.GoForward(); err != nil {
+		t.Fatal(err)
+	}
 
 	url3, _ := page.URL()
 	if !strings.Contains(url3, "iana.org") {

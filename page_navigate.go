@@ -218,6 +218,11 @@ func (p *Page) navigateToEntry(entryID int64, opts ...NavigateOption) error {
 			proto.PageEventLoadEventFiredMethod, signal,
 		))
 	}
+
+	unsubs = append(unsubs, p.session.Subscribe(
+		proto.PageEventFrameNavigatedMethod, signal,
+	))
+
 	defer func() {
 		for _, u := range unsubs {
 			u()
