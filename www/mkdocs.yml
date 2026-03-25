@@ -53,6 +53,8 @@ nav:
       - Accessibility Selectors: automation/accessibility.md
       - Locators: automation/locators.md
       - Input: automation/input.md
+      - Dispatch Event: automation/dispatch-event.md
+      - Overlay Handlers: automation/overlay-handlers.md
       - Frames: automation/frames.md
       - Mouse & Keyboard: automation/mouse-keyboard.md
       - Device Emulation: automation/device-emulation.md
@@ -65,6 +67,7 @@ nav:
       - Dialogs: events/dialogs.md
       - Downloads: events/downloads.md
       - Popups: events/popups.md
+      - Wait for Event: events/wait-for-event.md
   - Stealth:
       - Overview: stealth/overview.md
   - Advanced:
@@ -72,6 +75,9 @@ nav:
       - Session Persistence: advanced/session-persistence.md
       - Page Pool: advanced/pool.md
       - Debugging: advanced/debugging.md
+      - Wait States: advanced/wait-states.md
+      - Pause: advanced/pause.md
+      - Script & Style Injection: advanced/inject.md
   - MCP Server:
       - Overview: mcp/overview.md
       - Tools Reference: mcp/tools-reference.md

@@ -44,6 +44,7 @@ func (l *Locator) Nth(n int) *Locator {
 
 // Click waits for the element and clicks it.
 func (l *Locator) Click(opts ...WaitOption) error {
+	l.page.runLocatorHandlers()
 	el, err := l.resolve(opts...)
 	if err != nil {
 		return err
@@ -52,7 +53,11 @@ func (l *Locator) Click(opts ...WaitOption) error {
 }
 
 // Fill waits for the element and fills it with text.
-func (l *Locator) Fill(text string, opts ...WaitOption) error {
+func (l *Locator) Fill(
+	text string,
+	opts ...WaitOption,
+) error {
+	l.page.runLocatorHandlers()
 	el, err := l.resolve(opts...)
 	if err != nil {
 		return err
@@ -61,7 +66,11 @@ func (l *Locator) Fill(text string, opts ...WaitOption) error {
 }
 
 // Type waits for the element and types text character by character.
-func (l *Locator) Type(text string, opts ...TypeOption) error {
+func (l *Locator) Type(
+	text string,
+	opts ...TypeOption,
+) error {
+	l.page.runLocatorHandlers()
 	cfg := defaultTypeConfig()
 	for _, o := range opts {
 		o(cfg)
@@ -74,7 +83,11 @@ func (l *Locator) Type(text string, opts ...TypeOption) error {
 }
 
 // Press waits for the element and presses a key.
-func (l *Locator) Press(key string, opts ...WaitOption) error {
+func (l *Locator) Press(
+	key string,
+	opts ...WaitOption,
+) error {
+	l.page.runLocatorHandlers()
 	el, err := l.resolve(opts...)
 	if err != nil {
 		return err

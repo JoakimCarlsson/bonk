@@ -21,6 +21,7 @@ func NewServer(sess *Session) *server.MCPServer {
 	registerElementTools(s, sess)
 	registerNetworkTools(s, sess)
 	registerStateTools(s, sess)
+	registerOverlayTools(s, sess)
 
 	return s
 }
