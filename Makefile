@@ -1,4 +1,4 @@
-.PHONY: install fmt lint
+.PHONY: install fmt lint test
 
 install:
 	go install github.com/air-verse/air@latest
@@ -12,4 +12,7 @@ fmt:
 
 lint:
 	go vet ./...
-	$(shell go env GOPATH)/bin/golangci-lint run ./...	
+	$(shell go env GOPATH)/bin/golangci-lint run ./...
+
+test:
+	go test -short ./...	
