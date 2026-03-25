@@ -42,7 +42,7 @@ func (e *Element) IsVisible() (bool, error) {
 	return b, nil
 }
 
-// BoundingBox returns the element's bounding rectangle.
+// Box holds an element's bounding rectangle (x, y, width, height).
 type Box struct {
 	X      float64
 	Y      float64
@@ -125,7 +125,7 @@ func (e *Element) Screenshot(path string, opts ...ScreenshotOption) error {
 
 // ScreenshotBytes captures a screenshot of the element and returns PNG bytes.
 func (e *Element) ScreenshotBytes(
-	opts ...ScreenshotOption,
+	_ ...ScreenshotOption,
 ) ([]byte, error) {
 	if err := e.scrollIntoView(); err != nil {
 		return nil, err

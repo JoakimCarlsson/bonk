@@ -263,7 +263,7 @@ func TestGetByPlaceholderSubstring(t *testing.T) {
 	}
 }
 
-func TestGetByTestId(t *testing.T) {
+func TestGetByTestID(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
@@ -272,7 +272,7 @@ func TestGetByTestId(t *testing.T) {
 		<div data-testid="greeting">Hello</div>
 	</body></html>`)
 
-	text, err := page.GetByTestId("greeting").Text()
+	text, err := page.GetByTestID("greeting").Text()
 	if err != nil {
 		t.Fatal(err)
 	}

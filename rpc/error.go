@@ -19,6 +19,7 @@ func (e *ProtocolError) Error() string {
 	return fmt.Sprintf("cdp: %s (code %d)", e.Message, e.Code)
 }
 
+// JSON-RPC error codes used with [ProtocolError].
 const (
 	ErrCodeServerError    = -32000
 	ErrCodeInvalidParams  = -32602
@@ -26,6 +27,7 @@ const (
 	ErrCodeInternalError  = -32603
 )
 
+// Sentinel errors returned by the RPC client.
 var (
 	ErrConnectionClosed = errors.New("bonk: connection closed")
 	ErrResponseTimeout  = errors.New("bonk: response timeout")

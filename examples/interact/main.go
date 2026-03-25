@@ -1,3 +1,4 @@
+// Package main demonstrates page interaction with bonk.
 package main
 
 import (
@@ -17,30 +18,36 @@ func main() {
 
 	ctx, err := b.NewContext(bonk.WithViewport(1920, 1080))
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	defer ctx.Close()
 
 	page, err := ctx.NewPage()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	if err := page.Navigate("https://google.com"); err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	el, err := page.WaitSelector("textarea[name=q]")
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	if err := el.Type("bonk go cdp", bonk.WithDelay(50*time.Millisecond)); err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	if err := el.Press("Enter"); err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	page.WaitSelector("#search")

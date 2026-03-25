@@ -242,12 +242,12 @@ func TestParsePDL(t *testing.T) {
 	if response.ID != "Response" {
 		t.Errorf("type[3].ID = %q, want Response", response.ID)
 	}
-	requestIdProp := response.Properties[3]
-	if requestIdProp.Ref == nil || requestIdProp.Ref.Domain != "Network" ||
-		requestIdProp.Ref.Name != "RequestId" {
+	requestIDProp := response.Properties[3]
+	if requestIDProp.Ref == nil || requestIDProp.Ref.Domain != "Network" ||
+		requestIDProp.Ref.Name != "RequestId" {
 		t.Errorf(
 			"Response.requestId ref = %+v, want Network.RequestId",
-			requestIdProp.Ref,
+			requestIDProp.Ref,
 		)
 	}
 

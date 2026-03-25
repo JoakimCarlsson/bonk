@@ -11,6 +11,7 @@ type WaitOption func(*waitConfig)
 // WaitVisibility specifies what state to wait for.
 type WaitVisibility int
 
+// WaitAttached, WaitUntilVisible, and WaitUntilHidden select which element state to wait for.
 const (
 	WaitAttached WaitVisibility = iota
 	WaitUntilVisible

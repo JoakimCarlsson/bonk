@@ -5,6 +5,8 @@ import (
 	"fmt"
 )
 
+// ErrBrowserClosed is returned when the browser has been closed.
+// The other vars indicate a closed context, page, or session; missing or failing Chrome; or a stale element.
 var (
 	ErrBrowserClosed  = errors.New("bonk: browser closed")
 	ErrContextClosed  = errors.New("bonk: context closed")

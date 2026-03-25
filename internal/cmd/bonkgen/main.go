@@ -46,7 +46,8 @@ func main() {
 		fmt.Println("Downloading protocol definitions...")
 		p, err := downloadAndParse(tmpDir)
 		if err != nil {
-			log.Fatalf("download and parse: %v", err)
+			log.Printf("download and parse: %v\n", err)
+			return
 		}
 		proto = p
 	} else {
@@ -71,7 +72,8 @@ func main() {
 	}
 
 	if err := g.Generate(); err != nil {
-		log.Fatalf("generate: %v", err)
+		log.Printf("generate: %v\n", err)
+		return
 	}
 
 	fmt.Printf("Generated code in %s/\n", *outDir)

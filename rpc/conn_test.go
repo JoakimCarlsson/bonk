@@ -175,7 +175,7 @@ func TestUnsubscribe(t *testing.T) {
 	count := 0
 	unsub := conn.Subscribe(
 		"Page.loadEventFired",
-		func(params json.RawMessage) {
+		func(_ json.RawMessage) {
 			count++
 		},
 	)
@@ -193,14 +193,14 @@ func TestUnsubscribe(t *testing.T) {
 	}
 }
 
-func TestExecutorInterface(t *testing.T) {
+func TestExecutorInterface(_ *testing.T) {
 	mt := newMockTransport()
 	conn := New(mt)
 
 	var _ proto.Executor = conn
 }
 
-func TestConcurrentCalls(t *testing.T) {
+func TestConcurrentCalls(_ *testing.T) {
 	mt := newMockTransport()
 	conn := New(mt)
 
@@ -217,7 +217,7 @@ func TestConcurrentCalls(t *testing.T) {
 	}()
 
 	var wg sync.WaitGroup
-	for i := 0; i < 10; i++ {
+	for range 10 {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()

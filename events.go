@@ -16,6 +16,7 @@ import (
 // EventType identifies a page event.
 type EventType string
 
+// ConsoleEvent, DialogEvent, and DownloadEvent identify page event kinds for subscriptions.
 const (
 	ConsoleEvent  EventType = "console"
 	DialogEvent   EventType = "dialog"

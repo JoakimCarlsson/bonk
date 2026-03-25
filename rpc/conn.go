@@ -1,3 +1,4 @@
+// Package rpc provides JSON-RPC style CDP calls and events over a [transport.Transport].
 package rpc
 
 import (

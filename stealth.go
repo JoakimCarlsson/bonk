@@ -63,12 +63,6 @@ func patchUserAgent(p *Page) error {
 		Do(p.execCtx)
 }
 
-func injectPatches(p *Page) error {
-	_, err := proto.PageAddScriptToEvaluateOnNewDocument(stealthPatchScript).
-		Do(p.execCtx)
-	return err
-}
-
 func extractChromeVersion(ua string) (major, full string) {
 	matches := chromeVersionRe.FindStringSubmatch(ua)
 	if len(matches) < 3 {

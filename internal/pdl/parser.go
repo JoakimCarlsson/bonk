@@ -34,17 +34,17 @@ func ParseString(s string) (*Protocol, error) {
 
 func stripModifiers(line string) (experimental, deprecated bool, rest string) {
 	for {
-		if strings.HasPrefix(line, "experimental ") {
+		switch {
+		case strings.HasPrefix(line, "experimental "):
 			experimental = true
 			line = strings.TrimPrefix(line, "experimental ")
-		} else if strings.HasPrefix(line, "deprecated ") {
+		case strings.HasPrefix(line, "deprecated "):
 			deprecated = true
 			line = strings.TrimPrefix(line, "deprecated ")
-		} else {
-			break
+		default:
+			return experimental, deprecated, line
 		}
 	}
-	return experimental, deprecated, line
 }
 
 func containsKeyword(line, keyword string) bool {
@@ -295,7 +295,7 @@ func (p *parser) parseEvent(line, description string) error {
 	return nil
 }
 
-func (p *parser) parseField(line string, indent int, description string) error {
+func (p *parser) parseField(line string, _ int, description string) error {
 	if p.section == "enum" {
 		return p.addEnumValue(line)
 	}
@@ -363,18 +363,20 @@ func (p *parser) addEnumValue(line string) error {
 func parseProperty(line, description string) (*Property, error) {
 	prop := &Property{Description: description}
 
+parsePropMods:
 	for {
-		if strings.HasPrefix(line, "deprecated ") {
+		switch {
+		case strings.HasPrefix(line, "deprecated "):
 			prop.Deprecated = true
 			line = strings.TrimPrefix(line, "deprecated ")
-		} else if strings.HasPrefix(line, "experimental ") {
+		case strings.HasPrefix(line, "experimental "):
 			prop.Experimental = true
 			line = strings.TrimPrefix(line, "experimental ")
-		} else if strings.HasPrefix(line, "optional ") {
+		case strings.HasPrefix(line, "optional "):
 			prop.Optional = true
 			line = strings.TrimPrefix(line, "optional ")
-		} else {
-			break
+		default:
+			break parsePropMods
 		}
 	}
 

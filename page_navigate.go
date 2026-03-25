@@ -12,6 +12,7 @@ import (
 // NavigateWait specifies when navigation is considered complete.
 type NavigateWait int
 
+// WaitLoad, WaitDOMContentLoaded, and WaitNetworkIdle select when navigation is considered complete.
 const (
 	WaitLoad NavigateWait = iota
 	WaitDOMContentLoaded
@@ -217,6 +218,11 @@ func (p *Page) navigateToEntry(entryID int64, opts ...NavigateOption) error {
 			proto.PageEventLoadEventFiredMethod, signal,
 		))
 	}
+
+	unsubs = append(unsubs, p.session.Subscribe(
+		proto.PageEventFrameNavigatedMethod, signal,
+	))
+
 	defer func() {
 		for _, u := range unsubs {
 			u()

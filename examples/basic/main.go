@@ -1,3 +1,4 @@
+// Package main demonstrates basic bonk usage.
 package main
 
 import (
@@ -16,28 +17,33 @@ func main() {
 
 	ctx, err := b.NewContext()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	defer ctx.Close()
 
 	page, err := ctx.NewPage()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	if err := page.Navigate("https://example.com"); err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	title, err := page.Title()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	fmt.Println("Title:", title)
 
 	el, err := page.Query("h1")
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	if el != nil {
 		text, _ := el.Text()
@@ -53,12 +59,14 @@ func main() {
 
 	links, err := page.QueryAll("a")
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	fmt.Printf("Found %d links\n", len(links))
 
 	if err := page.Screenshot("example.png"); err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	fmt.Println("Screenshot saved")
 }

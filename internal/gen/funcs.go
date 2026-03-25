@@ -1,3 +1,4 @@
+// Package gen provides code generation for Chrome DevTools Protocol bindings.
 package gen
 
 import (
@@ -33,8 +34,8 @@ func TemplateFuncs(
 		"toLower":           strings.ToLower,
 		"isRefType":         isRefType,
 		"needsPointer":      needsPointer,
-		"isEnum":            func(p *pdl.Property) bool { return p.Enum != nil && len(p.Enum) > 0 },
-		"isInlineEnum":      func(p *pdl.Property) bool { return p.Enum != nil && len(p.Enum) > 0 },
+		"isEnum":            func(p *pdl.Property) bool { return len(p.Enum) > 0 },
+		"isInlineEnum":      func(p *pdl.Property) bool { return len(p.Enum) > 0 },
 		"isSelfRef": func(domain string, typeID string, ref *pdl.TypeRef) bool {
 			if ref == nil || ref.Items != nil {
 				return false
@@ -78,10 +79,10 @@ func goType(ref *pdl.TypeRef) string {
 }
 
 func makeResolveRef(
-	modulePath string,
+	_ string,
 	currentDomain *pdl.Domain,
 ) func(*pdl.TypeRef) string {
-	resolve := func(ref *pdl.TypeRef) string { return "" }
+	resolve := func(_ *pdl.TypeRef) string { return "" }
 	resolve = func(ref *pdl.TypeRef) string {
 		if ref == nil {
 			return "json.RawMessage"

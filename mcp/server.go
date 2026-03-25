@@ -1,3 +1,4 @@
+// Package mcp provides an MCP server for browser automation.
 package mcp
 
 import (

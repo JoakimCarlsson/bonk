@@ -1,3 +1,4 @@
+// Package proto contains generated Chrome DevTools Protocol types and commands.
 package proto
 
 import (

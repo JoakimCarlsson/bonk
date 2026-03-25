@@ -100,13 +100,13 @@ page.GetByPlaceholder("Search...").Fill("bonk go")
 page.GetByPlaceholder("Enter email", bonk.Exact()).Fill("a@b.com")
 ```
 
-## GetByTestId
+## GetByTestID
 
 Find elements by their `data-testid` attribute. Always uses exact matching:
 
 ```go
-page.GetByTestId("submit-button").Click()
-page.GetByTestId("user-avatar").Screenshot("avatar.png")
+page.GetByTestID("submit-button").Click()
+page.GetByTestID("user-avatar").Screenshot("avatar.png")
 ```
 
 ## GetByAltText
@@ -129,7 +129,7 @@ page.GetByTitle("Close", bonk.Exact()).Click()
 
 ## Text Matching
 
-All text-based selectors (except `GetByTestId`) default to **substring** matching. Pass `bonk.Exact()` to require an exact match (after trimming whitespace):
+All text-based selectors (except `GetByTestID`) default to **substring** matching. Pass `bonk.Exact()` to require an exact match (after trimming whitespace):
 
 | Call | Matches `"Submit Form"` |
 |------|------------------------|
@@ -166,7 +166,7 @@ frame.GetByLabel("Search").Fill("query")
 | `GetByLabel` | Form inputs associated with a label |
 | `GetByText` | Static text content, paragraphs, list items |
 | `GetByPlaceholder` | Inputs identified by placeholder text |
-| `GetByTestId` | Elements with explicit test IDs — most stable but least semantic |
+| `GetByTestID` | Elements with explicit test IDs — most stable but least semantic |
 | `GetByAltText` | Images |
 | `GetByTitle` | Elements with title tooltips |
 | `page.Locator(css)` | When you need a CSS selector (class, ID, complex structure) |
