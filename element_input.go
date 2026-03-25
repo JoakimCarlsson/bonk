@@ -163,6 +163,27 @@ func (e *Element) Uncheck() error {
 	return nil
 }
 
+// DispatchEvent fires a DOM event on the element programmatically.
+// The eventInit map is forwarded to the Event constructor; if empty,
+// {bubbles: true} is used as the default.
+func (e *Element) DispatchEvent(
+	eventType string,
+	eventInit ...map[string]any,
+) error {
+	var init map[string]any
+	if len(eventInit) > 0 && eventInit[0] != nil {
+		init = eventInit[0]
+	} else {
+		init = map[string]any{"bubbles": true}
+	}
+	_, err := e.callForValue(
+		`function(t,i){this.dispatchEvent(new Event(t,i))}`,
+		eventType,
+		init,
+	)
+	return err
+}
+
 // Upload sets files on a file input element.
 func (e *Element) Upload(paths ...string) error {
 	res, err := proto.DOMDescribeNode().

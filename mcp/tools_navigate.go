@@ -85,6 +85,33 @@ func registerNavigateTools(
 		),
 		sess.handleReload,
 	)
+
+	s.AddTool(
+		mcp.NewTool("wait_for_load_state",
+			mcp.WithDescription(
+				"Wait for the page to reach a specific load "+
+					"state. Useful after actions that trigger "+
+					"navigation without using navigate (e.g. "+
+					"form submissions, SPA route changes).",
+			),
+			mcp.WithString("state",
+				mcp.Required(),
+				mcp.Description("Load state to wait for"),
+				mcp.Enum(
+					"load",
+					"domcontentloaded",
+					"networkidle",
+				),
+			),
+			mcp.WithString("page_id",
+				mcp.Description(
+					"ID of the page. "+
+						"Omit to use the default page.",
+				),
+			),
+		),
+		sess.handleWaitForLoadState,
+	)
 }
 
 func parseWaitUntil(
@@ -197,4 +224,43 @@ func (s *Session) handleReload(
 	}
 
 	return mcp.NewToolResultText("Page reloaded"), nil
+}
+
+func parseLoadState(val string) bonk.NavigateWait {
+	switch val {
+	case "domcontentloaded":
+		return bonk.WaitDOMContentLoaded
+	case "networkidle":
+		return bonk.WaitNetworkIdle
+	default:
+		return bonk.WaitLoad
+	}
+}
+
+func (s *Session) handleWaitForLoadState(
+	_ context.Context,
+	req mcp.CallToolRequest,
+) (*mcp.CallToolResult, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	state, err := req.RequireString("state")
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	page, _, err := s.pageFromRequest(req)
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	if err := page.WaitForLoadState(
+		parseLoadState(state),
+	); err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	return mcp.NewToolResultText(
+		fmt.Sprintf("Load state %q reached", state),
+	), nil
 }

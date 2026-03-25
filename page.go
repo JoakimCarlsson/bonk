@@ -30,8 +30,9 @@ type Page struct {
 	defaultNavigationTimeout time.Duration
 	cancelTimeout            context.CancelFunc
 
-	mu     sync.Mutex
-	closed bool
+	mu              sync.Mutex
+	closed          bool
+	locatorHandlers []locatorHandler
 }
 
 func newPage(c *BrowserContext) (*Page, error) {
@@ -208,6 +209,13 @@ func (p *Page) ensureNetworkDomain() error {
 // deadline and cancellation. The copy shares the underlying session,
 // fetch manager, and mutex with the original.
 func (p *Page) WithContext(ctx context.Context) *Page {
+	p.mu.Lock()
+	handlers := make(
+		[]locatorHandler, len(p.locatorHandlers),
+	)
+	copy(handlers, p.locatorHandlers)
+	p.mu.Unlock()
+
 	return &Page{
 		browserCtx:               p.browserCtx,
 		targetID:                 p.targetID,
@@ -220,6 +228,7 @@ func (p *Page) WithContext(ctx context.Context) *Page {
 		stealth:                  p.stealth,
 		defaultTimeout:           p.defaultTimeout,
 		defaultNavigationTimeout: p.defaultNavigationTimeout,
+		locatorHandlers:          handlers,
 	}
 }
 

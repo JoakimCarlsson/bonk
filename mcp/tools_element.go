@@ -255,6 +255,44 @@ func registerElementTools(
 		),
 		sess.handleWaitForSelector,
 	)
+
+	s.AddTool(
+		mcp.NewTool("dispatch_event",
+			mcp.WithDescription(
+				"Fire a DOM event on an element "+
+					"programmatically. Useful when "+
+					"simulated clicks don't trigger "+
+					"framework-level handlers.",
+			),
+			mcp.WithString("selector",
+				mcp.Required(),
+				mcp.Description(
+					"CSS selector of the element",
+				),
+			),
+			mcp.WithString("event_type",
+				mcp.Required(),
+				mcp.Description(
+					"DOM event type (e.g. click, input, "+
+						"change, submit)",
+				),
+			),
+			mcp.WithObject("event_init",
+				mcp.Description(
+					"Event init options (e.g. "+
+						"{\"bubbles\":true}). "+
+						"Defaults to {bubbles: true}.",
+				),
+			),
+			mcp.WithString("page_id",
+				mcp.Description(
+					"ID of the page. "+
+						"Omit to use the default page.",
+				),
+			),
+		),
+		sess.handleDispatchEvent,
+	)
 }
 
 func (s *Session) handleClick(
@@ -711,5 +749,47 @@ func (s *Session) handleWaitForSelector(
 
 	return mcp.NewToolResultText(
 		fmt.Sprintf("Element %q found:\n%s", selector, data),
+	), nil
+}
+
+func (s *Session) handleDispatchEvent(
+	_ context.Context,
+	req mcp.CallToolRequest,
+) (*mcp.CallToolResult, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	selector, err := req.RequireString("selector")
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+	eventType, err := req.RequireString("event_type")
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	page, _, err := s.pageFromRequest(req)
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	var initArg []map[string]any
+	args := req.GetArguments()
+	if raw, ok := args["event_init"]; ok {
+		if m, ok := raw.(map[string]any); ok {
+			initArg = append(initArg, m)
+		}
+	}
+
+	if err := page.DispatchEvent(
+		selector, eventType, initArg...,
+	); err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	return mcp.NewToolResultText(
+		fmt.Sprintf(
+			"Dispatched %q on %q", eventType, selector,
+		),
 	), nil
 }

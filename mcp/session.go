@@ -51,6 +51,7 @@ type Session struct {
 	nextID    int
 	cfg       sessionConfig
 	routes    map[string]func()
+	overlays  map[string]*bonk.Locator
 }
 
 // NewSession creates a new session with the given options.
@@ -60,9 +61,10 @@ func NewSession(opts ...SessionOption) *Session {
 		o(&cfg)
 	}
 	return &Session{
-		pages:  make(map[string]*bonk.Page),
-		routes: make(map[string]func()),
-		cfg:    cfg,
+		pages:    make(map[string]*bonk.Page),
+		routes:   make(map[string]func()),
+		overlays: make(map[string]*bonk.Locator),
+		cfg:      cfg,
 	}
 }
 
@@ -240,6 +242,7 @@ func (s *Session) Close() error {
 		s.browser = nil
 		s.ctx = nil
 		s.pages = make(map[string]*bonk.Page)
+		s.overlays = make(map[string]*bonk.Locator)
 		return err
 	}
 	return nil
