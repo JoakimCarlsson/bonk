@@ -35,6 +35,8 @@ err = el.Check()
 err = el.Uncheck()
 err = el.Upload("./file.pdf")
 err = el.Focus()
+err = el.Blur()
+err = el.Clear()
 err = el.ScrollIntoView()
 ```
 
@@ -46,6 +48,9 @@ inner, err := el.InnerText()     // innerText (rendered text)
 html, err := el.HTML()           // outerHTML
 val, err := el.Attribute("href")
 visible, err := el.IsVisible()
+checked, err := el.IsChecked()
+disabled, err := el.IsDisabled()
+editable, err := el.IsEditable()
 box, err := el.BoundingBox()     // *Box{X, Y, Width, Height}
 ```
 

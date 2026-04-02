@@ -42,6 +42,45 @@ func (e *Element) IsVisible() (bool, error) {
 	return b, nil
 }
 
+// IsChecked reports whether the element is checked (for checkboxes and radio buttons).
+func (e *Element) IsChecked() (bool, error) {
+	res, err := e.callForValue("function(){return !!this.checked}")
+	if err != nil {
+		return false, err
+	}
+	b, _ := res.(bool)
+	return b, nil
+}
+
+// IsDisabled reports whether the element is disabled.
+func (e *Element) IsDisabled() (bool, error) {
+	res, err := e.callForValue("function(){return !!this.disabled}")
+	if err != nil {
+		return false, err
+	}
+	b, _ := res.(bool)
+	return b, nil
+}
+
+// IsEditable reports whether the element accepts input.
+// An element is editable if it is an input, textarea, select, or
+// contenteditable element that is neither disabled nor read-only.
+func (e *Element) IsEditable() (bool, error) {
+	res, err := e.callForValue(
+		"function(){" +
+			"var t=this.tagName;" +
+			"var ce=this.isContentEditable;" +
+			"if(t!=='INPUT'&&t!=='TEXTAREA'&&t!=='SELECT'&&!ce)return false;" +
+			"return !this.disabled&&!this.readOnly" +
+			"}",
+	)
+	if err != nil {
+		return false, err
+	}
+	b, _ := res.(bool)
+	return b, nil
+}
+
 // Box holds an element's bounding rectangle (x, y, width, height).
 type Box struct {
 	X      float64

@@ -182,6 +182,72 @@ func registerElementTools(
 	)
 
 	s.AddTool(
+		mcp.NewTool("is_checked",
+			mcp.WithDescription(
+				"Check if a checkbox or radio button is checked.",
+			),
+			mcp.WithString("selector",
+				mcp.Required(),
+				mcp.Description(
+					"CSS selector of the element",
+				),
+			),
+			mcp.WithString("page_id",
+				mcp.Description(
+					"ID of the page. "+
+						"Omit to use the default page.",
+				),
+			),
+		),
+		sess.handleIsChecked,
+	)
+
+	s.AddTool(
+		mcp.NewTool("is_disabled",
+			mcp.WithDescription(
+				"Check if an element is disabled.",
+			),
+			mcp.WithString("selector",
+				mcp.Required(),
+				mcp.Description(
+					"CSS selector of the element",
+				),
+			),
+			mcp.WithString("page_id",
+				mcp.Description(
+					"ID of the page. "+
+						"Omit to use the default page.",
+				),
+			),
+		),
+		sess.handleIsDisabled,
+	)
+
+	s.AddTool(
+		mcp.NewTool("is_editable",
+			mcp.WithDescription(
+				"Check if an element is editable "+
+					"(input, textarea, select, or "+
+					"contenteditable that is not "+
+					"disabled or readonly).",
+			),
+			mcp.WithString("selector",
+				mcp.Required(),
+				mcp.Description(
+					"CSS selector of the element",
+				),
+			),
+			mcp.WithString("page_id",
+				mcp.Description(
+					"ID of the page. "+
+						"Omit to use the default page.",
+				),
+			),
+		),
+		sess.handleIsEditable,
+	)
+
+	s.AddTool(
 		mcp.NewTool("query",
 			mcp.WithDescription(
 				"Find an element and return its text, "+
@@ -530,6 +596,117 @@ func (s *Session) handleUncheck(
 
 	return mcp.NewToolResultText(
 		fmt.Sprintf("Unchecked %q", selector),
+	), nil
+}
+
+func (s *Session) handleIsChecked(
+	_ context.Context,
+	req mcp.CallToolRequest,
+) (*mcp.CallToolResult, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	selector, err := req.RequireString("selector")
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	page, _, err := s.pageFromRequest(req)
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	el, err := page.Query(selector)
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+	if el == nil {
+		return mcp.NewToolResultError(
+			fmt.Sprintf("element %q not found", selector),
+		), nil
+	}
+
+	checked, err := el.IsChecked()
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	return mcp.NewToolResultText(
+		fmt.Sprintf("%t", checked),
+	), nil
+}
+
+func (s *Session) handleIsDisabled(
+	_ context.Context,
+	req mcp.CallToolRequest,
+) (*mcp.CallToolResult, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	selector, err := req.RequireString("selector")
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	page, _, err := s.pageFromRequest(req)
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	el, err := page.Query(selector)
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+	if el == nil {
+		return mcp.NewToolResultError(
+			fmt.Sprintf("element %q not found", selector),
+		), nil
+	}
+
+	disabled, err := el.IsDisabled()
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	return mcp.NewToolResultText(
+		fmt.Sprintf("%t", disabled),
+	), nil
+}
+
+func (s *Session) handleIsEditable(
+	_ context.Context,
+	req mcp.CallToolRequest,
+) (*mcp.CallToolResult, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	selector, err := req.RequireString("selector")
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	page, _, err := s.pageFromRequest(req)
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	el, err := page.Query(selector)
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+	if el == nil {
+		return mcp.NewToolResultError(
+			fmt.Sprintf("element %q not found", selector),
+		), nil
+	}
+
+	editable, err := el.IsEditable()
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	return mcp.NewToolResultText(
+		fmt.Sprintf("%t", editable),
 	), nil
 }
 

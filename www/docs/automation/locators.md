@@ -28,6 +28,9 @@ loc.Click()
 loc.Fill("hello@example.com")
 loc.Type("query", bonk.WithDelay(50*time.Millisecond))
 loc.Press("Enter")
+loc.Focus()
+loc.Blur()
+loc.Clear()
 ```
 
 ## Read Properties
@@ -38,7 +41,19 @@ inner, err := loc.InnerText()
 html, err := loc.HTML()
 val, err := loc.Attribute("href")
 visible, err := loc.IsVisible()
+checked, err := loc.IsChecked()
+disabled, err := loc.IsDisabled()
+editable, err := loc.IsEditable()
 box, err := loc.BoundingBox()
+```
+
+## Bulk Text
+
+Retrieve text from all matching elements at once:
+
+```go
+texts, err := loc.AllInnerTexts()      // rendered innerText of each match
+contents, err := loc.AllTextContents()  // textContent of each match
 ```
 
 ## Screenshot

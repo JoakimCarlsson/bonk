@@ -80,6 +80,11 @@ func (e *Element) Fill(text string) error {
 	return proto.InputInsertText(text).Do(e.page.execCtx)
 }
 
+// Clear clears the input field contents.
+func (e *Element) Clear() error {
+	return e.Fill("")
+}
+
 // Type types the given text character by character with key events.
 func (e *Element) Type(text string, opts ...TypeOption) error {
 	cfg := defaultTypeConfig()
@@ -290,6 +295,12 @@ func (e *Element) waitVisible() error {
 
 // Focus focuses the element.
 func (e *Element) Focus() error { return e.focus() }
+
+// Blur removes focus from the element.
+func (e *Element) Blur() error {
+	_, err := e.callForValue("function(){this.blur()}")
+	return err
+}
 
 func (e *Element) focus() error {
 	_, err := e.callForValue("function(){this.focus()}")

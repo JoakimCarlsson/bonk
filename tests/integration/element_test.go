@@ -234,6 +234,144 @@ func TestPageScreenshot(t *testing.T) {
 	}
 }
 
+func TestElementIsChecked(t *testing.T) {
+	b := launchBrowser(t)
+	page := newPage(t, b)
+
+	page.SetContent(`<html><body>
+		<input id="on" type="checkbox" checked>
+		<input id="off" type="checkbox">
+	</body></html>`)
+
+	on, _ := page.Query("#on")
+	checked, err := on.IsChecked()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !checked {
+		t.Error("expected checked=true for #on")
+	}
+
+	off, _ := page.Query("#off")
+	checked, err = off.IsChecked()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if checked {
+		t.Error("expected checked=false for #off")
+	}
+}
+
+func TestElementIsDisabled(t *testing.T) {
+	b := launchBrowser(t)
+	page := newPage(t, b)
+
+	page.SetContent(`<html><body>
+		<input id="dis" type="text" disabled>
+		<input id="en" type="text">
+	</body></html>`)
+
+	dis, _ := page.Query("#dis")
+	disabled, err := dis.IsDisabled()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !disabled {
+		t.Error("expected disabled=true for #dis")
+	}
+
+	en, _ := page.Query("#en")
+	disabled, err = en.IsDisabled()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if disabled {
+		t.Error("expected disabled=false for #en")
+	}
+}
+
+func TestElementIsEditable(t *testing.T) {
+	b := launchBrowser(t)
+	page := newPage(t, b)
+
+	page.SetContent(`<html><body>
+		<input id="editable" type="text">
+		<input id="disabled-input" type="text" disabled>
+		<input id="readonly-input" type="text" readonly>
+		<div id="plain">text</div>
+		<div id="ce" contenteditable="true">edit me</div>
+	</body></html>`)
+
+	cases := []struct {
+		sel  string
+		want bool
+	}{
+		{"#editable", true},
+		{"#disabled-input", false},
+		{"#readonly-input", false},
+		{"#plain", false},
+		{"#ce", true},
+	}
+	for _, tc := range cases {
+		el, _ := page.Query(tc.sel)
+		got, err := el.IsEditable()
+		if err != nil {
+			t.Fatalf("%s: %v", tc.sel, err)
+		}
+		if got != tc.want {
+			t.Errorf("%s: editable=%t, want %t", tc.sel, got, tc.want)
+		}
+	}
+}
+
+func TestElementBlur(t *testing.T) {
+	b := launchBrowser(t)
+	page := newPage(t, b)
+
+	page.SetContent(`<html><body><input id="input" type="text"></body></html>`)
+
+	el, _ := page.Query("#input")
+	el.Focus()
+
+	tag, _ := page.Evaluate("document.activeElement.tagName")
+	if tag != "INPUT" {
+		t.Fatalf("activeElement = %v, want INPUT", tag)
+	}
+
+	if err := el.Blur(); err != nil {
+		t.Fatal(err)
+	}
+
+	tag, _ = page.Evaluate("document.activeElement.tagName")
+	if tag != "BODY" {
+		t.Errorf("after blur activeElement = %v, want BODY", tag)
+	}
+}
+
+func TestElementClear(t *testing.T) {
+	b := launchBrowser(t)
+	page := newPage(t, b)
+
+	page.SetContent(`<html><body><input id="input" type="text"></body></html>`)
+
+	el, _ := page.Query("#input")
+	el.Fill("hello world")
+
+	val, _ := page.Evaluate(`document.querySelector("#input").value`)
+	if val != "hello world" {
+		t.Fatalf("value = %v, want 'hello world'", val)
+	}
+
+	if err := el.Clear(); err != nil {
+		t.Fatal(err)
+	}
+
+	val, _ = page.Evaluate(`document.querySelector("#input").value`)
+	if val != "" {
+		t.Errorf("after clear value = %v, want empty", val)
+	}
+}
+
 func isTimeoutError(err error, target **bonk.TimeoutError) bool {
 	te, ok := err.(*bonk.TimeoutError)
 	if ok {
