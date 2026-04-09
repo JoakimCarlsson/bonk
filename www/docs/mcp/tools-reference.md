@@ -337,6 +337,39 @@ Wait for an element to appear in the page.
 | `timeout_ms` | number | no | Timeout in milliseconds (default 30000) |
 | `page_id` | string | no | Target page |
 
+### is_checked
+
+Check if a checkbox or radio button is checked.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `selector` | string | yes | CSS selector of the element |
+| `page_id` | string | no | Target page |
+
+Returns `"true"` or `"false"`.
+
+### is_disabled
+
+Check if an element is disabled.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `selector` | string | yes | CSS selector of the element |
+| `page_id` | string | no | Target page |
+
+Returns `"true"` or `"false"`.
+
+### is_editable
+
+Check if an element is editable (input, textarea, select, or contenteditable that is not disabled or readonly).
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `selector` | string | yes | CSS selector of the element |
+| `page_id` | string | no | Target page |
+
+Returns `"true"` or `"false"`.
+
 ## Cookies & State
 
 ### get_cookies

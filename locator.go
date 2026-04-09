@@ -143,6 +143,106 @@ func (l *Locator) IsVisible() (bool, error) {
 	return el.IsVisible()
 }
 
+// IsChecked reports whether the element is checked.
+func (l *Locator) IsChecked() (bool, error) {
+	el, err := l.queryDirect()
+	if err != nil {
+		return false, err
+	}
+	if el == nil {
+		return false, nil
+	}
+	return el.IsChecked()
+}
+
+// IsDisabled reports whether the element is disabled.
+func (l *Locator) IsDisabled() (bool, error) {
+	el, err := l.queryDirect()
+	if err != nil {
+		return false, err
+	}
+	if el == nil {
+		return false, nil
+	}
+	return el.IsDisabled()
+}
+
+// IsEditable reports whether the element accepts input.
+func (l *Locator) IsEditable() (bool, error) {
+	el, err := l.queryDirect()
+	if err != nil {
+		return false, err
+	}
+	if el == nil {
+		return false, nil
+	}
+	return el.IsEditable()
+}
+
+// Focus waits for the element and focuses it.
+func (l *Locator) Focus(opts ...WaitOption) error {
+	l.page.runLocatorHandlers()
+	el, err := l.resolve(opts...)
+	if err != nil {
+		return err
+	}
+	return el.Focus()
+}
+
+// Blur waits for the element and removes focus from it.
+func (l *Locator) Blur(opts ...WaitOption) error {
+	l.page.runLocatorHandlers()
+	el, err := l.resolve(opts...)
+	if err != nil {
+		return err
+	}
+	return el.Blur()
+}
+
+// Clear waits for the element and clears its input value.
+func (l *Locator) Clear(opts ...WaitOption) error {
+	l.page.runLocatorHandlers()
+	el, err := l.resolve(opts...)
+	if err != nil {
+		return err
+	}
+	return el.Clear()
+}
+
+// AllInnerTexts returns the innerText of all matching elements.
+func (l *Locator) AllInnerTexts() ([]string, error) {
+	els, err := l.queryAllElements()
+	if err != nil {
+		return nil, err
+	}
+	texts := make([]string, 0, len(els))
+	for _, el := range els {
+		t, err := el.InnerText()
+		if err != nil {
+			return nil, err
+		}
+		texts = append(texts, t)
+	}
+	return texts, nil
+}
+
+// AllTextContents returns the textContent of all matching elements.
+func (l *Locator) AllTextContents() ([]string, error) {
+	els, err := l.queryAllElements()
+	if err != nil {
+		return nil, err
+	}
+	texts := make([]string, 0, len(els))
+	for _, el := range els {
+		t, err := el.Text()
+		if err != nil {
+			return nil, err
+		}
+		texts = append(texts, t)
+	}
+	return texts, nil
+}
+
 // BoundingBox returns the element's bounding box.
 func (l *Locator) BoundingBox() (*Box, error) {
 	el, err := l.resolve()
