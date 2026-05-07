@@ -115,8 +115,8 @@ func attachToTarget(
 	}
 	p.fetch = newFetchManager(p)
 
-	if stealth {
-		if err := applyStealth(p); err != nil {
+	if stealth && c.cfg.userAgent == "" {
+		if err := applyStealth(p, c.cfg.locale); err != nil {
 			return nil, err
 		}
 	}
@@ -128,6 +128,9 @@ func attachToTarget(
 	}
 	if c.cfg.userAgent != "" {
 		if err := proto.EmulationSetUserAgentOverride(c.cfg.userAgent).Do(execCtx); err != nil {
+			return nil, err
+		}
+		if err := addStealthScript(p, c.cfg.locale); err != nil {
 			return nil, err
 		}
 	}
@@ -160,7 +163,10 @@ func attachToTarget(
 func (p *Page) SetViewport(width, height int) error {
 	return proto.EmulationSetDeviceMetricsOverride(
 		int64(width), int64(height), 1, false,
-	).Do(p.execCtx)
+	).
+		WithScreenWidth(int64(width)).
+		WithScreenHeight(int64(height)).
+		Do(p.execCtx)
 }
 
 // Close closes the page.
@@ -250,6 +256,9 @@ func (p *Page) Context() *BrowserContext {
 // created in the page, including iframes. Useful for injecting polyfills
 // or overriding APIs before page scripts run.
 func (p *Page) AddInitScript(script string) error {
+	if err := p.ensurePageDomain(); err != nil {
+		return err
+	}
 	_, err := proto.PageAddScriptToEvaluateOnNewDocument(script).Do(p.execCtx)
 	return err
 }

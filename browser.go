@@ -89,6 +89,34 @@ func (b *Browser) NewPage(opts ...ContextOption) (*Page, error) {
 	return bc.NewPage()
 }
 
+// FirstPage attaches to Chrome's initial page in the default context.
+func (b *Browser) FirstPage(opts ...ContextOption) (*Page, error) {
+	cfg := defaultContextConfig()
+	for _, o := range opts {
+		o(cfg)
+	}
+
+	execCtx := proto.WithExecutor(b.ctx, b.conn)
+	targets, err := proto.TargetGetTargets().Do(execCtx)
+	if err != nil {
+		return nil, err
+	}
+	for _, target := range targets.TargetInfos {
+		if target.Type != "page" || target.Attached {
+			continue
+		}
+		bc := &BrowserContext{
+			browser: b,
+			cfg:     cfg,
+		}
+		b.mu.Lock()
+		b.contexts = append(b.contexts, bc)
+		b.mu.Unlock()
+		return attachToTarget(bc, target.TargetID)
+	}
+	return b.NewPage(opts...)
+}
+
 // Close shuts down the browser and cleans up resources.
 func (b *Browser) Close() error {
 	b.mu.Lock()

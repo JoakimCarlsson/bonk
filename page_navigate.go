@@ -50,6 +50,9 @@ func WithWaitUntil(w NavigateWait) NavigateOption {
 
 // Navigate navigates the page to the given URL and waits for completion.
 func (p *Page) Navigate(url string, opts ...NavigateOption) error {
+	if p.stealth {
+		return p.navigateStealth(url, opts...)
+	}
 	if err := p.ensurePageDomain(); err != nil {
 		return err
 	}
@@ -102,6 +105,40 @@ func (p *Page) Navigate(url string, opts ...NavigateOption) error {
 		return nil
 	case <-time.After(cfg.timeout):
 		return &TimeoutError{Operation: "navigation to " + url}
+	}
+}
+
+func (p *Page) navigateStealth(url string, opts ...NavigateOption) error {
+	cfg := defaultNavigateConfig(p)
+	for _, o := range opts {
+		o(cfg)
+	}
+
+	res, err := proto.PageNavigate(url).Do(p.execCtx)
+	if err != nil {
+		return err
+	}
+	if res.ErrorText != "" {
+		return &NavigationError{URL: url, Message: res.ErrorText}
+	}
+
+	deadline := time.After(cfg.timeout)
+	ticker := time.NewTicker(100 * time.Millisecond)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-deadline:
+			return &TimeoutError{Operation: "navigation to " + url}
+		case <-ticker.C:
+			state, err := p.Evaluate("document.readyState")
+			if err != nil {
+				continue
+			}
+			if state == "complete" || state == "interactive" {
+				return nil
+			}
+		}
 	}
 }
 
