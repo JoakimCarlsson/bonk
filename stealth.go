@@ -8,7 +8,10 @@ import (
 	"github.com/joakimcarlsson/bonk/proto"
 )
 
-var chromeVersionRe = regexp.MustCompile(`Chrome/(\d+)\.(\d+\.\d+\.\d+)`)
+var (
+	chromeVersionRe = regexp.MustCompile(`Chrome/(\d+)\.(\d+\.\d+\.\d+)`)
+	edgeVersionRe   = regexp.MustCompile(`Edg/(\d+)\.(\d+\.\d+\.\d+)`)
+)
 
 func applyStealth(p *Page) error {
 	if err := patchUserAgent(p); err != nil {
@@ -33,6 +36,12 @@ func patchUserAgent(p *Page) error {
 	cleanUA := strings.ReplaceAll(ua, "Headless", "")
 
 	major, full := extractChromeVersion(cleanUA)
+	brand := "Google Chrome"
+	if edgeMajor, edgeFull := extractEdgeVersion(cleanUA); edgeMajor != "" {
+		major = edgeMajor
+		full = edgeFull
+		brand = "Microsoft Edge"
+	}
 	if major == "" {
 		major = "136"
 		full = "136.0.0.0"
@@ -46,12 +55,12 @@ func patchUserAgent(p *Page) error {
 		WithUserAgentMetadata(proto.EmulationUserAgentMetadata{
 			Brands: []proto.EmulationUserAgentBrandVersion{
 				{Brand: "Chromium", Version: major},
-				{Brand: "Google Chrome", Version: major},
+				{Brand: brand, Version: major},
 				{Brand: "Not_A Brand", Version: "8"},
 			},
 			FullVersionList: []proto.EmulationUserAgentBrandVersion{
 				{Brand: "Chromium", Version: full},
-				{Brand: "Google Chrome", Version: full},
+				{Brand: brand, Version: full},
 				{Brand: "Not_A Brand", Version: "8.0.0.0"},
 			},
 			Platform:        platform,
@@ -65,6 +74,14 @@ func patchUserAgent(p *Page) error {
 
 func extractChromeVersion(ua string) (major, full string) {
 	matches := chromeVersionRe.FindStringSubmatch(ua)
+	if len(matches) < 3 {
+		return "", ""
+	}
+	return matches[1], matches[1] + "." + matches[2]
+}
+
+func extractEdgeVersion(ua string) (major, full string) {
+	matches := edgeVersionRe.FindStringSubmatch(ua)
 	if len(matches) < 3 {
 		return "", ""
 	}

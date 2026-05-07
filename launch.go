@@ -15,27 +15,18 @@ import (
 )
 
 var defaultChromeFlags = []string{
+	"--remote-allow-origins=*",
 	"--no-first-run",
+	"--no-service-autorun",
 	"--no-default-browser-check",
-	"--disable-background-networking",
-	"--disable-background-timer-throttling",
-	"--disable-backgrounding-occluded-windows",
+	"--homepage=about:blank",
+	"--no-pings",
 	"--disable-breakpad",
-	"--disable-component-extensions-with-background-pages",
-	"--disable-default-apps",
 	"--disable-dev-shm-usage",
-	"--disable-extensions",
-	"--disable-hang-monitor",
-	"--disable-ipc-flooding-protection",
-	"--disable-popup-blocking",
-	"--disable-prompt-on-repost",
-	"--disable-renderer-backgrounding",
-	"--disable-sync",
-	"--disable-translate",
-	"--metrics-recording-only",
-	"--no-startup-window",
+	"--disable-infobars",
+	"--disable-session-crashed-bubble",
+	"--disable-search-engine-choice-screen",
 	"--password-store=basic",
-	"--use-mock-keychain",
 	"--remote-debugging-port=0",
 }
 
@@ -168,9 +159,6 @@ func buildArgs(cfg *launchConfig, dataDir string) []string {
 		args = append(args,
 			"--disable-blink-features=AutomationControlled",
 			"--disable-features=IsolateOrigins,site-per-process",
-			"--disable-infobars",
-			"--disable-session-crashed-bubble",
-			"--disable-search-engine-choice-screen",
 		)
 		if cfg.headless {
 			args = append(args, "--window-size=1920,1080")
@@ -236,7 +224,7 @@ func findChrome(explicit string) (string, error) {
 		}
 	}
 
-	for _, name := range []string{"google-chrome-stable", "google-chrome", "chromium-browser", "chromium"} {
+	for _, name := range []string{"google-chrome-stable", "google-chrome", "chromium-browser", "chromium", "msedge"} {
 		if p, err := exec.LookPath(name); err == nil {
 			return p, nil
 		}
@@ -263,9 +251,14 @@ func chromeCandidates() []string {
 	case "windows":
 		localAppData := os.Getenv("LOCALAPPDATA")
 		programFiles := os.Getenv("PROGRAMFILES")
+		programFilesX86 := os.Getenv("ProgramFiles(x86)")
 		return []string{
 			programFiles + `\Google\Chrome\Application\chrome.exe`,
+			programFilesX86 + `\Google\Chrome\Application\chrome.exe`,
 			localAppData + `\Google\Chrome\Application\chrome.exe`,
+			programFiles + `\Microsoft\Edge\Application\msedge.exe`,
+			programFilesX86 + `\Microsoft\Edge\Application\msedge.exe`,
+			localAppData + `\Microsoft\Edge\Application\msedge.exe`,
 		}
 	}
 	return nil

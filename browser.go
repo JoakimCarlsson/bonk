@@ -70,6 +70,25 @@ func (b *Browser) NewContext(opts ...ContextOption) (*BrowserContext, error) {
 	return bc, nil
 }
 
+// NewPage creates a page in the browser's default context.
+func (b *Browser) NewPage(opts ...ContextOption) (*Page, error) {
+	cfg := defaultContextConfig()
+	for _, o := range opts {
+		o(cfg)
+	}
+
+	bc := &BrowserContext{
+		browser: b,
+		cfg:     cfg,
+	}
+
+	b.mu.Lock()
+	b.contexts = append(b.contexts, bc)
+	b.mu.Unlock()
+
+	return bc.NewPage()
+}
+
 // Close shuts down the browser and cleans up resources.
 func (b *Browser) Close() error {
 	b.mu.Lock()

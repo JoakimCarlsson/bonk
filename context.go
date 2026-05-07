@@ -56,6 +56,9 @@ func (c *BrowserContext) Close() error {
 		p.Close()
 	}
 
+	if c.id == "" {
+		return nil
+	}
 	return proto.TargetDisposeBrowserContext(c.id).Do(c.browser.execCtx())
 }
 
