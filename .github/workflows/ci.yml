@@ -47,14 +47,6 @@ jobs:
       - name: Integration tests
         run: go test ./tests/... -v -timeout 180s -coverprofile=coverage-integration.out
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage-integration.out
-          flags: integration
-          fail_ci_if_error: false
-
   fmt:
     name: Format
     runs-on: ubuntu-latest
