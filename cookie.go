@@ -24,7 +24,9 @@ func (c *BrowserContext) Cookies() ([]Cookie, error) {
 		return nil, nil
 	}
 
-	res, err := proto.StorageGetCookies().Do(pages[0].execCtx)
+	res, err := proto.StorageGetCookies().
+		WithBrowserContextID(c.id).
+		Do(c.browser.execCtx())
 	if err != nil {
 		return nil, err
 	}
@@ -62,17 +64,18 @@ func (c *BrowserContext) SetCookies(cookies ...Cookie) error {
 			Expires:  proto.TimeSinceEpoch(ck.Expires),
 			HTTPOnly: ck.HTTPOnly,
 			Secure:   ck.Secure,
+			SameSite: proto.NetworkCookieSameSite(ck.SameSite),
 		})
 	}
 
-	return proto.StorageSetCookies(params).Do(pages[0].execCtx)
+	return proto.StorageSetCookies(params).
+		WithBrowserContextID(c.id).
+		Do(c.browser.execCtx())
 }
 
 // ClearCookies clears all cookies in the browser context.
 func (c *BrowserContext) ClearCookies() error {
-	pages := c.Pages()
-	if len(pages) == 0 {
-		return nil
-	}
-	return proto.StorageClearCookies().Do(pages[0].execCtx)
+	return proto.StorageClearCookies().
+		WithBrowserContextID(c.id).
+		Do(c.browser.execCtx())
 }
