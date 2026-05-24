@@ -11,8 +11,9 @@ import (
 )
 
 type domainState struct {
-	pageEnabled    atomic.Bool
-	networkEnabled atomic.Bool
+	pageEnabled      atomic.Bool
+	networkEnabled   atomic.Bool
+	inspectorEnabled atomic.Bool
 }
 
 // Page represents a single browser tab/page.
@@ -190,6 +191,17 @@ func (p *Page) ensurePageDomain() error {
 		return err
 	}
 	p.domains.pageEnabled.Store(true)
+	return nil
+}
+
+func (p *Page) ensureInspectorDomain() error {
+	if p.domains.inspectorEnabled.Load() {
+		return nil
+	}
+	if err := proto.InspectorEnable().Do(p.execCtx); err != nil {
+		return err
+	}
+	p.domains.inspectorEnabled.Store(true)
 	return nil
 }
 

@@ -75,6 +75,7 @@ nav:
       - Session Persistence: advanced/session-persistence.md
       - Page Pool: advanced/pool.md
       - Debugging: advanced/debugging.md
+      - Observability: advanced/observability.md
       - Wait States: advanced/wait-states.md
       - Pause: advanced/pause.md
       - Script & Style Injection: advanced/inject.md

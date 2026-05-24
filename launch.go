@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"runtime"
@@ -77,12 +78,15 @@ func Launch(opts ...LaunchOption) (*Browser, error) {
 		return nil, fmt.Errorf("bonk: start chrome: %w", err)
 	}
 
-	wsURL, err := parseDevToolsURL(stderr, 30*time.Second)
+	wsURL, scanner, err := parseDevToolsURL(stderr, 30*time.Second)
 	if err != nil {
 		cmd.Process.Kill()
 		cmd.Wait()
 		cleanupDir(tempDir)
 		return nil, fmt.Errorf("%w: %v", ErrChromeStartup, err)
+	}
+	if cfg.stderrSink != nil {
+		go drainScanner(scanner, cfg.stderrSink)
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -105,16 +109,17 @@ func Launch(opts ...LaunchOption) (*Browser, error) {
 	go conn.Listen(ctx)
 
 	b := &Browser{
-		conn:    conn,
-		process: cmd.Process,
-		cmd:     cmd,
-		dataDir: dataDir,
-		tempDir: tempDir,
-		wsURL:   wsURL,
-		stealth: cfg.stealth,
-		cfg:     cfg,
-		ctx:     ctx,
-		cancel:  cancel,
+		conn:      conn,
+		process:   cmd.Process,
+		cmd:       cmd,
+		dataDir:   dataDir,
+		tempDir:   tempDir,
+		wsURL:     wsURL,
+		stealth:   cfg.stealth,
+		cfg:       cfg,
+		ctx:       ctx,
+		cancel:    cancel,
+		crashSeen: snapshotCrashReports(dataDir),
 	}
 	b.setupOnClose(conn)
 	return b, nil
@@ -184,7 +189,7 @@ func buildArgs(cfg *launchConfig, dataDir string) []string {
 func parseDevToolsURL(
 	r interface{ Read([]byte) (int, error) },
 	timeout time.Duration,
-) (string, error) {
+) (string, *bufio.Scanner, error) {
 	scanner := bufio.NewScanner(r)
 	done := make(chan string, 1)
 	errCh := make(chan error, 1)
@@ -207,11 +212,17 @@ func parseDevToolsURL(
 
 	select {
 	case url := <-done:
-		return url, nil
+		return url, scanner, nil
 	case err := <-errCh:
-		return "", err
+		return "", nil, err
 	case <-time.After(timeout):
-		return "", fmt.Errorf("timeout waiting for DevTools URL")
+		return "", nil, fmt.Errorf("timeout waiting for DevTools URL")
+	}
+}
+
+func drainScanner(s *bufio.Scanner, w io.Writer) {
+	for s.Scan() {
+		w.Write(append(s.Bytes(), '\n'))
 	}
 }
 

@@ -1,6 +1,9 @@
 package bonk
 
-import "log/slog"
+import (
+	"io"
+	"log/slog"
+)
 
 // LaunchOption configures browser launch behavior.
 type LaunchOption func(*launchConfig)
@@ -13,6 +16,8 @@ type launchConfig struct {
 	extraArgs   []string
 	extraEnv    []string
 	logger      *slog.Logger
+	stderrSink  io.Writer
+	onCrashpad  func(reports []CrashReport)
 }
 
 func defaultLaunchConfig() *launchConfig {
@@ -73,5 +78,25 @@ func Env(env ...string) LaunchOption {
 func WithLogger(l *slog.Logger) LaunchOption {
 	return func(c *launchConfig) {
 		c.logger = l
+	}
+}
+
+// WithStderrSink streams Chrome's stderr to w after the DevTools URL has been
+// parsed. Without this option bonk drops the rest of Chrome's stderr on the
+// floor, which hides renderer crashes, GPU process errors, and Chrome's own
+// "[ERROR]" lines. Pass os.Stderr or a *os.File to a log path.
+func WithStderrSink(w io.Writer) LaunchOption {
+	return func(c *launchConfig) {
+		c.stderrSink = w
+	}
+}
+
+// WithCrashpadHandler registers a callback fired on Browser.Close with any
+// crash dumps that appeared in the user-data-dir's Crashpad/reports directory
+// during this session. Useful for surfacing the file path + a one-line summary
+// (e.g. v8-oom-location) instead of letting renderer crashes vanish silently.
+func WithCrashpadHandler(fn func(reports []CrashReport)) LaunchOption {
+	return func(c *launchConfig) {
+		c.onCrashpad = fn
 	}
 }

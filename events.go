@@ -154,6 +154,26 @@ func (p *Page) OnConsole(fn func(*ConsoleMessage)) func() {
 	return p.onConsole(fn)
 }
 
+// OnCrash registers a handler invoked when the page's renderer process
+// crashes (Inspector.targetCrashed). Reason is currently best-effort: the
+// CDP event carries no payload, so the string identifies the event class
+// rather than the underlying cause. Pair with WithCrashpadHandler on
+// Browser.Close to recover the actual minidump.
+//
+// Calling OnCrash enables the Inspector CDP domain, which is detectable by
+// anti-automation scripts. Use sparingly in stealth contexts.
+func (p *Page) OnCrash(fn func(reason string)) func() {
+	if err := p.ensureInspectorDomain(); err != nil {
+		return func() {}
+	}
+	return p.session.Subscribe(
+		proto.InspectorEventTargetCrashedMethod,
+		func(_ json.RawMessage) {
+			fn("Inspector.targetCrashed")
+		},
+	)
+}
+
 // OnDialog registers a handler for JavaScript dialogs.
 func (p *Page) OnDialog(fn func(*Dialog)) func() {
 	return p.onDialog(fn)

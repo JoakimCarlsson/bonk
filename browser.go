@@ -27,6 +27,8 @@ type Browser struct {
 	ctx     context.Context
 	cancel  context.CancelFunc
 
+	crashSeen map[string]struct{}
+
 	mu           sync.Mutex
 	contexts     []*BrowserContext
 	closed       bool
@@ -95,8 +97,19 @@ func (b *Browser) Close() error {
 		b.waitForExit()
 	}
 
+	b.reportCrashes()
 	cleanupDir(b.tempDir)
 	return nil
+}
+
+func (b *Browser) reportCrashes() {
+	if b.cfg == nil || b.cfg.onCrashpad == nil {
+		return
+	}
+	reports := collectCrashReports(b.dataDir, b.crashSeen)
+	if len(reports) > 0 {
+		b.cfg.onCrashpad(reports)
+	}
 }
 
 func (b *Browser) waitForExit() {
