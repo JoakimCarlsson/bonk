@@ -152,6 +152,14 @@ Get the full HTML content of the page.
 |-----------|------|----------|-------------|
 | `page_id` | string | no | Target page |
 
+### snapshot
+
+Get the accessibility tree of the page as indexed, structured text. Interactive elements get numbered indices (`[N]`). Use it to understand page structure before acting; the numbered elements can be clicked directly with `click_ref`.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `page_id` | string | no | Target page |
+
 ### evaluate
 
 Execute JavaScript in the page.
@@ -213,6 +221,15 @@ Click an element.
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `selector` | string | yes | CSS selector of the element |
+| `page_id` | string | no | Target page |
+
+### click_ref
+
+Click the interactive element at the given index from the page's most recent `snapshot` (the number shown as `[N]`). More reliable than a selector for elements read from the snapshot, since it acts on that exact node. Call `snapshot` first.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `ref` | number | yes | The `[N]` index of the element from the latest snapshot |
 | `page_id` | string | no | Target page |
 
 ### fill

@@ -112,7 +112,9 @@ func registerPageTools(s *server.MCPServer, sess *Session) {
 					"Returns an indexed, structured view of "+
 					"all elements. Interactive elements get "+
 					"numbered indices. Use this to understand "+
-					"page structure before clicking or filling.",
+					"page structure before clicking or filling. "+
+					"Click a numbered element directly with "+
+					"click_ref.",
 			),
 			mcp.WithString("page_id",
 				mcp.Description(
@@ -122,6 +124,32 @@ func registerPageTools(s *server.MCPServer, sess *Session) {
 			),
 		),
 		sess.handleSnapshot,
+	)
+
+	s.AddTool(
+		mcp.NewTool("click_ref",
+			mcp.WithDescription(
+				"Click the interactive element at the given "+
+					"index from the most recent snapshot of "+
+					"the page (the number shown as [N]). More "+
+					"reliable than a selector for elements read "+
+					"from the snapshot.",
+			),
+			mcp.WithNumber("ref",
+				mcp.Required(),
+				mcp.Description(
+					"The [N] index of the element from the "+
+						"latest snapshot.",
+				),
+			),
+			mcp.WithString("page_id",
+				mcp.Description(
+					"ID of the page. "+
+						"Omit to use the default page.",
+				),
+			),
+		),
+		sess.handleClickRef,
 	)
 
 	s.AddTool(
@@ -358,7 +386,7 @@ func (s *Session) handleSnapshot(
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	page, _, err := s.pageFromRequest(req)
+	page, id, err := s.pageFromRequest(req)
 	if err != nil {
 		return mcp.NewToolResultError(err.Error()), nil
 	}
@@ -368,11 +396,46 @@ func (s *Session) handleSnapshot(
 		return mcp.NewToolResultError(err.Error()), nil
 	}
 
-	text := bonk.FormatAccessibilityTree(nodes)
+	text, refs := bonk.FormatAccessibilityTreeIndexed(nodes)
+	s.snapshots[id] = refs
 	if text == "" {
 		text = "(empty accessibility tree)"
 	}
 	return mcp.NewToolResultText(text), nil
+}
+
+func (s *Session) handleClickRef(
+	_ context.Context,
+	req mcp.CallToolRequest,
+) (*mcp.CallToolResult, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	ref := int(req.GetFloat("ref", 0))
+
+	page, id, err := s.pageFromRequest(req)
+	if err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+
+	refs := s.snapshots[id]
+	if len(refs) == 0 {
+		return mcp.NewToolResultError(
+			"no snapshot for this page; call snapshot first",
+		), nil
+	}
+	if ref < 1 || ref > len(refs) {
+		return mcp.NewToolResultError(
+			fmt.Sprintf("ref %d out of range 1..%d", ref, len(refs)),
+		), nil
+	}
+
+	if err := page.ClickNode(refs[ref-1]); err != nil {
+		return mcp.NewToolResultError(err.Error()), nil
+	}
+	return mcp.NewToolResultText(
+		fmt.Sprintf("Clicked [%d]", ref),
+	), nil
 }
 
 func (s *Session) handlePause(
