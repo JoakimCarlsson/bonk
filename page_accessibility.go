@@ -10,16 +10,17 @@ import (
 
 // AXNode represents a node in the accessibility tree.
 type AXNode struct {
-	Role     string
-	Name     string
-	Value    string
-	Disabled bool
-	Focused  bool
-	Checked  string
-	Selected bool
-	Expanded string
-	Level    int
-	Children []*AXNode
+	Role          string
+	Name          string
+	Value         string
+	Disabled      bool
+	Focused       bool
+	Checked       string
+	Selected      bool
+	Expanded      string
+	Level         int
+	BackendNodeID proto.BackendNodeID
+	Children      []*AXNode
 }
 
 var interactiveRoles = map[string]bool{
@@ -84,6 +85,38 @@ func (p *Page) AccessibilityTree() ([]*AXNode, error) {
 	return result, nil
 }
 
+// ElementForNode resolves an accessibility node to a live Element via its
+// backend DOM node id, so a node read from AccessibilityTree can be acted on
+// directly without re-locating it by accessible name.
+func (p *Page) ElementForNode(n *AXNode) (*Element, error) {
+	if n == nil || n.BackendNodeID == 0 {
+		return nil, fmt.Errorf("bonk: accessibility node has no backend node id")
+	}
+	res, err := proto.DOMResolveNode().
+		WithBackendNodeID(n.BackendNodeID).
+		Do(p.execCtx)
+	if err != nil {
+		return nil, fmt.Errorf("bonk: resolve accessibility node: %w", err)
+	}
+	if res.Object.ObjectID == "" {
+		return nil, fmt.Errorf("bonk: accessibility node did not resolve to an element")
+	}
+	return &Element{page: p, objectID: res.Object.ObjectID}, nil
+}
+
+// ClickNode resolves an accessibility node and clicks it by dispatching a native
+// DOM click on the element. Unlike a coordinate-based click, this reliably
+// triggers links and buttons even when an overlay covers the element's centre or
+// hit-testing would otherwise send the click elsewhere.
+func (p *Page) ClickNode(n *AXNode) error {
+	el, err := p.ElementForNode(n)
+	if err != nil {
+		return err
+	}
+	_, err = p.EvaluateOn(el, "function(){ this.click() }")
+	return err
+}
+
 func buildAXNode(
 	lookup map[proto.AccessibilityAXNodeID]*proto.AccessibilityAXNode,
 	id proto.AccessibilityAXNodeID,
@@ -130,9 +163,10 @@ func buildAXNode(
 	}
 
 	node := &AXNode{
-		Role:  role,
-		Name:  axValueString(raw.Name),
-		Value: axValueString(raw.Value),
+		Role:          role,
+		Name:          axValueString(raw.Name),
+		Value:         axValueString(raw.Value),
+		BackendNodeID: raw.BackendDOMNodeID,
 	}
 
 	for _, prop := range raw.Properties {
@@ -165,12 +199,23 @@ func buildAXNode(
 // for LLM consumption. Interactive elements get numbered
 // indices; non-interactive elements are shown without indices.
 func FormatAccessibilityTree(nodes []*AXNode) string {
+	text, _ := FormatAccessibilityTreeIndexed(nodes)
+	return text
+}
+
+// FormatAccessibilityTreeIndexed formats the tree like FormatAccessibilityTree
+// and also returns the interactive nodes in index order: the element shown as
+// [i] in the text is refs[i-1]. Pass a ref to Page.ClickNode or
+// Page.ElementForNode to act on exactly the element that was shown, instead of
+// re-locating it by accessible name.
+func FormatAccessibilityTreeIndexed(nodes []*AXNode) (string, []*AXNode) {
 	var b strings.Builder
+	var refs []*AXNode
 	idx := 1
 	for _, n := range nodes {
-		formatNode(&b, n, 0, &idx)
+		formatNode(&b, n, 0, &idx, &refs)
 	}
-	return b.String()
+	return b.String(), refs
 }
 
 func formatNode(
@@ -178,10 +223,11 @@ func formatNode(
 	n *AXNode,
 	depth int,
 	idx *int,
+	refs *[]*AXNode,
 ) {
 	if n.Role == "" && len(n.Children) > 0 {
 		for _, c := range n.Children {
-			formatNode(b, c, depth, idx)
+			formatNode(b, c, depth, idx, refs)
 		}
 		return
 	}
@@ -195,6 +241,7 @@ func formatNode(
 	if interactiveRoles[n.Role] {
 		fmt.Fprintf(b, "%s[%d] %s", indent, *idx, n.Role)
 		*idx++
+		*refs = append(*refs, n)
 	} else {
 		fmt.Fprintf(b, "%s%s", indent, n.Role)
 	}
@@ -232,7 +279,7 @@ func formatNode(
 	b.WriteByte('\n')
 
 	for _, c := range n.Children {
-		formatNode(b, c, depth+1, idx)
+		formatNode(b, c, depth+1, idx, refs)
 	}
 }
 
