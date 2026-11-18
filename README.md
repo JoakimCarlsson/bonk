@@ -1,32 +1,40 @@
 # bonk
+
+[![CI](https://github.com/joakimcarlsson/bonk/actions/workflows/ci.yml/badge.svg)](https://github.com/joakimcarlsson/bonk/actions/workflows/ci.yml)
 [![Go Reference](https://pkg.go.dev/badge/github.com/joakimcarlsson/bonk.svg)](https://pkg.go.dev/github.com/joakimcarlsson/bonk)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Go Version](https://img.shields.io/badge/go-1.26%2B-00ADD8?logo=go)](https://go.dev/)
 
-> *Point at a website. Bonk it. Walk away whistling.*
+A stealth-first browser automation library for Go. bonk drives Chrome over the
+DevTools Protocol directly on a WebSocket — no WebDriver, no relay process, and
+no automation fingerprints left for bot detection to find.
 
-bonk is a fast, sneaky browser automation library for Go. It talks to Chrome over raw DevTools Protocol on a WebSocket: no WebDriver, no relay, no middlemen, and no "are you a robot?" side-eye from the sites you visit.
+**[Documentation](https://joakimcarlsson.github.io/bonk)**
 
-[Read the docs](https://joakimcarlsson.github.io/bonk)
+## Features
 
-## Why bonk?
+- **Direct CDP** — One WebSocket to Chrome, zero intermediaries
+- **Stealth by default** — Skips `Runtime.enable`, patches navigator, plugins and WebGL, strips headless signals
+- **Generated protocol bindings** — All 55 CDP domains, generated from the upstream `.pdl` files
+- **Context-aware** — `page.WithContext(ctx)` and `page.Timeout(d)` for deadlines and cancellation
+- **Auto-waiting** — Elements are waited on before interaction; stale references are retried
+- **Locators** — CSS, role, label, text, placeholder and test ID queries that never go stale
+- **Network interception** — Observe, modify, mock or block requests and responses
+- **Device emulation** — Presets for iPhone, Pixel, iPad, Galaxy and custom devices
+- **Session persistence** — Save and restore cookies and localStorage across runs
+- **Isolated contexts** — Separate cookie jars, proxies, viewports and locales per context
+- **MCP server** — Expose the browser as tools to AI agents via `bonkmcp`
+- **Single dependency** — Only [`coder/websocket`](https://github.com/coder/websocket)
 
-- **Stealth by default.** Skips `Runtime.enable`, patches navigator, plugins and WebGL, and scrubs the headless tells. Bot detectors see a perfectly boring human.
-- **Direct CDP.** A straight WebSocket to Chrome. Nothing in between to slow you down or snitch on you.
-- **Every CDP domain, generated.** All 55 domains, built from the upstream `.pdl` files, so you never hit a wall.
-- **Context-aware.** `page.WithContext(ctx)` and `page.Timeout(d)` for deadlines and cancellation, the Go way.
-- **Auto-waiting elements.** Waits until things are visible before poking them, and quietly retries stale references.
-- **Network interception.** Intercept, rewrite, mock or flat-out block requests and responses.
-- **Device emulation.** Pretend to be an iPhone 15, Pixel 8, iPad Pro, Galaxy S23 and friends.
-- **Session persistence.** Save cookies and localStorage, come back tomorrow, still logged in.
-- **Isolated contexts.** Separate cookie jars, proxies, viewports and locales, all in one browser.
-- **One dependency.** Just [`coder/websocket`](https://github.com/coder/websocket). That's the whole list.
-
-## Get it
+## Installation
 
 ```bash
 go get github.com/joakimcarlsson/bonk
 ```
 
-## Bonk your first page
+bonk needs a local Chrome or Chromium install.
+
+## Quick start
 
 ```go
 package main
@@ -64,16 +72,20 @@ func main() {
 }
 ```
 
-That's it. Chrome opens, the page loads, the title gets printed, nobody notices a thing.
-## More bonking
+## Interaction
 
-### Click things like a human would
 ```go
 page.Fill("input[name=email]", "me@example.com")
 page.GetByRole("button", bonk.WithName("Sign in")).Click()
 ```
 
-### Mess with the network
+See [locators](https://joakimcarlsson.github.io/bonk/automation/locators/),
+[selectors](https://joakimcarlsson.github.io/bonk/automation/selectors/),
+[input](https://joakimcarlsson.github.io/bonk/automation/input/) and
+[accessibility](https://joakimcarlsson.github.io/bonk/automation/accessibility/).
+
+## Network interception
+
 ```go
 page.OnRequest(func(r *bonk.Request) {
 	if strings.HasSuffix(r.URL, ".css") {
@@ -88,15 +100,23 @@ page.Route("**/api/user", func(r *bonk.Route) {
 })
 ```
 
-### Become a phone
+See [interception](https://joakimcarlsson.github.io/bonk/network/interception/),
+[routing](https://joakimcarlsson.github.io/bonk/network/routing/) and
+[headers](https://joakimcarlsson.github.io/bonk/network/headers/).
+
+## Device emulation
+
 ```go
 page.Emulate(bonk.IPhone15)
-page.Screenshot("tiny.png")
+page.Screenshot("mobile.png")
 ```
 
-## Hand the browser to your AI
+See [device emulation](https://joakimcarlsson.github.io/bonk/automation/device-emulation/).
 
-bonk ships an [MCP](https://modelcontextprotocol.io/) server, so Claude, Cursor and friends can drive a real, stealthy Chrome for you.
+## MCP server
+
+`bonkmcp` is an [MCP](https://modelcontextprotocol.io/) server that exposes
+bonk as tools for AI agents such as Claude Code, Claude Desktop and Cursor.
 
 ```bash
 go install github.com/joakimcarlsson/bonk/cmd/bonkmcp@latest
@@ -105,17 +125,28 @@ go install github.com/joakimcarlsson/bonk/cmd/bonkmcp@latest
 ```json
 {
   "mcpServers": {
-    "bonk": { "command": "bonkmcp", "args": ["--headless"] }
+    "bonk": {
+      "command": "bonkmcp",
+      "args": ["--headless"]
+    }
   }
 }
 ```
 
-More in the [MCP docs](https://joakimcarlsson.github.io/bonk/mcp/overview/).
+See the [MCP overview](https://joakimcarlsson.github.io/bonk/mcp/overview/) and
+[tools reference](https://joakimcarlsson.github.io/bonk/mcp/tools-reference/).
 
-## Contributing
+## Development
 
-Found a bug or have an idea? Open an issue or a PR. Run `go test ./...` first; the tests launch a real Chrome, so make sure you have one.
+```bash
+git clone https://github.com/joakimcarlsson/bonk
+cd bonk
+go test ./...
+```
+
+The tests launch a real browser, so Chrome must be installed. Protocol bindings
+in `proto/` are generated by `internal/cmd/bonkgen`; do not edit them by hand.
 
 ## License
 
-See [LICENSE](LICENSE). Go forth and bonk responsibly. 
+See [LICENSE](LICENSE) file.
