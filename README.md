@@ -1,25 +1,24 @@
-# bonk 🔨
-
+# bonk
 [![Go Reference](https://pkg.go.dev/badge/github.com/joakimcarlsson/bonk.svg)](https://pkg.go.dev/github.com/joakimcarlsson/bonk)
 
 > *Point at a website. Bonk it. Walk away whistling.*
 
 bonk is a fast, sneaky browser automation library for Go. It talks to Chrome over raw DevTools Protocol on a WebSocket: no WebDriver, no relay, no middlemen, and no "are you a robot?" side-eye from the sites you visit.
 
-📚 [Read the docs](https://joakimcarlsson.github.io/bonk)
+[Read the docs](https://joakimcarlsson.github.io/bonk)
 
 ## Why bonk?
 
-- 🥷 **Stealth by default.** Skips `Runtime.enable`, patches navigator, plugins and WebGL, and scrubs the headless tells. Bot detectors see a perfectly boring human.
-- ⚡ **Direct CDP.** A straight WebSocket to Chrome. Nothing in between to slow you down or snitch on you.
-- 🤖 **Every CDP domain, generated.** All 55 domains, built from the upstream `.pdl` files, so you never hit a wall.
-- ⏱️ **Context-aware.** `page.WithContext(ctx)` and `page.Timeout(d)` for deadlines and cancellation, the Go way.
-- 🎯 **Auto-waiting elements.** Waits until things are visible before poking them, and quietly retries stale references.
-- 🕸️ **Network interception.** Intercept, rewrite, mock or flat-out block requests and responses.
-- 📱 **Device emulation.** Pretend to be an iPhone 15, Pixel 8, iPad Pro, Galaxy S23 and friends.
-- 🍪 **Session persistence.** Save cookies and localStorage, come back tomorrow, still logged in.
-- 🧳 **Isolated contexts.** Separate cookie jars, proxies, viewports and locales, all in one browser.
-- 🪶 **One dependency.** Just [`coder/websocket`](https://github.com/coder/websocket). That's the whole list.
+- **Stealth by default.** Skips `Runtime.enable`, patches navigator, plugins and WebGL, and scrubs the headless tells. Bot detectors see a perfectly boring human.
+- **Direct CDP.** A straight WebSocket to Chrome. Nothing in between to slow you down or snitch on you.
+- **Every CDP domain, generated.** All 55 domains, built from the upstream `.pdl` files, so you never hit a wall.
+- **Context-aware.** `page.WithContext(ctx)` and `page.Timeout(d)` for deadlines and cancellation, the Go way.
+- **Auto-waiting elements.** Waits until things are visible before poking them, and quietly retries stale references.
+- **Network interception.** Intercept, rewrite, mock or flat-out block requests and responses.
+- **Device emulation.** Pretend to be an iPhone 15, Pixel 8, iPad Pro, Galaxy S23 and friends.
+- **Session persistence.** Save cookies and localStorage, come back tomorrow, still logged in.
+- **Isolated contexts.** Separate cookie jars, proxies, viewports and locales, all in one browser.
+- **One dependency.** Just [`coder/websocket`](https://github.com/coder/websocket). That's the whole list.
 
 ## Get it
 
@@ -65,19 +64,16 @@ func main() {
 }
 ```
 
-That's it. Chrome opens, the page loads, the title gets printed, nobody notices a thing. 🎉
-
+That's it. Chrome opens, the page loads, the title gets printed, nobody notices a thing.
 ## More bonking
 
-### Click things like a human would 🖱️
-
+### Click things like a human would
 ```go
 page.Fill("input[name=email]", "me@example.com")
 page.GetByRole("button", bonk.WithName("Sign in")).Click()
 ```
 
-### Mess with the network 🕸️
-
+### Mess with the network
 ```go
 page.OnRequest(func(r *bonk.Request) {
 	if strings.HasSuffix(r.URL, ".css") {
@@ -92,14 +88,13 @@ page.Route("**/api/user", func(r *bonk.Route) {
 })
 ```
 
-### Become a phone 📱
-
+### Become a phone
 ```go
 page.Emulate(bonk.IPhone15)
 page.Screenshot("tiny.png")
 ```
 
-## 🤖 Hand the browser to your AI
+## Hand the browser to your AI
 
 bonk ships an [MCP](https://modelcontextprotocol.io/) server, so Claude, Cursor and friends can drive a real, stealthy Chrome for you.
 
@@ -123,4 +118,4 @@ Found a bug or have an idea? Open an issue or a PR. Run `go test ./...` first; t
 
 ## License
 
-See [LICENSE](LICENSE). Go forth and bonk responsibly. 🔨
+See [LICENSE](LICENSE). Go forth and bonk responsibly. 
