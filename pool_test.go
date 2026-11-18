@@ -1,4 +1,4 @@
-package integration
+package bonk_test
 
 import (
 	"sync"

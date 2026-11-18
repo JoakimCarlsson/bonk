@@ -1,4 +1,4 @@
-package integration
+package bonk_test
 
 import (
 	"testing"
@@ -11,7 +11,7 @@ func TestLocatorText(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 
 	loc := page.Locator("h1")
 	text, err := loc.Text()
@@ -27,7 +27,7 @@ func TestLocatorCount(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 
 	count, err := page.Locator("p").Count()
 	if err != nil {
@@ -42,7 +42,7 @@ func TestLocatorNth(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 
 	first := page.Locator("p").First()
 	text, err := first.Text()

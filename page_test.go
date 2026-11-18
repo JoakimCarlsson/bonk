@@ -1,4 +1,4 @@
-package integration
+package bonk_test
 
 import (
 	"strings"
@@ -109,7 +109,7 @@ func TestEvaluate(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 
 	result, err := page.Evaluate("1 + 2 + 3")
 	if err != nil {
@@ -124,7 +124,7 @@ func TestEvaluateHandle(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 
 	el, err := page.EvaluateHandle("document.querySelector('h1')")
 	if err != nil {
@@ -144,7 +144,7 @@ func TestEvaluateOn(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 
 	el, _ := page.Query("h1")
 	result, err := page.EvaluateOn(el, "function(){return this.tagName}")

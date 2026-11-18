@@ -45,7 +45,7 @@ jobs:
           chrome-version: stable
 
       - name: Integration tests
-        run: go test ./tests/... -v -timeout 180s -coverprofile=coverage-integration.out
+        run: go test ./... -v -timeout 300s -coverprofile=coverage-integration.out
 
   fmt:
     name: Format

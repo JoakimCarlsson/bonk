@@ -1,4 +1,4 @@
-package integration
+package bonk_test
 
 import (
 	"fmt"
@@ -83,14 +83,15 @@ func TestOnRequestAbort(t *testing.T) {
 func TestOnResponseBody(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
+	url := exampleURL(t)
 
 	bodyCh := make(chan string, 1)
 	unsub := page.OnResponse(func(r *bonk.Response) {
-		if strings.Contains(r.URL, "example.com") && r.Status == 200 {
+		if r.URL == url && r.Status == 200 {
 			body, err := r.Body()
 			if err == nil && len(body) > 0 {
 				select {
-				case bodyCh <- string(body[:min(100, len(body))]):
+				case bodyCh <- string(body):
 				default:
 				}
 			}
@@ -99,7 +100,7 @@ func TestOnResponseBody(t *testing.T) {
 	})
 	defer unsub()
 
-	page.Navigate("https://example.com")
+	page.Navigate(url)
 
 	select {
 	case body := <-bodyCh:

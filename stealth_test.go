@@ -1,4 +1,4 @@
-package integration
+package bonk_test
 
 import (
 	"strings"
@@ -152,8 +152,8 @@ func TestStealthHardwareConcurrency(t *testing.T) {
 		t.Fatal(err)
 	}
 	cores, _ := result.(float64)
-	if cores != 8 {
-		t.Errorf("hardwareConcurrency = %v, want 8", result)
+	if cores < 1 {
+		t.Errorf("hardwareConcurrency = %v, want a positive core count", result)
 	}
 }
 

@@ -1,4 +1,4 @@
-package integration
+package bonk_test
 
 import (
 	"os"
@@ -12,7 +12,7 @@ func TestQuery(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 
 	el, err := page.Query("h1")
 	if err != nil {
@@ -32,7 +32,7 @@ func TestQueryNotFound(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 
 	el, err := page.Query("#nonexistent")
 	if err != nil {
@@ -47,7 +47,7 @@ func TestQueryAll(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 
 	els, err := page.QueryAll("p")
 	if err != nil {
@@ -62,7 +62,7 @@ func TestWaitSelector(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 
 	el, err := page.WaitSelector("h1", bonk.WaitTimeout(5*time.Second))
 	if err != nil {
@@ -79,7 +79,7 @@ func TestWaitSelectorTimeout(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 
 	_, err := page.WaitSelector("#nonexistent", bonk.WaitTimeout(1*time.Second))
 	if err == nil {
@@ -96,7 +96,7 @@ func TestElementText(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 	el, _ := page.Query("h1")
 
 	text, err := el.Text()
@@ -112,7 +112,7 @@ func TestElementHTML(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 	el, _ := page.Query("h1")
 
 	html, err := el.HTML()
@@ -128,7 +128,7 @@ func TestElementAttribute(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 	el, _ := page.Query("a")
 
 	href, err := el.Attribute("href")
@@ -144,7 +144,7 @@ func TestElementIsVisible(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 	el, _ := page.Query("h1")
 
 	visible, err := el.IsVisible()
@@ -160,7 +160,7 @@ func TestElementBoundingBox(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 	el, _ := page.Query("h1")
 
 	box, err := el.BoundingBox()
@@ -179,7 +179,7 @@ func TestElementClick(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 
 	err := page.Click("a")
 	if err != nil {
@@ -197,7 +197,7 @@ func TestElementScreenshot(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 	el, _ := page.Query("h1")
 
 	path := t.TempDir() + "/h1.png"
@@ -218,7 +218,7 @@ func TestPageScreenshot(t *testing.T) {
 	b := launchBrowser(t)
 	page := newPage(t, b)
 
-	page.Navigate("https://example.com")
+	page.Navigate(exampleURL(t))
 
 	path := t.TempDir() + "/page.png"
 	if err := page.Screenshot(path); err != nil {

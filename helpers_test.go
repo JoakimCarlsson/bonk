@@ -1,6 +1,8 @@
-package integration
+package bonk_test
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"testing"
 	"time"
 
@@ -77,4 +79,31 @@ func newPage(t *testing.T, b *bonk.Browser) *bonk.Page {
 	}
 	t.Cleanup(func() { ctx.Close() })
 	return page
+}
+
+// examplePageHTML is the classic example.com document the element, locator
+// and page tests were written against, served locally so the tests do not
+// depend on the live site's markup.
+const examplePageHTML = `<!doctype html>
+<html>
+<head><title>Example Domain</title></head>
+<body>
+<div>
+<h1>Example Domain</h1>
+<p>This domain is for use in illustrative examples in documents.</p>
+<p><a href="https://iana.org/domains/example">More information...</a></p>
+</div>
+</body>
+</html>`
+
+// exampleURL starts a local HTTP server serving examplePageHTML for the
+// duration of the test and returns its URL.
+func exampleURL(t *testing.T) string {
+	t.Helper()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		w.Write([]byte(examplePageHTML))
+	}))
+	t.Cleanup(srv.Close)
+	return srv.URL + "/"
 }
