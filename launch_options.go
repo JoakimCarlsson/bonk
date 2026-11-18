@@ -13,6 +13,12 @@ type launchConfig struct {
 	extraArgs   []string
 	extraEnv    []string
 	logger      *slog.Logger
+	// chromium is set at launch when the binary is a plain Chromium rather
+	// than Google Chrome, so stealth reports Chromium's own brands.
+	chromium bool
+	// userAgent is the user agent headless stealth launches Chrome with,
+	// set at launch from the binary's version.
+	userAgent string
 }
 
 func defaultLaunchConfig() *launchConfig {

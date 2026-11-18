@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"regexp"
 	"runtime"
 	"strings"
 	"time"
@@ -49,6 +50,13 @@ func Launch(opts ...LaunchOption) (*Browser, error) {
 	chromePath, err := findChrome(cfg.chromePath)
 	if err != nil {
 		return nil, err
+	}
+
+	cfg.chromium = isChromium(chromePath)
+	if cfg.stealth && cfg.headless && !hasArg(cfg.extraArgs, "--user-agent") {
+		if ua := headfulUserAgent(chromePath); ua != "" {
+			cfg.userAgent = ua
+		}
 	}
 
 	tempDir := ""
@@ -172,8 +180,17 @@ func buildArgs(cfg *launchConfig, dataDir string) []string {
 			"--disable-session-crashed-bubble",
 			"--disable-search-engine-choice-screen",
 		)
+		if cfg.headless && cfg.userAgent != "" {
+			args = append(args, "--user-agent="+cfg.userAgent)
+		}
 		if cfg.headless {
-			args = append(args, "--window-size=1920,1080")
+			args = append(args,
+				"--window-size=1680,960",
+				"--screen-info={1920x1080}",
+				"--enable-gpu",
+				"--blink-settings=primaryHoverType=2,availableHoverTypes=2,"+
+					"primaryPointerType=4,availablePointerTypes=4",
+			)
 		}
 	}
 
@@ -271,6 +288,64 @@ func chromeCandidates() []string {
 	return nil
 }
 
+// versionRe finds the version number in the output of chrome --version.
+var versionRe = regexp.MustCompile(`(\d+)\.\d+\.\d+\.\d+`)
+
+// headfulUserAgent returns the user agent a headful Chrome of the binary at
+// path sends, for headless Chrome to send from every page and worker; the
+// page-level override stealth applies does not reach service workers. The
+// version is read from the binary's --version output, and the platform part
+// is the reduced one Chrome sends on the host OS. It returns an empty
+// string when the version cannot be read.
+func headfulUserAgent(path string) string {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	out, err := exec.CommandContext(ctx, path, "--version").Output()
+	if err != nil {
+		return ""
+	}
+	m := versionRe.FindStringSubmatch(string(out))
+	if m == nil {
+		return ""
+	}
+	return "Mozilla/5.0 (" + reducedPlatform() + ") AppleWebKit/537.36 " +
+		"(KHTML, like Gecko) Chrome/" + m[1] + ".0.0.0 Safari/537.36"
+}
+
+// reducedPlatform returns the platform part of the reduced user agent
+// Chrome sends on the host OS.
+func reducedPlatform() string {
+	switch runtime.GOOS {
+	case "darwin":
+		return "Macintosh; Intel Mac OS X 10_15_7"
+	case "windows":
+		return "Windows NT 10.0; Win64; x64"
+	case "android":
+		return "Linux; Android 10; K"
+	default:
+		return "X11; Linux x86_64"
+	}
+}
+
+// hasArg reports whether args holds the flag name, bare or with a value.
+func hasArg(args []string, name string) bool {
+	for _, a := range args {
+		if a == name || strings.HasPrefix(a, name+"=") {
+			return true
+		}
+	}
+	return false
+}
+
+// isChromium reports whether the browser binary at path is a plain Chromium
+// build rather than Google Chrome, judged by its path.
+func isChromium(path string) bool {
+	lower := strings.ToLower(path)
+	return strings.Contains(lower, "chromium") ||
+		strings.Contains(lower, "ms-playwright")
+}
+
+// cleanupDir removes dir when it is not empty.
 func cleanupDir(dir string) {
 	if dir != "" {
 		os.RemoveAll(dir)
