@@ -7,11 +7,15 @@ import (
 	"github.com/joakimcarlsson/bonk/proto"
 )
 
-// Evaluate executes a JavaScript expression and returns the result as a Go value.
+// Evaluate executes a JavaScript expression as if the user triggered it, so
+// gesture-gated APIs such as window.open work under popup blocking, and
+// returns the result as a Go value. It fails when the protocol call fails,
+// the expression throws, or the result cannot be decoded.
 func (p *Page) Evaluate(expression string) (any, error) {
 	res, err := proto.RuntimeEvaluate(expression).
 		WithReturnByValue(true).
 		WithAwaitPromise(true).
+		WithUserGesture(true).
 		Do(p.execCtx)
 	if err != nil {
 		return nil, err

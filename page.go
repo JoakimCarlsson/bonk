@@ -29,6 +29,7 @@ type Page struct {
 	defaultTimeout           time.Duration
 	defaultNavigationTimeout time.Duration
 	cancelTimeout            context.CancelFunc
+	cursor                   *cursorState
 
 	mu              sync.Mutex
 	closed          bool
@@ -112,6 +113,7 @@ func attachToTarget(
 		domains:        domains,
 		stealth:        stealth,
 		defaultTimeout: 0,
+		cursor:         &cursorState{},
 	}
 	p.fetch = newFetchManager(p)
 
@@ -226,6 +228,7 @@ func (p *Page) WithContext(ctx context.Context) *Page {
 		fetch:                    p.fetch,
 		domains:                  p.domains,
 		stealth:                  p.stealth,
+		cursor:                   p.cursor,
 		defaultTimeout:           p.defaultTimeout,
 		defaultNavigationTimeout: p.defaultNavigationTimeout,
 		locatorHandlers:          handlers,

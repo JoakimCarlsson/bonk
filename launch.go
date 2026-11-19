@@ -162,9 +162,25 @@ func Connect(wsURL string, opts ...LaunchOption) (*Browser, error) {
 	return b, nil
 }
 
+// stealthDroppedFlags are default flags that page scripts can observe, so a
+// stealth launch leaves them out: without popup blocking a script can open a
+// window unprompted, and without IPC flooding protection history.replaceState
+// is never throttled.
+var stealthDroppedFlags = map[string]bool{
+	"--disable-popup-blocking":          true,
+	"--disable-ipc-flooding-protection": true,
+}
+
+// buildArgs returns the command line flags Chrome is started with for cfg,
+// using dataDir as its profile directory.
 func buildArgs(cfg *launchConfig, dataDir string) []string {
-	args := make([]string, len(defaultChromeFlags))
-	copy(args, defaultChromeFlags)
+	args := make([]string, 0, len(defaultChromeFlags))
+	for _, f := range defaultChromeFlags {
+		if cfg.stealth && stealthDroppedFlags[f] {
+			continue
+		}
+		args = append(args, f)
+	}
 
 	args = append(args, "--user-data-dir="+dataDir)
 

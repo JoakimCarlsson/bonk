@@ -6,67 +6,39 @@ import (
 	"github.com/joakimcarlsson/bonk/proto"
 )
 
-// Click scrolls the element into view and clicks it.
+// Click scrolls the element into view and clicks it, moving the pointer
+// there along a human path on a stealth page. It fails when the element
+// cannot be found or shown, or a CDP command fails.
 func (e *Element) Click() error {
-	box, err := e.prepare()
-	if err != nil {
-		return err
-	}
-	cx := box.X + box.Width/2
-	cy := box.Y + box.Height/2
-
-	if err := e.mouseEvent(proto.InputDispatchMouseEventTypeMouseMoved, cx, cy, 0); err != nil {
-		return err
-	}
-	if err := e.mouseEvent(proto.InputDispatchMouseEventTypeMousePressed, cx, cy, 1); err != nil {
-		return err
-	}
-	return e.mouseEvent(
-		proto.InputDispatchMouseEventTypeMouseReleased,
-		cx,
-		cy,
-		1,
-	)
+	return e.clickN(1)
 }
 
-// DoubleClick scrolls the element into view and double-clicks it.
+// DoubleClick scrolls the element into view and double-clicks it. It fails
+// like Click.
 func (e *Element) DoubleClick() error {
+	return e.clickN(2)
+}
+
+// clickN scrolls the element into view and clicks it count times at a
+// point inside it. It fails like Click.
+func (e *Element) clickN(count int64) error {
 	box, err := e.prepare()
 	if err != nil {
 		return err
 	}
-	cx := box.X + box.Width/2
-	cy := box.Y + box.Height/2
-
-	if err := e.mouseEvent(proto.InputDispatchMouseEventTypeMouseMoved, cx, cy, 0); err != nil {
-		return err
-	}
-	if err := e.mouseEvent(proto.InputDispatchMouseEventTypeMousePressed, cx, cy, 1); err != nil {
-		return err
-	}
-	if err := e.mouseEvent(proto.InputDispatchMouseEventTypeMouseReleased, cx, cy, 1); err != nil {
-		return err
-	}
-	if err := e.mouseEvent(proto.InputDispatchMouseEventTypeMousePressed, cx, cy, 2); err != nil {
-		return err
-	}
-	return e.mouseEvent(
-		proto.InputDispatchMouseEventTypeMouseReleased,
-		cx,
-		cy,
-		2,
-	)
+	x, y := e.page.targetPoint(box)
+	return e.page.clickAt(x, y, count)
 }
 
-// Hover scrolls the element into view and moves the mouse to it.
+// Hover scrolls the element into view and moves the mouse to it. It fails
+// like Click.
 func (e *Element) Hover() error {
 	box, err := e.prepare()
 	if err != nil {
 		return err
 	}
-	cx := box.X + box.Width/2
-	cy := box.Y + box.Height/2
-	return e.mouseEvent(proto.InputDispatchMouseEventTypeMouseMoved, cx, cy, 0)
+	x, y := e.page.targetPoint(box)
+	return e.page.moveCursor(x, y)
 }
 
 // Fill clears the input field and inserts the given text.
@@ -85,50 +57,27 @@ func (e *Element) Clear() error {
 	return e.Fill("")
 }
 
-// Type types the given text character by character with key events.
+// Type focuses the element and types the given text character by character
+// with full key events, pausing like a person between keys on a stealth
+// page unless WithDelay sets the gap. It returns the first error.
 func (e *Element) Type(text string, opts ...TypeOption) error {
 	cfg := defaultTypeConfig()
 	for _, o := range opts {
 		o(cfg)
 	}
-
 	if err := e.focus(); err != nil {
 		return err
 	}
-
-	for _, ch := range text {
-		s := string(ch)
-		if err := proto.InputDispatchKeyEvent(proto.InputDispatchKeyEventTypeKeyDown).
-			WithText(s).
-			WithKey(s).
-			Do(e.page.execCtx); err != nil {
-			return err
-		}
-		if err := proto.InputDispatchKeyEvent(proto.InputDispatchKeyEventTypeKeyUp).
-			WithKey(s).
-			Do(e.page.execCtx); err != nil {
-			return err
-		}
-		if cfg.delay > 0 {
-			time.Sleep(cfg.delay)
-		}
-	}
-	return nil
+	return e.page.typeText(text, cfg.delay)
 }
 
-// Press sends a single key press event.
+// Press focuses the element and presses one key, given by a name such as
+// "Enter" or a single character. It returns the first error.
 func (e *Element) Press(key string) error {
 	if err := e.focus(); err != nil {
 		return err
 	}
-	if err := proto.InputDispatchKeyEvent(proto.InputDispatchKeyEventTypeKeyDown).
-		WithKey(key).
-		Do(e.page.execCtx); err != nil {
-		return err
-	}
-	return proto.InputDispatchKeyEvent(proto.InputDispatchKeyEventTypeKeyUp).
-		WithKey(key).
-		Do(e.page.execCtx)
+	return e.page.pressKey(key)
 }
 
 // SelectOption selects an option in a <select> element by value.
@@ -305,15 +254,4 @@ func (e *Element) Blur() error {
 func (e *Element) focus() error {
 	_, err := e.callForValue("function(){this.focus()}")
 	return err
-}
-
-func (e *Element) mouseEvent(
-	typ proto.InputDispatchMouseEventType,
-	x, y float64,
-	clickCount int64,
-) error {
-	p := proto.InputDispatchMouseEvent(typ, x, y).
-		WithButton(proto.InputMouseButtonLeft).
-		WithClickCount(clickCount)
-	return p.Do(e.page.execCtx)
 }

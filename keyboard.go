@@ -1,8 +1,6 @@
 package bonk
 
 import (
-	"time"
-
 	"github.com/joakimcarlsson/bonk/proto"
 )
 
@@ -16,52 +14,34 @@ func (p *Page) Keyboard() *Keyboard {
 	return &Keyboard{page: p}
 }
 
-// Press sends a key down followed by key up event.
+// Press sends a key down followed by key up event for a key name such as
+// "Enter" or a single character, with its real code and key code. It
+// returns the first CDP error.
 func (k *Keyboard) Press(key string) error {
-	if err := k.Down(key); err != nil {
-		return err
-	}
-	return k.Up(key)
+	return k.page.pressKey(key)
 }
 
-// Down sends a key down event.
+// Down sends a key down event for a key name or character. It returns the
+// CDP error.
 func (k *Keyboard) Down(key string) error {
-	return proto.InputDispatchKeyEvent(
-		proto.InputDispatchKeyEventTypeKeyDown,
-	).WithKey(key).Do(k.page.execCtx)
+	return k.page.dispatchKey(true, lookupKey(key))
 }
 
-// Up sends a key up event.
+// Up sends a key up event for a key name or character. It returns the CDP
+// error.
 func (k *Keyboard) Up(key string) error {
-	return proto.InputDispatchKeyEvent(
-		proto.InputDispatchKeyEventTypeKeyUp,
-	).WithKey(key).Do(k.page.execCtx)
+	return k.page.dispatchKey(false, lookupKey(key))
 }
 
-// Type types text character by character with key events.
+// Type types text character by character with key events, pausing like a
+// person between keys on a stealth page unless WithDelay sets the gap. It
+// returns the first CDP error.
 func (k *Keyboard) Type(text string, opts ...TypeOption) error {
 	cfg := defaultTypeConfig()
 	for _, o := range opts {
 		o(cfg)
 	}
-
-	for _, ch := range text {
-		s := string(ch)
-		if err := proto.InputDispatchKeyEvent(
-			proto.InputDispatchKeyEventTypeKeyDown,
-		).WithText(s).WithKey(s).Do(k.page.execCtx); err != nil {
-			return err
-		}
-		if err := proto.InputDispatchKeyEvent(
-			proto.InputDispatchKeyEventTypeKeyUp,
-		).WithKey(s).Do(k.page.execCtx); err != nil {
-			return err
-		}
-		if cfg.delay > 0 {
-			time.Sleep(cfg.delay)
-		}
-	}
-	return nil
+	return k.page.typeText(text, cfg.delay)
 }
 
 // InsertText inserts text without key events (instant).
